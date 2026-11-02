@@ -35,6 +35,43 @@
 
   <entries>
 
+    <entry id="V-001" date="2026-11-02" type="verification" area="data"
+           title="Full corpus verification: 510 rows checked against sources" status="done">
+      <detail>
+        All 442 site rows, all 55 utility rows and all 13 operator rows were
+        checked against their cited sources by 15 parallel research agents,
+        plus a script pass over the derived arithmetic (status totals, H100e
+        sums, GPU conversion factors, method priority) and all 623 cited URLs.
+        Result: 402 SUPPORTED, 99 PARTLY_SUPPORTED, 9 CONTRADICTED, 0
+        UNVERIFIABLE. Per-row record: data/verification/verdicts.csv.
+        Summary and corrections table: docs/verification_ledger.md.
+        Corrections applied: 9 contradicted rows fixed (AWS Madison County
+        2200-&gt;1000 MW; Google Midlothian third-party 331,986-&gt;143,581;
+        TeraWulf row split from the Hawesville Anthropic lease and renamed to
+        Lake Hawkeye; Fairwater Atlanta moved to Fayetteville/640 MW/150k
+        GB200; China Telecom Qingyang 250-&gt;135 MW; Bridge Cyberjaya 98-&gt;20
+        MW; Nebius Beit Shemesh 80-&gt;58 MW; China Mobile Hohhot 10,000-&gt;20,000
+        cards; Data Vault Pakistan 3,000-&gt;100 GPUs; FirstEnergy Ohio 2025
+        increase 7.1%&gt;11.8%/13.3%), 2 mis-cited source URLs replaced (Google
+        West Memphis, Bitdeer Milam County), and 8 dead links replaced
+        (all replacements verified HTTP 200). Headline totals changed:
+        ~64.0M H100e (was ~64.7M); status split now 199/35/117/91
+        (Google West Memphis planned -&gt; under_construction).
+      </detail>
+      <files>
+        <file>data/canonical/data_centers.csv</file>
+        <file>data/published/data_centers.csv</file>
+        <file>data/published/data_centers.json</file>
+        <file>data/published/country_table.md</file>
+        <file>data/verification/verdicts.csv</file>
+        <file>data/us_utility_impacts.csv</file>
+        <file>pipeline/build.py</file>
+        <file>index.html</file>
+        <file>README.md</file>
+        <file>docs/verification_ledger.md</file>
+      </files>
+    </entry>
+
     <entry id="C-009" date="2026-11-02" type="change" area="repo"
            title="Repository reorganised into data / pipeline / docs" status="done">
       <detail>

@@ -133,10 +133,10 @@ STATUS = {
     "Reliance Jamnagar AI Data Center": "under_construction",
     "Viettel Tan Phu Trung Data Center": "under_construction",
     # --- planned / announced (not yet started construction) ---
-    "Google West Memphis": "planned",
+    "Google West Memphis": "under_construction",
     "AWS Salem Township (Susquehanna)": "planned",
     "Crusoe Abilene II (Microsoft campus)": "planned",
-    "TeraWulf Cayuga (Justified Data Campus)": "planned",
+    "TeraWulf Lake Hawkeye (Cayuga site)": "planned",
     "Hut 8 River Bend": "planned",
     "Lambda DFW-04 (Aligned)": "planned",
     "Campus AI (Mistral Paris AI Campus)": "planned",

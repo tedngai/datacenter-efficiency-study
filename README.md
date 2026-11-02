@@ -72,8 +72,8 @@ Each site has a `status` column (also color-coded on the map):
 |---|---|---|
 | `operational` | Fully operating; campus may still have announced expansions | 199 |
 | `partially_operational` | First phase(s) live, but the campus is still ramping to its target capacity | 35 |
-| `under_construction` | Construction underway; no live AI capacity yet (or first energization imminent) | 116 |
-| `planned` | Announced/leased, construction not yet started (incl. some with uncertain status) | 92 |
+| `under_construction` | Construction underway; no live AI capacity yet (or first energization imminent) | 117 |
+| `planned` | Announced/leased, construction not yet started (incl. some with uncertain status) | 91 |
 
 So **only 199 of 442 sites (45%) are fully operational** — the field is dominated by
 gigawatt-scale projects still being built. Judged by H100e, the split is starker still:
@@ -149,7 +149,7 @@ into `cluster_peak_pflops`.
 ## Headline numbers (as of compilation)
 
 - **442 campuses**, 353 with a quantifiable H100e estimate
-- **~64.7M H100e** total across tracked sites (heavily skewed by gigawatt-scale builds
+- **~64.0M H100e** total across tracked sites (heavily skewed by gigawatt-scale builds
   still under construction — see status classification above; the two largest figures,
   Fermi America's ~4.6M and Wonder Valley's ~3.1M H100e power-based estimates, are
   speculative proposals without confirmed tenants)
@@ -195,9 +195,9 @@ no usable PUE/WUE.
 
 | Country | Sites | MW (known) | H100e (known) |
 |---|---:|---:|---:|
-| USA | 121 | 70,306 | 38,907,464 |
-| China | 29 | 2,041 | 904,837 |
-| Malaysia | 25 | 4,559 | 2,657,134 |
+| USA | 121 | 69,422 | 38,316,893 |
+| China | 29 | 1,926 | 853,920 |
+| Malaysia | 25 | 4,481 | 2,624,634 |
 | India | 25 | 7,560 | 3,002,471 |
 | Mexico | 23 | 1,828 | 838,280 |
 | Canada | 20 | 10,404 | 4,341,931 |
@@ -214,7 +214,7 @@ no usable PUE/WUE.
 | Italy | 5 | 707 | 318,208 |
 | Sweden | 5 | 820 | 335,067 |
 | Poland | 5 | 43 | 33,650 |
-| Israel | 4 | 218 | 98,548 |
+| Israel | 4 | 196 | 89,382 |
 | Finland | 3 | 985 | 428,167 |
 | Denmark | 3 | 810 | 357,500 |
 | Norway | 3 | 272 | 275,773 |
@@ -232,7 +232,7 @@ no usable PUE/WUE.
 | Vietnam | 2 | 144 | 61,333 |
 | Thailand | 2 | 147 | 65,167 |
 | Kenya | 2 | 30 | 11,250 |
-| Pakistan | 2 | 12 | 6,542 |
+| Pakistan | 2 | 10 | 3,642 |
 | Uruguay | 2 | - | - |
 | Argentina | 1 | 500 | 208,333 |
 | Trinidad and Tobago | 1 | 450 | 187,500 |
@@ -254,7 +254,18 @@ no usable PUE/WUE.
 | Romania | 1 | - | 2,527 |
 | Czechia | 1 | - | 430 |
 | Serbia | 1 | - | 58 |
-| Greece, Switzerland, Qatar, Bahrain, El Salvador, Ethiopia, Bulgaria, Lithuania, Hungary, Ukraine, Azerbaijan, Peru | 1 each | - | - |
+| Greece | 1 | - | - |
+| Switzerland | 1 | - | - |
+| Qatar | 1 | - | - |
+| Bahrain | 1 | - | - |
+| El Salvador | 1 | - | - |
+| Ethiopia | 1 | - | - |
+| Bulgaria | 1 | - | - |
+| Lithuania | 1 | - | - |
+| Hungary | 1 | - | - |
+| Ukraine | 1 | - | - |
+| Azerbaijan | 1 | - | - |
+| Peru | 1 | - | - |
 
 MW = sum of known gross power (falls back to IT load where gross is unpublished); it
 mixes announced, operating and speculative capacity, so treat it as a scale indicator,

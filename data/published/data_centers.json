@@ -207,29 +207,6 @@
     "source_url": "https://www.crusoe.ai/resources/newsroom/crusoe-expands-ai-data-center-campus-in-abilene-to-1-2-gigawatts"
   },
   {
-    "name": "AWS Madison County (Canton & Ridgeland)",
-    "operator": "Amazon Web Services",
-    "city": "Canton / Ridgeland",
-    "state_province": "Mississippi",
-    "country": "USA",
-    "latitude": 32.619,
-    "longitude": -90.029,
-    "power_capacity_mw": 2200.0,
-    "it_load_mw": null,
-    "announced_gpu_count": null,
-    "gpu_types": "Trainium2",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": null,
-    "h100e_third_party": null,
-    "h100e_flops": null,
-    "h100e_power": 916667,
-    "h100e_best": 916667,
-    "h100e_method": "power",
-    "status": "partially_operational",
-    "status_note": "$21B two-campus program: 34 DCs ~2.2 GW; Canton (JAN100) partially operational 2026; Ridgeland early construction; reported part of Project Rainier program",
-    "source_url": "https://servercountry.org/data/projects/aws-madison-county-data-center-campus"
-  },
-  {
     "name": "IREN Sweetwater Hub (Sweetwater 1 & 2)",
     "operator": "IREN",
     "city": "Sweetwater (Nolan/Fisher Counties)",
@@ -549,7 +526,7 @@
     "h100e_method": "power",
     "status": "under_construction",
     "status_note": "Flagship 1.2GW AI/high-density campus with behind-the-meter gas plant and Energy Transfer gas contract (450k MMBtu/day); under development",
-    "source_url": "https://cloudburstdc.com/data-centers/"
+    "source_url": "https://www.datacenterdynamics.com/en/news/cloudburst-breaks-ground-on-gigawatt-scale-data-center-campus-in-texas/"
   },
   {
     "name": "DayOne Kempas",
@@ -619,6 +596,29 @@
     "status": "partially_operational",
     "status_note": "Existing PDX campuses (Boardman/Hermiston/Umatilla); new 1 GW exascale campus planned (announced 2026)",
     "source_url": "https://www.electricchoice.com/datacenters/oregon"
+  },
+  {
+    "name": "AWS Madison County (Canton & Ridgeland)",
+    "operator": "Amazon Web Services",
+    "city": "Canton / Ridgeland",
+    "state_province": "Mississippi",
+    "country": "USA",
+    "latitude": 32.619,
+    "longitude": -90.029,
+    "power_capacity_mw": 1000.0,
+    "it_load_mw": null,
+    "announced_gpu_count": null,
+    "gpu_types": "Trainium2",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": null,
+    "h100e_third_party": null,
+    "h100e_flops": null,
+    "h100e_power": 416667,
+    "h100e_best": 416667,
+    "h100e_method": "power",
+    "status": "partially_operational",
+    "status_note": "$21B two-campus program: 34 DCs; cited project page states 1.0 GW (Canton operational, Ridgeland early construction); Epoch lists 284 MW IT / 214k H100e for the Madison Mega Site today; reported part of Project Rainier program",
+    "source_url": "https://servercountry.org/data/projects/aws-madison-county-data-center-campus"
   },
   {
     "name": "Project Jupiter (Stargate Dona Ana County)",
@@ -920,29 +920,6 @@
     "source_url": "https://www.hut8.com/news-insights/press-releases/hut-8-fully-commercializes-1-gw-beacon-point-ai-data-center-campus-with-second-352-mw-it-lease"
   },
   {
-    "name": "Google Midlothian",
-    "operator": "Google",
-    "city": "Midlothian",
-    "state_province": "Texas",
-    "country": "USA",
-    "latitude": 32.47,
-    "longitude": -96.99,
-    "power_capacity_mw": null,
-    "it_load_mw": 103.0,
-    "announced_gpu_count": null,
-    "gpu_types": "(Google TPU/GPU)",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": null,
-    "h100e_third_party": 331986.0,
-    "h100e_flops": null,
-    "h100e_power": 51500,
-    "h100e_best": 331986.0,
-    "h100e_method": "third_party",
-    "status": "operational",
-    "status_note": "Operating/expanding Google AI campus; Epoch AI estimates 103MW IT",
-    "source_url": "https://epoch.ai/data/ai-data-centers"
-  },
-  {
     "name": "Google Columbus",
     "operator": "Google",
     "city": "Columbus",
@@ -1079,6 +1056,29 @@
     "status": "operational",
     "status_note": "2,000-acre Citadel Campus designed for up to 650MW / 7.2M sq ft; high-density AI/HPC-capable superscale colocation; tenant mix undisclosed",
     "source_url": "https://www.switch.com/switch-tahoe-reno-data-center-now-open/"
+  },
+  {
+    "name": "Fairwater Atlanta",
+    "operator": "Microsoft",
+    "city": "Fayetteville",
+    "state_province": "Georgia",
+    "country": "USA",
+    "latitude": 33.585,
+    "longitude": -84.544,
+    "power_capacity_mw": 640.0,
+    "it_load_mw": null,
+    "announced_gpu_count": 150000.0,
+    "gpu_types": "GB200",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": null,
+    "h100e_third_party": null,
+    "h100e_flops": null,
+    "h100e_power": 266667,
+    "h100e_best": 266667,
+    "h100e_method": "power",
+    "status": "operational",
+    "status_note": "Operational Oct 2025 at QTS Fayetteville campus (1435 Hwy 54 W); Fairwater 1 (DC-9/DC-10) 340 MW IT + Fairwater 2 (DC-1/DC-2) 300+ MW IT, >700 MW IT by end-2026; >150,000 GB200 in DC-10; linked to Wisconsin via AI WAN (first AI superfactory); 324 MW Union City figure belonged to the separate EdgeConneX ATL11 project",
+    "source_url": "https://news.microsoft.com/source/features/ai/from-wisconsin-to-atlanta-microsoft-connects-datacenters-to-build-its-first-ai-superfactory/"
   },
   {
     "name": "Crusoe Goodnight (Project Llano)",
@@ -1656,29 +1656,6 @@
     "source_url": "https://epoch.ai/data/ai-data-centers/directory/aws-new-albany"
   },
   {
-    "name": "TeraWulf Cayuga (Justified Data Campus)",
-    "operator": "TeraWulf (Anthropic tenant via Fluidstack)",
-    "city": "Lansing (Cayuga Lake)",
-    "state_province": "New York",
-    "country": "USA",
-    "latitude": 42.49,
-    "longitude": -76.48,
-    "power_capacity_mw": 400.0,
-    "it_load_mw": 401.0,
-    "announced_gpu_count": null,
-    "gpu_types": "",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": null,
-    "h100e_third_party": null,
-    "h100e_flops": null,
-    "h100e_power": 200500,
-    "h100e_best": 200500,
-    "h100e_method": "power",
-    "status": "planned",
-    "status_note": "Announced 2026; ~401 MW critical IT lease to Anthropic (Fluidstack/Google-backed)",
-    "source_url": "https://investors.terawulf.com/news-events/press-releases/detail/142/terawulf-announces-anthropic-lease-at-justified-data-campus-and-sale-of-majority-interest-in-abernathy-joint-venture-to-fluidstack"
-  },
-  {
     "name": "Applied Digital Polaris Forge 1",
     "operator": "Applied Digital (CoreWeave tenant)",
     "city": "Ellendale",
@@ -2162,6 +2139,29 @@
     "source_url": "https://usdatamap.com/state/IA"
   },
   {
+    "name": "TeraWulf Lake Hawkeye (Cayuga site)",
+    "operator": "TeraWulf (Anthropic tenant via Fluidstack)",
+    "city": "Lansing (Cayuga Lake)",
+    "state_province": "New York",
+    "country": "USA",
+    "latitude": 42.49,
+    "longitude": -76.48,
+    "power_capacity_mw": 400.0,
+    "it_load_mw": null,
+    "announced_gpu_count": null,
+    "gpu_types": "",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": null,
+    "h100e_third_party": null,
+    "h100e_flops": null,
+    "h100e_power": 166667,
+    "h100e_best": 166667,
+    "h100e_method": "power",
+    "status": "planned",
+    "status_note": "80-year ground lease (Aug 2025) on former Cayuga coal-plant site, Lansing NY; up to 400 MW, 138 MW RFS expected 2H 2026; closed-loop cooling; NO Anthropic lease here - the 401 MW Anthropic lease (Jul 2026) is at the sister site Justified Data, Hawesville KY; Lansing moratorium risk noted",
+    "source_url": "https://investors.terawulf.com/news-events/press-releases/detail/113/terawulf-secures-long-term-ground-lease-at-cayuga-site-to-expand-high-performance-computing-infrastructure"
+  },
+  {
     "name": "Beacon Foothills AI Data Center Hub",
     "operator": "Beacon Data Centres",
     "city": "Foothills County",
@@ -2599,6 +2599,29 @@
     "source_url": "https://investor.bitfarms.com/news-releases/news-release-details/bitfarms-converts-macquarie-debt-facility-300m-project-financing"
   },
   {
+    "name": "Google Midlothian",
+    "operator": "Google",
+    "city": "Midlothian",
+    "state_province": "Texas",
+    "country": "USA",
+    "latitude": 32.47,
+    "longitude": -96.99,
+    "power_capacity_mw": null,
+    "it_load_mw": 103.0,
+    "announced_gpu_count": null,
+    "gpu_types": "(Google TPU/GPU)",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": null,
+    "h100e_third_party": 143581.0,
+    "h100e_flops": null,
+    "h100e_power": 51500,
+    "h100e_best": 143581.0,
+    "h100e_method": "third_party",
+    "status": "operational",
+    "status_note": "Operating/expanding Google AI campus; Epoch AI estimates 103MW IT",
+    "source_url": "https://epoch.ai/data/ai-data-centers"
+  },
+  {
     "name": "AirTrunk MEL1 Melbourne",
     "operator": "AirTrunk",
     "city": "Melbourne",
@@ -2620,29 +2643,6 @@
     "status": "operational",
     "status_note": "Operating; 276MW+; 34 data halls on 8.8ha; part of >630MW AirTrunk Melbourne platform with MEL2",
     "source_url": "https://airtrunk.com/location/mel1-melbourne/"
-  },
-  {
-    "name": "Fairwater Atlanta",
-    "operator": "Microsoft",
-    "city": "Union City (Atlanta metro)",
-    "state_province": "Georgia",
-    "country": "USA",
-    "latitude": 33.585,
-    "longitude": -84.544,
-    "power_capacity_mw": 324.0,
-    "it_load_mw": null,
-    "announced_gpu_count": null,
-    "gpu_types": "NVIDIA Blackwell-class (GB200/GB300)",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": null,
-    "h100e_third_party": null,
-    "h100e_flops": null,
-    "h100e_power": 135000,
-    "h100e_best": 135000,
-    "h100e_method": "power",
-    "status": "operational",
-    "status_note": "Operational Oct 2025; linked to Wisconsin via AI WAN as first AI superfactory; 324 MW per permit records",
-    "source_url": "https://news.microsoft.com/source/features/ai/from-wisconsin-to-atlanta-microsoft-connects-datacenters-to-build-its-first-ai-superfactory/"
   },
   {
     "name": "Meta Los Lunas",
@@ -3427,29 +3427,6 @@
     "source_url": "https://local.microsoft.com/blog/microsoft-bouwt-aan-toekomstbestendige-datacentercampus-in-middenmeer/"
   },
   {
-    "name": "China Telecom Qingyang Intelligent Computing Center",
-    "operator": "China Telecom Gansu",
-    "city": "Qingyang",
-    "state_province": "Gansu",
-    "country": "China",
-    "latitude": 35.73,
-    "longitude": 107.64,
-    "power_capacity_mw": 250.0,
-    "it_load_mw": null,
-    "announced_gpu_count": null,
-    "gpu_types": "",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": null,
-    "h100e_third_party": null,
-    "h100e_flops": null,
-    "h100e_power": 104167,
-    "h100e_best": 104167,
-    "h100e_method": "power",
-    "status": "under_construction",
-    "status_note": "Under construction/expanding; 8 intelligent-computing buildings; >100,000 racks (~250MW IT); first 100kW liquid-cooled racks; Qingyang cluster total 306,000P FP16 (Oct 2026)",
-    "source_url": "https://local.cctv.com/2026/09/18/ARTIyjwEDeaq7N2VZI9stVk260918.shtml"
-  },
-  {
     "name": "EcoDataCenter 2 (Kvarnsveden)",
     "operator": "EcoDataCenter",
     "city": "Borlange",
@@ -3999,7 +3976,7 @@
     "h100e_method": "power",
     "status": "planned",
     "status_note": "70+ acre AI/HPC campus; 30MW grid ready-for-service Q4 2026 growing to 200MW, four 50MW buildings, 150kW+ racks (coords approximate)",
-    "source_url": "https://cloudburstdc.com/data-centers/"
+    "source_url": "https://www.datacenterdynamics.com/en/news/cloudburst-breaks-ground-on-gigawatt-scale-data-center-campus-in-texas/"
   },
   {
     "name": "Tecto TGRU1",
@@ -4482,7 +4459,7 @@
     "h100e_method": "power",
     "status": "operational",
     "status_note": "Opened 2026; CCCC's first green data center; >140MW IT, designed for >60,000P; part of Zhongwei Western Cloud Base (88k GPU cards end-2024)",
-    "source_url": "https://www.news.cn/politics/20260317/7b4eb07c9754dada8ad61b69a1aeee7/c.html"
+    "source_url": "https://www.news.cn/politics/20260317/7b4eb07c97554dada8ad61b69a1aeee7/c.html"
   },
   {
     "name": "Nscale Loughton AI Campus",
@@ -4506,6 +4483,29 @@
     "status": "under_construction",
     "status_note": "Under construction; 50MW AI capacity scalable to 90MW; 23,040 GB300 GPUs due Q1 2027 as UK's largest AI supercomputer; press reports say Microsoft exited deal 2026 amid UK grid delays",
     "source_url": "https://www.nscale.com/press-releases/nscale-uk-ai-infrastructure-announcement"
+  },
+  {
+    "name": "China Telecom Qingyang Intelligent Computing Center",
+    "operator": "China Telecom Gansu",
+    "city": "Qingyang",
+    "state_province": "Gansu",
+    "country": "China",
+    "latitude": 35.73,
+    "longitude": 107.64,
+    "power_capacity_mw": 135.0,
+    "it_load_mw": null,
+    "announced_gpu_count": null,
+    "gpu_types": "",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": null,
+    "h100e_third_party": null,
+    "h100e_flops": null,
+    "h100e_power": 56250,
+    "h100e_best": 56250,
+    "h100e_method": "power",
+    "status": "under_construction",
+    "status_note": "Under construction/expanding; 8 intelligent-computing buildings; Qingyang municipal government: 22,500 racks / 135 MW rack capacity at full build-out (Oct 2024 groundbreaking); first 100kW liquid-cooled racks; 100k-rack / 306,000P figures cover the wider Qingyang cluster",
+    "source_url": "https://www.chinatelecom.com.cn/ct/news/yunjisuanjisuanli/164971.html"
   },
   {
     "name": "AirTrunk SYD1 Sydney West",
@@ -5405,29 +5405,6 @@
     "source_url": "https://programminginsider.com/felix-huettenbach-and-terranum-advance-plans-for-africas-largest-off-grid-data-center-campus-in-prieska-south-africa/"
   },
   {
-    "name": "Bridge Data Centres Cyberjaya (MY01 & MY02)",
-    "operator": "Bridge Data Centres (Chindata)",
-    "city": "Cyberjaya",
-    "state_province": "Selangor",
-    "country": "Malaysia",
-    "latitude": 2.9935,
-    "longitude": 101.653,
-    "power_capacity_mw": 98.0,
-    "it_load_mw": null,
-    "announced_gpu_count": null,
-    "gpu_types": "",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": null,
-    "h100e_third_party": null,
-    "h100e_flops": null,
-    "h100e_power": 40833,
-    "h100e_best": 40833,
-    "h100e_method": "power",
-    "status": "operational",
-    "status_note": "Operating; ~20MW critical IT from 2018 plus 87MW MY02 expansion announced 2024; Bridge lists 98MW total IT for Cyberjaya campuses",
-    "source_url": "https://www.datacenterdynamics.com/en/news/bridge-dc-expands-in-malaysia-with-data-center-in-cyberjaya/"
-  },
-  {
     "name": "Mistral Compute - Essonne (MDA)",
     "operator": "Mistral AI",
     "city": "Cerny",
@@ -5610,29 +5587,6 @@
     "status": "operational",
     "status_note": "Operating since 2023; ~80 MW; approximate (tracker)",
     "source_url": "https://usdatamap.com/company/coreweave"
-  },
-  {
-    "name": "Nebius-Mega Or AI Data Center Beit Shemesh",
-    "operator": "Nebius (leased from Mega Or)",
-    "city": "Beit Shemesh",
-    "state_province": "Jerusalem District",
-    "country": "Israel",
-    "latitude": 31.74,
-    "longitude": 34.99,
-    "power_capacity_mw": 80.0,
-    "it_load_mw": null,
-    "announced_gpu_count": null,
-    "gpu_types": "",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": null,
-    "h100e_third_party": null,
-    "h100e_flops": null,
-    "h100e_power": 33333,
-    "h100e_best": 33333,
-    "h100e_method": "power",
-    "status": "under_construction",
-    "status_note": "Under construction; 80MW lease signed Jan 2026 (delivery from Q3 2026); expandable to 222MW",
-    "source_url": "https://www.datacenterdynamics.com/en/news/nebius-signs-80mw-data-center-lease-with-mega-or-in-israel/"
   },
   {
     "name": "Yotta NM2 Navi Mumbai",
@@ -5908,7 +5862,7 @@
     "h100e_method": "gpu_count",
     "status": "partially_operational",
     "status_note": "30MW facility live; campus Phase 1 designed for 250MW (billed gigawatt-scale); will host India's largest NVIDIA B300 AI Factory (10,000 GPUs) for Together AI (~$1-1.75B deal, Aug 2026); 52MW expansion groundbreaking Oct 2026",
-    "source_url": "https://www.larsentoubro.com/pressreleases/2026/2026-08-13-larsen-toubro-secures-mega-order-as-part-of-a-strategic-partnership-with-together-ai-to-build-indias-largest-nvidia-b300-ai-factory"
+    "source_url": "https://www.larsentoubro.com/pressreleases/2026/2026-08-13-larsen-toubro-secures-mega-order-as-part-of-a-strategic-partnership-with-together-ai-to-build-india-s-largest-nvidia-b300-ai-factory"
   },
   {
     "name": "NTT DATA-Neysa Hyderabad AI DC Cluster",
@@ -6001,6 +5955,29 @@
     "status": "operational",
     "status_note": "Operational; CT2 expansion completed Nov 2025 adding 32MW across 8 halls, taking the facility to 50MW critical IT load; marketed for cloud and next-gen AI workloads",
     "source_url": "https://www.teraco.co.za/news/teraco-completes-ct2-data-centre-expansion/"
+  },
+  {
+    "name": "Nebius-Mega Or AI Data Center Beit Shemesh",
+    "operator": "Nebius (leased from Mega Or)",
+    "city": "Beit Shemesh",
+    "state_province": "Jerusalem District",
+    "country": "Israel",
+    "latitude": 31.74,
+    "longitude": 34.99,
+    "power_capacity_mw": 58.0,
+    "it_load_mw": null,
+    "announced_gpu_count": null,
+    "gpu_types": "",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": null,
+    "h100e_third_party": null,
+    "h100e_flops": null,
+    "h100e_power": 24167,
+    "h100e_best": 24167,
+    "h100e_method": "power",
+    "status": "under_construction",
+    "status_note": "Under construction; 58 MW at Beit Shemesh - the 80 MW Jan 2026 lease is combined with the 22 MW Masmiyya site (delivery from Q3 2026); expandable to 222MW",
+    "source_url": "https://www.datacenterdynamics.com/en/news/nebius-signs-80mw-data-center-lease-with-mega-or-in-israel/"
   },
   {
     "name": "JUPITER / JAIF (Exascale AI Factory)",
@@ -6759,7 +6736,7 @@
     "h100e_method": "gpu_count",
     "status": "operational",
     "status_note": "Operational; 30,000-card multi-heterogeneous intelligent-computing cluster; H100e assumes Ascend-class 0.35 factor; first large-scale green direct-supply project (Datang 2GW wind/solar)",
-    "source_url": "https://www.news.cn/politics/20260317/7b4eb07c9754dada8ad61b69a1aeee7/c.html"
+    "source_url": "https://www.news.cn/politics/20260317/7b4eb07c97554dada8ad61b69a1aeee7/c.html"
   },
   {
     "name": "Anant Raj Manesar AI Cloud DC",
@@ -6783,29 +6760,6 @@
     "status": "partially_operational",
     "status_note": "21MW phase live at ARL Tech Park, campus designed for 50MW; Submer immersion-cooled AI/GPU partnership; ~28MW operational across Manesar/Rai/Panchkula with 300MW potential",
     "source_url": "https://anantrajcloud.com"
-  },
-  {
-    "name": "China Mobile Hohhot Intelligent Computing Center",
-    "operator": "China Mobile",
-    "city": "Hohhot",
-    "state_province": "Inner Mongolia",
-    "country": "China",
-    "latitude": 40.75,
-    "longitude": 111.6,
-    "power_capacity_mw": null,
-    "it_load_mw": null,
-    "announced_gpu_count": 10000.0,
-    "gpu_types": "GPU (incl. domestic accelerators)",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": 10000.0,
-    "h100e_third_party": null,
-    "h100e_flops": null,
-    "h100e_power": null,
-    "h100e_best": 10000.0,
-    "h100e_method": "gpu_count",
-    "status": "operational",
-    "status_note": "Operating; one of China Mobile's 21+ AI data centres hosting >10,000 GPUs; China Mobile targets ~100 EFLOPS AI compute with domestic chips by 2028",
-    "source_url": "https://www.scmp.com/business/article/3328842/china-mobile-aims-triple-ai-computing-power-using-homegrown-chips-2028"
   },
   {
     "name": "CoreWeave Crawley (Digital Realty LGW15/16)",
@@ -6992,6 +6946,29 @@
     "source_url": "https://www.datacenterdynamics.com/en/news/sttgdc-to-host-neysa-gpus-at-data-center-in-noida-india"
   },
   {
+    "name": "Bridge Data Centres Cyberjaya (MY01 & MY02)",
+    "operator": "Bridge Data Centres (Chindata)",
+    "city": "Cyberjaya",
+    "state_province": "Selangor",
+    "country": "Malaysia",
+    "latitude": 2.9935,
+    "longitude": 101.653,
+    "power_capacity_mw": 20.0,
+    "it_load_mw": null,
+    "announced_gpu_count": null,
+    "gpu_types": "",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": null,
+    "h100e_third_party": null,
+    "h100e_flops": null,
+    "h100e_power": 8333,
+    "h100e_best": 8333,
+    "h100e_method": "power",
+    "status": "operational",
+    "status_note": "Operating; DCD: original two Cyberjaya sites ~20 MW critical IT; separate 87 MW third Cyberjaya campus across three phases was under development (Feb 2024); the 98 MW total figure appears only in Bridge listing",
+    "source_url": "https://www.datacenterdynamics.com/en/news/bridge-dc-expands-in-malaysia-with-data-center-in-cyberjaya/"
+  },
+  {
     "name": "CoreWeave Austin (Core Scientific)",
     "operator": "Core Scientific (CoreWeave tenant)",
     "city": "Austin",
@@ -7105,6 +7082,29 @@
     "status": "partially_operational",
     "status_note": "First building 14.4MW IT live, expanding to 3 buildings/43.2MW IT by ~2028; Poland's largest AI-ready colocation campus; 140kW/rack, liquid cooling",
     "source_url": "https://atman.pl/en/atman-data-center/warsaw-3/"
+  },
+  {
+    "name": "China Mobile Hohhot Intelligent Computing Center",
+    "operator": "China Mobile",
+    "city": "Hohhot",
+    "state_province": "Inner Mongolia",
+    "country": "China",
+    "latitude": 40.75,
+    "longitude": 111.6,
+    "power_capacity_mw": null,
+    "it_load_mw": null,
+    "announced_gpu_count": 20000.0,
+    "gpu_types": "GPU (incl. domestic accelerators)",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": 7000.0,
+    "h100e_third_party": null,
+    "h100e_flops": null,
+    "h100e_power": null,
+    "h100e_best": 7000.0,
+    "h100e_method": "gpu_count",
+    "status": "operational",
+    "status_note": "Operating; Yicai/China Daily/Light Reading report ~20,000 AI accelerator cards at ~6.7 EFLOPS (Ascend-class, 0.35 factor); China Mobile targets ~100 EFLOPS AI compute with domestic chips by 2028",
+    "source_url": "https://www.scmp.com/business/article/3328842/china-mobile-aims-triple-ai-computing-power-using-homegrown-chips-2028"
   },
   {
     "name": "China Mobile Intelligent Computing Center (Harbin)",
@@ -7475,29 +7475,6 @@
     "source_url": "https://www.cassavatechnologies.com/cassava-to-upgrade-its-data-centres-with-nvidia-supercomputers-to-drive-africas-ai-future/"
   },
   {
-    "name": "Data Vault Pakistan AI Data Center",
-    "operator": "Data Vault Pakistan (with Telenor Pakistan)",
-    "city": "Karachi (Korangi)",
-    "state_province": "Sindh",
-    "country": "Pakistan",
-    "latitude": 24.833,
-    "longitude": 67.14,
-    "power_capacity_mw": null,
-    "it_load_mw": 3.0,
-    "announced_gpu_count": 3000.0,
-    "gpu_types": "NVIDIA H100/H200 (claimed)",
-    "cluster_peak_pflops": null,
-    "h100e_gpu": 3000.0,
-    "h100e_third_party": null,
-    "h100e_flops": null,
-    "h100e_power": 1500,
-    "h100e_best": 3000.0,
-    "h100e_method": "gpu_count",
-    "status": "operational",
-    "status_note": "Launched Nov 2025; Pakistan's first AI-ready sovereign DC & GPU-as-a-Service (Telenor partnership); >3,000 H100/H200 GPUs reported via US export licenses (unverified claim); ~3MW AI IT load is DCMI estimate",
-    "source_url": "https://datavault.com.pk"
-  },
-  {
     "name": "FPT AI Factory",
     "operator": "FPT Corporation",
     "city": "Hanoi",
@@ -7518,7 +7495,7 @@
     "h100e_method": "gpu_count",
     "status": "operational",
     "status_note": "Operational Jan 2025 at Hoa Lac Hi-Tech Park; Vietnam's first AI factory, ~$200M; Epoch AI estimates ~3,000 H100 SXM5 and 2.97 EFLOPS FP16 (FPT disclosed 'thousands')",
-    "source_url": "https://fpt.com/en/news/fpt-news/can-canh-sieu-chip-nvidia-tai-nha-may-ai-cua-fpt-tai-viet-nam"
+    "source_url": "https://fpt.com/en/news/inside-fpts-first-ai-factory-in-vietnam-thousands-of-nvidia-superchips-in-action"
   },
   {
     "name": "Shaheen III Supercomputer (KAUST)",
@@ -8073,6 +8050,29 @@
     "source_url": "https://www.alliancecan.ca/en/services/compute/vulcan"
   },
   {
+    "name": "Data Vault Pakistan AI Data Center",
+    "operator": "Data Vault Pakistan (with Telenor Pakistan)",
+    "city": "Karachi (Korangi)",
+    "state_province": "Sindh",
+    "country": "Pakistan",
+    "latitude": 24.833,
+    "longitude": 67.14,
+    "power_capacity_mw": null,
+    "it_load_mw": 1.0,
+    "announced_gpu_count": 100.0,
+    "gpu_types": "NVIDIA RTX PRO 6000 / A100 / H200 / B200 (mixed)",
+    "cluster_peak_pflops": null,
+    "h100e_gpu": 100.0,
+    "h100e_third_party": null,
+    "h100e_flops": null,
+    "h100e_power": 500,
+    "h100e_best": 100.0,
+    "h100e_method": "gpu_count",
+    "status": "operational",
+    "status_note": "Facility in operation Jul 2025 (Korangi, Karachi); sovereign AI DC & GPU-as-a-Service (Telenor partnership); operator site (Oct 2026): 100 GPUs installed, 1 MW critical IT today, 3 MW expansion capacity; the >3,000 GPU figure is a CEO procurement claim (Dawn), not installed capacity",
+    "source_url": "https://datavault.com.pk"
+  },
+  {
     "name": "Serbian National AI Platform (SAIFA host)",
     "operator": "Office for IT and eGovernment (Government of Serbia)",
     "city": "Kragujevac",
@@ -8229,9 +8229,9 @@
     "h100e_power": null,
     "h100e_best": null,
     "h100e_method": "",
-    "status": "planned",
-    "status_note": "Planned/announced 2024; Entergy building ~$600M generation plus 440 MW solar PPA for the campus; capacity not disclosed",
-    "source_url": "https://baxtel.com/data-center/google-dalles-6"
+    "status": "under_construction",
+    "status_note": "Announced Oct 2025 ($4B+, 1,000+ acres, Entergy); construction began Oct 2025 on first of up to five buildings (Arkansas Democrat-Gazette, Jun 2026); capacity not disclosed",
+    "source_url": "https://www.arkansasedc.com/news-events/newsroom/detail/2025/10/02/google-locating-new-data-center-in-west-memphis--arkansas-with-multi-billion-dollar-investment"
   },
   {
     "name": "Lambda DFW-04 (Aligned)",
@@ -9657,7 +9657,7 @@
     "h100e_method": "",
     "status": "operational",
     "status_note": "Operating; Tier III carrier-neutral facility; May 2025 partnership with Ethiopian AI Institute to host AI compute; EAII tendered NVIDIA DGX H200 purchases Dec 2025; capacity figures not published",
-    "source_url": "https://africacomputetracker.org/facilities/"
+    "source_url": "https://www.wingu.africa/latest-news/wingu-africa-partners-with-ethiopian-artificial-intelligence-institute"
   },
   {
     "name": "Microsoft Cloud Region Poland (Mazovia expansion)",
@@ -9979,7 +9979,7 @@
     "h100e_method": "",
     "status": "planned",
     "status_note": "Planned; acquired 200-acre former Alcoa smelter site for AI/HPC expansion (Sep 2026); no capacity disclosed",
-    "source_url": "https://www.datacenterdynamics.com/en/news/bitdeer-looks-to-develop-750mw-data-center-campus-in-ohio/"
+    "source_url": "https://www.datacenterdynamics.com/en/news/bitdeer-buys-200-acres-in-milam-county-texas-to-expand-ai-and-hpc-data-center/"
   },
   {
     "name": "Google Fort Wayne",

@@ -25,3 +25,7 @@ venv/
 *.xls
 *.log
 *.tmp
+
+# macOS AppleDouble metadata (BigData volume creates these)
+._*
+.DS_Store
