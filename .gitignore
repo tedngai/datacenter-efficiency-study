@@ -1,0 +1,27 @@
+# --- secrets -------------------------------------------------------------
+# The GitHub PAT lives here and must never be committed.
+.env
+.env.*
+!.env.example
+
+# --- OS / editor ---------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# --- python --------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# --- transient research artifacts ---------------------------------------
+# EIA workbooks are downloaded to %TEMP%, but ignore any that land here.
+*.xlsx
+*.xls
+*.log
+*.tmp

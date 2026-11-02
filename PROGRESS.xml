@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PROGRESS.xml — append-only log of decisions, incidents, verifications and changes.
+
+  Rules:
+    * New entries go at the TOP of <entries> (newest first).
+    * Never rewrite history. If a decision is reversed, add a new entry that
+      supersedes it and set superseded="true" on the old one.
+    * Every entry that changes published numbers must name the files touched.
+    * Do not paste credentials, tokens or private keys into this file.
+-->
+<progress project="datacenter-efficiency-study"
+          repo="https://github.com/tedngai/datacenter-efficiency-study"
+          updated="2026-11-02"
+          schema="1">
+
+  <summary>
+    Global inventory of major AI/hyperscale data centers quantified in H100e,
+    plus US utility-territory impacts (energy prices and water) and an
+    operator-efficiency comparison. Current release: 442 sites, 71 countries,
+    ~64.7M H100e, 121 US sites across 55 utility territories, 13 operators.
+  </summary>
+
+  <state>
+    <sites>442</sites>
+    <countries>71</countries>
+    <sites_with_h100e>353</sites_with_h100e>
+    <total_h100e>64700000</total_h100e>
+    <us_sites>121</us_sites>
+    <us_utility_rows>55</us_utility_rows>
+    <operator_rows>13</operator_rows>
+    <status operational="199" partially_operational="35"
+            under_construction="116" planned="92"/>
+  </state>
+
+  <entries>
+
+    <entry id="C-009" date="2026-11-02" type="change" area="repo"
+           title="Repository reorganised into data / pipeline / docs" status="done">
+      <detail>
+        Flat layout replaced with a structured one before the first commit:
+        data/{canonical,raw,published}, pipeline/{,archive,verification}, docs/.
+        The canonical dataset moved from data_centers_fixed.csv to
+        data/canonical/data_centers.csv; build outputs now live in
+        data/published/ and index.html stays at the repo root for GitHub Pages.
+        Every script now derives ROOT from __file__, so it runs from any working
+        directory. Country count corrected from 69 to 71 (71 distinct country
+        strings in the canonical data; the old figure was stale).
+      </detail>
+      <files>
+        <file>data/canonical/data_centers.csv</file>
+        <file>data/raw/data_centers_raw.csv</file>
+        <file>data/published/data_centers.csv</file>
+        <file>data/published/data_centers.json</file>
+        <file>pipeline/build.py</file>
+        <file>pipeline/country_table.py</file>
+        <file>pipeline/inventory.py</file>
+        <file>pipeline/archive/</file>
+        <file>pipeline/verification/</file>
+        <file>docs/</file>
+        <file>AGENTS.md</file>
+        <file>README.md</file>
+        <file>DATA_DICTIONARY.md</file>
+      </files>
+    </entry>
+
+    <entry id="I-011" date="2026-11-02" type="incident" area="tooling"
+           title="Archive scripts truncated by a rewrite bug; recovered intact" status="resolved">
+      <detail>
+        During the restructure a one-line Python rewrite opened each
+        pipeline/archive/*.py for writing before reading it, truncating all nine
+        scripts to zero bytes. The canonical dataset, published outputs and all
+        documents were unaffected. The original tool-call payloads were still in
+        OpenCode's local session database, so all nine files were rebuilt and
+        verified byte-for-byte against their pre-incident sizes, then re-patched
+        for the new paths. Guardrail: read a file fully into memory before
+        opening it for write; never call open(path, "w") as the object of a
+        method whose argument re-reads the same path.
+      </detail>
+      <files>
+        <file>pipeline/archive/add_rows.py</file>
+        <file>pipeline/archive/add_rows2.py</file>
+        <file>pipeline/archive/add_rows3.py</file>
+        <file>pipeline/archive/add_rows4.py</file>
+        <file>pipeline/archive/add_rows5.py</file>
+        <file>pipeline/archive/add_rows6.py</file>
+        <file>pipeline/archive/patch.py</file>
+        <file>pipeline/archive/salvage.py</file>
+        <file>pipeline/archive/fix_urls5.py</file>
+      </files>
+    </entry>
+
+    <entry id="D-007" date="2026-11-02" type="decision" area="tooling"
+           title="Scripts resolve the repo root from their own location" status="accepted">
+      <detail>
+        All pipeline scripts compute ROOT from __file__ (one level for
+        pipeline/*.py, two for pipeline/archive and pipeline/verification) and
+        build absolute paths from it. This makes the layout reorganisation safe
+        and lets scripts run from any working directory. New scripts must follow
+        the same pattern.
+      </detail>
+    </entry>
+
+    <entry id="R-001" date="2026-11-02" type="release" area="repo"
+           title="Repository packaged and published" status="done">
+      <detail>
+        Initial public packaging: AGENTS.md, PROGRESS.xml, DATA_DICTIONARY.md,
+        .gitignore and a token-safe push helper. Dataset, map, US impacts study
+        and operator-efficiency study committed together. Remote:
+        github.com/tedngai/datacenter-efficiency-study (branch main).
+      </detail>
+      <files>
+        <file>AGENTS.md</file>
+        <file>PROGRESS.xml</file>
+        <file>DATA_DICTIONARY.md</file>
+        <file>.gitignore</file>
+        <file>scripts/push.ps1</file>
+      </files>
+    </entry>
+
+    <entry id="D-006" date="2026-11-02" type="decision" area="security"
+           title="Credentials never enter tracked files" status="accepted">
+      <detail>
+        The GitHub PAT lives only in .env (gitignored). AGENTS.md documents the
+        location and handling, not the value. Pushes use scripts/push.ps1, which
+        reads .env at runtime, disables the credential helper and targets a
+        tokenised URL so nothing is written to .git/config. Rationale: a token
+        in git history is compromised even after deletion, and this repository
+        is published.
+      </detail>
+    </entry>
+
+    <entry id="C-008" date="2026-11-02" type="change" area="operators"
+           title="Operator efficiency comparison added" status="done">
+      <detail>
+        Built operator_efficiency.csv (13 operators) and operator_efficiency.md.
+        Fleet metrics: Meta PUE 1.08 / WUE 0.19 (2024); Google 1.09 / 1.02
+        derived (2025); AWS 1.14 / 0.12 (2025); Microsoft 1.17 / 0.27 (FY25).
+        Key finding: energy and water trade off — Google has the best PUE of the
+        largest fleet but 5-8x the water intensity of Meta/AWS. Neoclouds split
+        into design claims (Crusoe, Nebius) and non-disclosure (CoreWeave,
+        Applied Digital, Lambda, Galaxy); xAI discloses nothing, bottom-up
+        estimate ~1.0 L/kWh.
+      </detail>
+      <files>
+        <file>operator_efficiency.csv</file>
+        <file>operator_efficiency.md</file>
+        <file>README.md</file>
+      </files>
+    </entry>
+
+    <entry id="I-009" date="2026-11-01" type="incident" area="us-impacts"
+           title="Dominion order dated and described incorrectly" status="resolved">
+      <detail>
+        Row text said "Jan 2026 order" and "14-yr contracts". The SCC final order
+        is dated 25 Nov 2025 (PUR-2025-00058) and the release contains no 14-year
+        term; the minimums are 85% distribution/transmission and 60% generation.
+        Corrected in the NoVA row and in us_water_energy.md.
+      </detail>
+      <files>
+        <file>us_utility_impacts.csv</file>
+        <file>us_water_energy.md</file>
+      </files>
+    </entry>
+
+    <entry id="I-008" date="2026-11-01" type="incident" area="water"
+           title="Two water figures downgraded to unverified" status="resolved">
+      <detail>
+        AWS Ridgeland's 3.67 MGD peak-day demand does not appear in the
+        water-service agreement text; xAI's 1.3 MGD contract demand rests on a
+        paywalled Commercial Appeal piece. Both rows now say "reported,
+        unverified" instead of asserting the figure.
+      </detail>
+      <files>
+        <file>us_utility_impacts.csv</file>
+        <file>us_water_energy.md</file>
+      </files>
+    </entry>
+
+    <entry id="I-007" date="2026-11-01" type="incident" area="water"
+           title="Fermi water rate overstated as 'double the standard rate'" status="resolved">
+      <detail>
+        Amarillo reporting confirms $8.72 per 1,000 gallons and that it is the
+        highest industrial rate the city has ever charged; it does not support
+        "double". Corrected in both the CSV and the report table.
+      </detail>
+      <files>
+        <file>us_utility_impacts.csv</file>
+        <file>us_water_energy.md</file>
+      </files>
+    </entry>
+
+    <entry id="I-006" date="2026-11-01" type="incident" area="water"
+           title="Microsoft Goodyear water allowance mischaracterised" status="resolved">
+      <detail>
+        The 1.2 MGD in the 2023 council amendment is wastewater treatment
+        capacity, not a freshwater entitlement. The original cooling plan was up
+        to 5 MGD (~1M gpd per building); later buildings were switched to air
+        cooling. Row rewritten with the $36M contribution to the $90M plant.
+      </detail>
+      <files>
+        <file>us_utility_impacts.csv</file>
+        <file>us_water_energy.md</file>
+      </files>
+    </entry>
+
+    <entry id="I-005" date="2026-11-01" type="incident" area="us-impacts"
+           title="Alabama price comparison had the sign wrong" status="resolved">
+      <detail>
+        Montgomery was described as above the US average (13.09c vs 16.48c). EIA
+        shows 12.96c (2021) and 16.09c (2025) against a 17.23c US average — below,
+        not above. High Alabama bills come from consumption per household, not
+        price per kWh. Row corrected and the distinction made explicit.
+      </detail>
+      <files>
+        <file>us_utility_impacts.csv</file>
+      </files>
+    </entry>
+
+    <entry id="I-004" date="2026-11-01" type="incident" area="us-impacts"
+           title="Systematic 2021 price baselines ~1c/kWh too low" status="resolved">
+      <detail>
+        Subagent-supplied 2021 baselines were consistently low (VA 11.0 vs 11.96;
+        AR 9.9 vs 11.27; GA 11.7 vs 12.51; AZ 11.7 vs 12.54), and several 2025
+        figures were mid-year quotes or "typical bill / 1,000 kWh" arithmetic.
+        All 32 state series re-based on EIA Table 2.10 (2021, 2024, 2025) and EEM
+        Table 5.6.B (Jan-Aug 2026 YTD). A Wyoming "9.14c in 2024" claim could not
+        be reconciled and was removed.
+      </detail>
+      <files>
+        <file>us_utility_impacts.csv</file>
+        <file>us_impacts_verification.md</file>
+        <file>verify_eia.py</file>
+      </files>
+    </entry>
+
+    <entry id="V-001" date="2026-11-01" type="verification" area="us-impacts"
+           title="US price and water claims verified; grades assigned" status="done">
+      <detail>
+        Load-bearing claims checked against EIA, Google 2026 Environmental Report
+        p.97, Virginia SCC, PJM BRA, Georgia PSC rate survey, Wisconsin PSC
+        5-UR-111/112 and Umatilla notices. Grades: 25 A, 30 B, 0 C, 0 D. Four
+        correction passes applied (verify_apply.py to verify_apply4.py), each
+        printing OK/MISS per edit.
+      </detail>
+      <files>
+        <file>us_impacts_verification.md</file>
+        <file>verify_apply.py</file>
+        <file>verify_apply2.py</file>
+        <file>verify_apply3.py</file>
+        <file>verify_apply4.py</file>
+      </files>
+    </entry>
+
+    <entry id="C-007" date="2026-11-01" type="change" area="water"
+           title="Google site water re-based on 2026 Environmental Report" status="done">
+      <detail>
+        Council Bluffs corrected from "~1.4B gal (2024)" to 1,746.4M withdrawn /
+        1,346.0M consumed (2025). New Albany corrected from "~127M gal/yr" to
+        1,008.1M / 835.7M. Google Nebraska corrected to 732.1M consumed in 2025,
+        up from 134.7M in 2023 (not 2024). Loudoun clarified as 899M potable plus
+        815M reclaimed.
+      </detail>
+      <files>
+        <file>us_utility_impacts.csv</file>
+        <file>us_water_energy.md</file>
+      </files>
+    </entry>
+
+    <entry id="D-005" date="2026-10" type="decision" area="us-impacts"
+           title="Group US impacts by utility territory, not by site" status="accepted">
+      <detail>
+        121 US sites collapse into 55 utility territories; grouping avoids
+        repeating the same rate case and water source dozens of times. One row
+        per territory, listing the sites it covers.
+      </detail>
+    </entry>
+
+    <entry id="I-003" date="2026-10" type="incident" area="dataset"
+           title="Boydton attributed to the wrong utility" status="resolved">
+      <detail>
+        Microsoft Boydton was attributed to AEP Virginia. EIA territory data
+        shows Mecklenburg Electric Cooperative / Southside Electric Cooperative
+        with some Dominion. A 2021 MEC SCC filing confirms a data-center special
+        rate in its territory. Dataset and US impacts row corrected.
+      </detail>
+      <files>
+        <file>data_centers_fixed.csv</file>
+        <file>us_utility_impacts.csv</file>
+      </files>
+    </entry>
+
+    <entry id="I-002" date="2026-10" type="incident" area="dataset"
+           title="Nscale NC-1 located in the wrong county" status="resolved">
+      <detail>
+        Corrected to the town of Madison, Rockingham County, North Carolina
+        (Duke Energy Carolinas territory), not Madison County.
+      </detail>
+      <files>
+        <file>data_centers_fixed.csv</file>
+      </files>
+    </entry>
+
+    <entry id="I-001" date="2026-10" type="incident" area="dataset"
+           title="Cipher Barber Lake placed in the wrong state" status="resolved">
+      <detail>
+        Listed in Barbour County, West Virginia; it is in Colorado City, Texas
+        (Cipher 8-K, Sep 2025). Row corrected; the WV Mon Power row in the US
+        impacts file is retained only as regional context.
+      </detail>
+      <files>
+        <file>data_centers_fixed.csv</file>
+        <file>us_utility_impacts.csv</file>
+      </files>
+    </entry>
+
+    <entry id="C-006" date="2026-10" type="change" area="docs"
+           title="README methodology and country summary completed" status="done">
+      <detail>
+        Added H100e methodology, status table, regional coverage note and the
+        country-level summary table generated from h100e_best.
+      </detail>
+      <files>
+        <file>README.md</file>
+        <file>country_table.py</file>
+      </files>
+    </entry>
+
+    <entry id="C-005" date="2026-10" type="change" area="us-impacts"
+           title="US impacts dataset and report published" status="done">
+      <detail>
+        us_utility_impacts.csv (55 territory rows) and us_water_energy.md
+        (headline findings, big-drinker table, complaint groups, caveats) built
+        from six regional research sweeps covering all 121 US sites.
+      </detail>
+      <files>
+        <file>us_utility_impacts.csv</file>
+        <file>us_water_energy.md</file>
+      </files>
+    </entry>
+
+    <entry id="C-004" date="2026-10" type="change" area="dataset"
+           title="Country-by-country sweep completed" status="done">
+      <detail>
+        Regional deep-dives merged into the canonical dataset, reaching 442
+        sites across 69 countries. Status coverage validated by build.py.
+      </detail>
+      <files>
+        <file>data_centers_fixed.csv</file>
+        <file>data_centers.csv</file>
+        <file>data_centers.json</file>
+        <file>index.html</file>
+      </files>
+    </entry>
+
+    <entry id="D-004" date="2026-10" type="decision" area="method"
+           title="Four-state status taxonomy with fixed map colours" status="accepted">
+      <detail>
+        operational / partially_operational / under_construction / planned map
+        to green / yellow / blue / purple on the Leaflet map. Any new status
+        value requires updating build.py, the legend and this document.
+      </detail>
+    </entry>
+
+    <entry id="D-003" date="2026-10" type="decision" area="method"
+           title="H100e computed three ways, best estimate published" status="accepted">
+      <detail>
+        h100e_gpu (count conversion), h100e_flops (peak FLOPS) and h100e_power
+        (500 per MW IT, 417 per MW gross at PUE 1.2). h100e_best picks the
+        strongest available method and h100e_method records which one. Mixed GPU
+        generations get no single factor and are left blank with a note.
+      </detail>
+    </entry>
+
+    <entry id="D-002" date="2026-10" type="decision" area="method"
+           title="GPU generation conversion factors fixed" status="accepted">
+      <detail>
+        H100/H200/H800/GH200 1.0; B200/GB200 2.25; GB300/B300 2.5; A100 0.315;
+        Trainium2 0.34; Ascend 910B 0.35; L40S 0.19; unspecified 1.0. Factors are
+        documented in README and applied by the append scripts.
+      </detail>
+    </entry>
+
+    <entry id="D-001" date="2026-10" type="decision" area="scope"
+           title="Inclusion bar set at ~100 MW or 10k+ GPUs" status="accepted">
+      <detail>
+        Major AI/hyperscale campuses only. National-lab supercomputers excluded
+        except where genuinely notable as AI systems. Thin rows kept when the
+        site is notable, with an honest note; overlapping or uncertain sites kept
+        with an explicit warning note rather than silently dropped.
+      </detail>
+    </entry>
+
+    <entry id="I-010" date="2026-10" type="incident" area="tooling"
+           title="PowerShell quoting and download-path failures during verification" status="resolved">
+      <detail>
+        Inline Python f-strings broke under PowerShell 5 parsing, and EIA files
+        downloaded under URL-derived names did not match the expected paths. Fix:
+        write verification logic to .py files and reference explicit filenames.
+        Also, the first correction pass used guessed substrings and reported
+        MISS on 13 edits; the second pass used exact substrings from the CSV.
+      </detail>
+      <files>
+        <file>verify_eia.py</file>
+        <file>verify_apply.py</file>
+        <file>verify_apply2.py</file>
+      </files>
+    </entry>
+
+  </entries>
+</progress>
