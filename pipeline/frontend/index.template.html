@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore the world's major AI data centers, their H100-equivalent compute, and the energy–water trade-offs behind operator efficiency.">
+  <title>Compute Atlas — The infrastructure behind intelligence</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312251e'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7zm10 0h8v8h-8z' fill='%23c8f56a'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>/*__DASHBOARD_CSS__*/</style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="Compute Atlas home">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span>COMPUTE<span class="brand-slash">/</span>ATLAS</span>
+    </a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#infrastructure">Infrastructure</a>
+      <a href="#efficiency">Efficiency</a>
+      <a href="#scenario">Scenario lab</a>
+      <a href="#methodology">Methodology</a>
+    </nav>
+    <a class="data-link" href="data/published/data_centers.csv" download>
+      <span>Get the data</span>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11m0 0 4-4m-4 4-4-4M3 15v3h14v-3"/></svg>
+    </a>
+  </header>
+
+  <main id="main">
+    <section class="hero shell" id="overview">
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span class="pulse-dot"></span> GLOBAL AI INFRASTRUCTURE · NOV 2026</p>
+        <h1>The infrastructure<br>behind <em>intelligence.</em></h1>
+        <p class="hero-intro">A field guide to the campuses powering AI—and the energy and water required to keep them running.</p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#infrastructure">Explore the atlas <span aria-hidden="true">↘</span></a>
+          <a class="text-link" href="#efficiency">Compare efficiency <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <div class="hero-card reveal" aria-label="Dataset summary">
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+        <div class="hero-card-head">
+          <span>TRACKED COMPUTE</span>
+          <span class="live-label"><i></i> BEST ESTIMATES</span>
+        </div>
+        <div class="hero-total"><span id="hero-total">—</span><small>H100e</small></div>
+        <p class="hero-card-caption">One H100e represents the dense FP8 compute of one NVIDIA H100 SXM.</p>
+        <div class="status-stack" id="hero-status-stack" aria-label="Sites by status"></div>
+        <div class="hero-status-key" id="hero-status-key"></div>
+        <div class="hero-card-foot">
+          <span>Capacity is not current draw.</span>
+          <a href="#methodology">Read the method ↗</a>
+        </div>
+      </div>
+
+      <div class="hero-stats reveal" aria-label="Dataset key figures">
+        <div class="hero-stat"><strong id="stat-sites">—</strong><span>major campuses</span></div>
+        <div class="hero-stat"><strong id="stat-countries">—</strong><span>countries represented</span></div>
+        <div class="hero-stat"><strong id="stat-power">—</strong><span>known gross power</span></div>
+        <div class="hero-stat"><strong id="stat-operational">—</strong><span>fully operational</span></div>
+      </div>
+    </section>
+
+    <section class="atlas-section shell reveal" id="infrastructure">
+      <div class="section-heading section-heading-light">
+        <div>
+          <p class="section-index">01 / GLOBAL INFRASTRUCTURE</p>
+          <h2>Where the compute<br><em>is being built.</em></h2>
+        </div>
+        <p>Circle area represents estimated scale; color represents build status. Select any site to inspect the evidence behind the number.</p>
+      </div>
+
+      <div class="atlas-toolbar" aria-label="Map filters">
+        <label class="search-field">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
+          <span class="sr-only">Search sites, operators, or locations</span>
+          <input id="site-search" type="search" placeholder="Search site, operator, location…" autocomplete="off">
+        </label>
+        <label class="select-field">
+          <span class="sr-only">Filter by country</span>
+          <select id="country-filter"><option value="">All countries</option></select>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>
+        </label>
+        <label class="select-field">
+          <span class="sr-only">Choose marker size metric</span>
+          <select id="size-metric">
+            <option value="h100e_best">Size: H100e</option>
+            <option value="power">Size: power</option>
+          </select>
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>
+        </label>
+        <button class="reset-button" id="reset-filters" type="button">Reset <span aria-hidden="true">↺</span></button>
+      </div>
+      <div class="status-filters" id="status-filters" aria-label="Filter by build status"></div>
+
+      <div class="atlas-grid">
+        <div class="map-wrap">
+          <div id="map" role="application" aria-label="Interactive map of global AI data centers"></div>
+          <div class="map-legend">
+            <span class="legend-title">MARKER AREA</span>
+            <span class="legend-size small"></span><span>Smaller</span>
+            <span class="legend-size large"></span><span>Larger</span>
+          </div>
+          <div class="map-count" id="map-count">— sites</div>
+        </div>
+        <aside class="site-panel" id="site-panel" aria-live="polite"></aside>
+      </div>
+      <div class="atlas-caption">
+        <span id="filter-summary">Showing the complete inventory.</span>
+        <span>Power-based H100e is an upper-bound-style estimate. Read each site's note before quoting.</span>
+      </div>
+
+      <div class="ranking-block">
+        <div class="ranking-head">
+          <div><p class="mini-label">FILTERED LEADERBOARD</p><h3>Largest campuses by H100e</h3></div>
+          <button class="button button-outline-light button-small" id="export-filtered" type="button">Export selection <span aria-hidden="true">↓</span></button>
+        </div>
+        <div class="table-scroll">
+          <table class="site-table">
+            <thead><tr><th>Rank / campus</th><th>Status</th><th>Power</th><th>Estimate</th><th>Method</th></tr></thead>
+            <tbody id="site-ranking"></tbody>
+          </table>
+        </div>
+        <button class="show-more" id="show-more-sites" type="button">Show more sites <span aria-hidden="true">↓</span></button>
+      </div>
+    </section>
+
+    <section class="efficiency-section shell" id="efficiency">
+      <div class="section-heading reveal">
+        <div>
+          <p class="section-index">02 / OPERATOR EFFICIENCY</p>
+          <h2>Efficiency has<br><em>two bottom lines.</em></h2>
+        </div>
+        <p>Power Usage Effectiveness tracks facility overhead. Water Usage Effectiveness tracks water per unit of IT energy. Optimizing one can worsen the other.</p>
+      </div>
+
+      <div class="finding-grid reveal">
+        <article><span class="finding-number" id="finding-pue">—</span><div><strong>Lowest hyperscaler PUE</strong><p id="finding-pue-label">—</p></div></article>
+        <article><span class="finding-number" id="finding-wue">—</span><div><strong>Lowest hyperscaler WUE</strong><p id="finding-wue-label">—</p></div></article>
+        <article class="finding-quote"><span class="quote-mark">“</span><p>Evaporative cooling can cut compressor energy—but consume more water. There is no single winner without deciding which resource matters.</p></article>
+      </div>
+
+      <div class="efficiency-grid reveal">
+        <div class="chart-card">
+          <div class="chart-head">
+            <div><p class="mini-label">THE ENERGY–WATER FRONTIER</p><h3>Lower is better on both axes</h3></div>
+            <div class="segmented" id="operator-filter" aria-label="Filter operators">
+              <button class="active" type="button" data-filter="all">All</button>
+              <button type="button" data-filter="hyperscaler">Hyperscalers</button>
+              <button type="button" data-filter="reported">Reported</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="efficiency-chart-wrap">
+            <svg id="efficiency-chart" viewBox="0 0 760 470" role="img" aria-labelledby="chart-title chart-desc">
+              <title id="chart-title">Operator PUE and WUE comparison</title>
+              <desc id="chart-desc">Scatter plot of operators with both power and water usage effectiveness values. Lower values are better. Select a point for scope and reporting caveats.</desc>
+            </svg>
+            <div class="chart-tooltip" id="chart-tooltip" role="tooltip"></div>
+          </div>
+          <div class="chart-foot"><span><i class="design-dot"></i> Design target / range midpoint</span><span id="chart-coverage">—</span></div>
+        </div>
+        <aside class="operator-card" id="operator-detail" aria-live="polite"></aside>
+      </div>
+      <p class="comparison-warning reveal"><strong>Read before comparing:</strong> reporting years, site boundaries, and WUE definitions differ. Nebius's WUE is one Finland site; Crusoe's PUE is a design range; Google's WUE is derived from consumption. PUE measures facility overhead—not useful compute per joule.</p>
+
+      <details class="disclosure-table reveal">
+        <summary><span>See all 13 operator disclosures</span><span class="summary-meta">Transparency is part of the metric <b>+</b></span></summary>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Operator</th><th>Year</th><th>PUE</th><th>WUE <small>L/kWh</small></th><th>Disclosure</th><th>Boundary</th></tr></thead>
+            <tbody id="operator-table"></tbody>
+          </table>
+        </div>
+      </details>
+    </section>
+
+    <section class="scenario-section shell reveal" id="scenario">
+      <div class="scenario-heading">
+        <div><p class="section-index">03 / SCENARIO LAB</p><h2>Same IT load.<br><em>Different resource bill.</em></h2></div>
+        <p>Compare two disclosure profiles at full utilization for one year. This is a unit conversion, not a campus forecast.</p>
+      </div>
+      <div class="scenario-controls">
+        <label class="load-control" for="load-slider">
+          <span><b>IT load</b><output id="load-output" for="load-slider">100 MW</output></span>
+          <input id="load-slider" type="range" min="10" max="1000" step="10" value="100">
+          <span class="range-labels"><small>10 MW</small><small>1,000 MW</small></span>
+        </label>
+        <label class="operator-select"><span>PROFILE A</span><select id="operator-a"></select></label>
+        <span class="versus">VS</span>
+        <label class="operator-select"><span>PROFILE B</span><select id="operator-b"></select></label>
+      </div>
+      <div class="scenario-results" id="scenario-results"></div>
+      <div class="scenario-delta" id="scenario-delta"></div>
+      <p class="scenario-note">Annual electricity = IT MW × PUE × 8,760 hours. Water uses each operator's disclosed or derived WUE normalizer. Assumes constant load; excludes embodied resources and local grid emissions. Operators missing either metric are not offered.</p>
+    </section>
+
+    <section class="method-section shell" id="methodology">
+      <div class="section-heading reveal">
+        <div><p class="section-index">04 / HOW TO READ THE NUMBERS</p><h2>Three metrics.<br><em>Three different questions.</em></h2></div>
+        <p>Scale, facility efficiency, and water intensity are related—but none can stand in for the others.</p>
+      </div>
+      <div class="method-grid reveal">
+        <article class="method-card">
+          <span class="method-number">01</span><div class="method-icon compute-icon" aria-hidden="true"><i></i><i></i><i></i></div>
+          <h3>How much compute?</h3><p class="method-formula">H100e = compute ÷ 1.979 PFLOPS</p>
+          <p>H100-equivalents normalize announced GPU counts, third-party estimates, peak FLOPS, or power. The most direct available signal wins.</p>
+          <span class="method-tag">SCALE · ESTIMATED</span>
+        </article>
+        <article class="method-card featured">
+          <span class="method-number">02</span><div class="method-icon energy-icon" aria-hidden="true">ϟ</div>
+          <h3>How much overhead?</h3><p class="method-formula">PUE = facility energy ÷ IT energy</p>
+          <p>A PUE of 1.10 means 10 units of facility overhead for every 100 units of IT energy. It says nothing about GPU utilization or work per joule.</p>
+          <span class="method-tag">ENERGY · LOWER IS BETTER</span>
+        </article>
+        <article class="method-card">
+          <span class="method-number">03</span><div class="method-icon water-icon" aria-hidden="true">◒</div>
+          <h3>How much water?</h3><p class="method-formula">WUE = water litres ÷ IT kWh</p>
+          <p>WUE can describe withdrawal or consumption. Those are not interchangeable, and a single efficient site is not a fleet-wide result.</p>
+          <span class="method-tag">WATER · CHECK THE BASIS</span>
+        </article>
+      </div>
+      <div class="method-callout reveal">
+        <div><span class="callout-icon">i</span><p><strong>The honest efficiency metric is still missing.</strong> A comparable answer would fix the reporting year, facility boundary, and utilization—then measure useful work such as tokens or FLOPS per joule.</p></div>
+        <a href="docs/operator_efficiency.md">Full analysis &amp; sources <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer shell">
+    <div class="footer-brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><strong>COMPUTE/ATLAS</strong><p>A source-linked inventory of major AI infrastructure.<br>Research current as of November 2026.</p></div>
+    <div class="footer-links"><span>DATA &amp; METHOD</span><a href="data/published/data_centers.csv">Site dataset ↗</a><a href="data/operator_efficiency.csv">Operator dataset ↗</a><a href="README.md">Methodology &amp; caveats ↗</a></div>
+    <div class="footer-links"><span>COMPANION RESEARCH</span><a href="docs/us_water_energy.md">US water &amp; energy ↗</a><a href="docs/verification_ledger.md">Verification ledger ↗</a><a href="https://github.com/tedngai/datacenter-efficiency-study">GitHub repository ↗</a></div>
+    <div class="footer-bottom"><span>Built for scrutiny, not hype.</span><a href="#overview">Back to top ↑</a></div>
+  </footer>
+
+  <script>
+    const DATA = __DATA__;
+    const OPERATORS = __OPERATORS__;
+  </script>
+  <script>/*__DASHBOARD_JS__*/</script>
+</body>
+</html>

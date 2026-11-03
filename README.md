@@ -10,10 +10,11 @@ capacity, announced GPU counts, announced FLOPS, and estimated compute in
 |---|---|
 | `data/published/data_centers.csv` | Final dataset, one row per campus, sorted by best H100e estimate |
 | `data/published/data_centers.json` | Same data as JSON (typed numbers) |
-| `index.html` | Interactive Leaflet map — circle size = H100e; click for details. Open directly in a browser. |
+| `index.html` | Self-contained Compute Atlas dashboard: filterable map, site leaderboard, PUE/WUE explorer, and energy–water scenario lab. Open directly in a browser. |
 | `data/canonical/data_centers.csv` | Canonical source of truth (edit this, then rebuild) |
 | `data/raw/data_centers_raw.csv` | Original research capture (kept for provenance) |
 | `pipeline/build.py` | Computes H100e columns and regenerates outputs: `python pipeline/build.py` |
+| `pipeline/frontend/` | Maintainable HTML template, CSS, and JavaScript embedded into `index.html` by the build |
 | `pipeline/country_table.py` | Regenerates the country-level summary table |
 | `data/us_utility_impacts.csv` | 55 US utility territories: prices, rate cases, water, complaint groups |
 | `docs/us_water_energy.md` | US local energy/water impacts report |
@@ -28,6 +29,23 @@ Companion studies: `data/us_utility_impacts.csv` + `docs/us_water_energy.md` (US
 energy/water impacts, with `docs/us_impacts_verification.md`) and
 `data/operator_efficiency.csv` + `docs/operator_efficiency.md` (PUE/WUE comparison
 across Google, Meta, Microsoft, AWS, xAI and the neoclouds).
+
+## Interactive dashboard
+
+`index.html` combines both published datasets in a responsive, dependency-light
+interface:
+
+- **Global atlas:** search and filter 442 campuses, switch between H100e and power
+  marker sizing, inspect site notes and sources, and export the filtered rows.
+- **Efficiency explorer:** compare PUE and WUE on a log-scale chart, then inspect
+  each operator's reporting year, boundary, water basis, and disclosure grade.
+- **Scenario lab:** compare annual facility electricity, non-IT overhead, and water
+  for two operator profiles at a chosen IT load. Results are unit conversions at
+  full utilization, not campus forecasts.
+
+Edit the sources in `pipeline/frontend/`, then run `python pipeline/build.py` to
+regenerate the self-contained page. Site and operator values are embedded at build
+time; the map tiles, Leaflet, and web fonts require an internet connection.
 
 ## H100e methodology
 

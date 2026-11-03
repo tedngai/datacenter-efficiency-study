@@ -35,6 +35,34 @@
 
   <entries>
 
+    <entry id="C-010" date="2026-11-02" type="change" area="frontend"
+           title="Compute Atlas interactive efficiency dashboard" status="done">
+      <detail>
+        Replaced the map-only page with a responsive, data-driven dashboard.
+        The global atlas now supports text, country and status filters, H100e or
+        power marker sizing, site evidence profiles, a filter-linked leaderboard
+        and CSV selection export. Operator efficiency is explained through an
+        interactive PUE/WUE scatter plot, disclosure-boundary profiles, a full
+        disclosure table and a two-operator annual energy/water scenario lab.
+        Reporting-year, scope, withdrawal/consumption and design-target caveats
+        remain adjacent to the visual claims. Reusable HTML/CSS/JS sources live
+        in pipeline/frontend and are embedded by build.py; no research values or
+        canonical rows changed. Browser checks passed for filtering, site and
+        operator selection, scenario arithmetic, console errors and horizontal
+        overflow at 1440px and 390px.
+      </detail>
+      <files>
+        <file>pipeline/build.py</file>
+        <file>pipeline/frontend/index.template.html</file>
+        <file>pipeline/frontend/dashboard.css</file>
+        <file>pipeline/frontend/dashboard.js</file>
+        <file>index.html</file>
+        <file>README.md</file>
+        <file>AGENTS.md</file>
+        <file>PROGRESS.xml</file>
+      </files>
+    </entry>
+
     <entry id="V-001" date="2026-11-02" type="verification" area="data"
            title="Full corpus verification: 510 rows checked against sources" status="done">
       <detail>

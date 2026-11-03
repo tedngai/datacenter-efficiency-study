@@ -10,7 +10,7 @@ H100e methodology (documented in README.md):
                  accelerator systems at ~1.2 kW per GPU  =>  500 H100e per MW of IT load
 - h100e_best:    most confident available estimate (gpu > third_party > flops > power)
 """
-import csv, json, math, os
+import csv, json, math, os, re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -577,104 +577,47 @@ with open(OUT_CSV, "w", newline="", encoding="utf-8") as f:
 with open(OUT_JSON, "w", encoding="utf-8") as f:
     json.dump(out, f, indent=2)
 
-# ---- index.html (self-contained Leaflet map) ----
-html = """<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Global AI Data Centers — H100-equivalent compute</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<style>
-  html,body{margin:0;height:100%;font-family:system-ui,sans-serif}
-  #map{height:100%}
-  #panel{position:absolute;top:10px;left:10px;z-index:1000;background:rgba(255,255,255,.95);
-    padding:12px 14px;border-radius:8px;max-width:300px;box-shadow:0 2px 8px rgba(0,0,0,.3);font-size:13px}
-  #panel h1{font-size:15px;margin:0 0 6px}
-  .stat{color:#555}
-  #legend{position:absolute;bottom:20px;right:10px;z-index:1000;background:rgba(255,255,255,.95);
-    padding:10px 14px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.3);font-size:13px}
-  #legend .title{font-weight:600;margin-bottom:6px;color:#333}
-  #legend .row{margin:3px 0;color:#333}
-  .sw{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:7px;vertical-align:-1px}
-</style>
-</head>
-<body>
-<div id="panel">
-  <h1>Global AI Data Centers</h1>
-  <div class="stat" id="stats"></div>
-  <div class="stat" style="margin-top:6px">Circle size = H100-equivalent compute (best available estimate).<br>
-  Method: GPU counts, FLOPS, or power-based (500 H100e per MW IT load). Click a circle for details.</div>
-</div>
-<div id="legend">
-  <div class="title">Build status</div>
-  <div class="row"><span class="sw" style="background:#22c55e"></span>Fully operational</div>
-  <div class="row"><span class="sw" style="background:#eab308"></span>Partially operational</div>
-  <div class="row"><span class="sw" style="background:#3b82f6"></span>Under construction</div>
-  <div class="row"><span class="sw" style="background:#a855f7"></span>Planned / announced</div>
-</div>
-<div id="map"></div>
-<script>
-const DATA = __DATA__;
-const map = L.map('map').setView([25, 10], 2.5);
-L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-  {attribution:'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ', maxZoom: 16}).addTo(map);
+# ---- index.html (self-contained interactive dashboard) ----
+FRONTEND = os.path.join(ROOT, "pipeline", "frontend")
+with open(os.path.join(ROOT, "data", "operator_efficiency.csv"), encoding="utf-8") as f:
+    operators = list(csv.DictReader(f))
 
-function radius(h){ if(!h) return 4; return 4 + 9*Math.sqrt(h)/Math.sqrt(Math.max(...DATA.map(d=>d.h100e_best||0))); }
+# Numeric chart fields are derived at build time; the original disclosure strings
+# remain intact so ranges, estimates and reporting boundaries stay visible.
+for operator in operators:
+    pue_numbers = [float(v) for v in re.findall(r"\d+(?:\.\d+)?", operator["pue"])]
+    pue_kind = "design" if "design" in operator["pue"].lower() else "reported"
+    operator["pue_kind"] = pue_kind
+    if not pue_numbers:
+        operator["pue_value"] = None
+    elif pue_kind == "design" and len(pue_numbers) >= 2:
+        operator["pue_value"] = (pue_numbers[0] + pue_numbers[1]) / 2
+    else:
+        operator["pue_value"] = pue_numbers[0]
+    wue = operator["wue_l_per_kwh"].strip()
+    water = operator["water_gal_per_mw_year"].replace(",", "").strip()
+    operator["wue_value"] = float(wue) if re.fullmatch(r"\d+(?:\.\d+)?", wue) else None
+    operator["water_value"] = float(water) if re.fullmatch(r"\d+(?:\.\d+)?", water) else None
 
-const STATUS_COLORS = {
-  operational: '#22c55e',
-  partially_operational: '#eab308',
-  under_construction: '#3b82f6',
-  planned: '#a855f7',
-  unknown: '#9ca3af'
-};
-const STATUS_LABELS = {
-  operational: 'Fully operational',
-  partially_operational: 'Partially operational',
-  under_construction: 'Under construction',
-  planned: 'Planned / announced',
-  unknown: 'Unknown status'
-};
+with open(os.path.join(FRONTEND, "index.template.html"), encoding="utf-8") as f:
+    html = f.read()
+with open(os.path.join(FRONTEND, "dashboard.css"), encoding="utf-8") as f:
+    css = f.read()
+with open(os.path.join(FRONTEND, "dashboard.js"), encoding="utf-8") as f:
+    js = f.read()
 
-DATA.forEach(d=>{
-  if(d.latitude==null||d.longitude==null) return;
-  const h = d.h100e_best;
-  const color = STATUS_COLORS[d.status] || STATUS_COLORS.unknown;
-  const m = L.circleMarker([d.latitude,d.longitude],{
-    radius: radius(h), color: color, weight:1, fillColor: color, fillOpacity:0.55
-  }).addTo(map);
-  const rows = [
-    ['Operator', d.operator],
-    ['Location', [d.city,d.state_province,d.country].filter(Boolean).join(', ')],
-    ['Power (MW)', d.power_capacity_mw ?? d.it_load_mw ?? '—'],
-    ['Announced GPUs', d.announced_gpu_count ? d.announced_gpu_count.toLocaleString() : '—'],
-    ['GPU types', d.gpu_types || '—'],
-    ['Peak PFLOPS', d.cluster_peak_pflops ? d.cluster_peak_pflops.toLocaleString() : '—'],
-    ['H100e (GPU count)', d.h100e_gpu ? d.h100e_gpu.toLocaleString() : '—'],
-    ['H100e (FLOPS)', d.h100e_flops ? d.h100e_flops.toLocaleString() : '—'],
-    ['H100e (power est.)', d.h100e_power ? d.h100e_power.toLocaleString() : '—'],
-    ['H100e (3rd-party est.)', d.h100e_third_party ? d.h100e_third_party.toLocaleString() : '—'],
-    ['Notes', d.status_note || '—'],
-    ['Source', `<a href="${d.source_url}" target="_blank">link</a>`],
-  ];
-  m.bindPopup(`<b>${d.name}</b><br>${STATUS_LABELS[d.status] || d.status} — <b>${h?h.toLocaleString():'?'} H100e</b> (est. via ${d.h100e_method})<br><br>` +
-    rows.map(r=>`<b>${r[0]}:</b> ${r[1]}`).join('<br>'));
-});
+# Prevent data strings from closing the inline script element.
+def inline_json(value):
+    return (json.dumps(value, ensure_ascii=False)
+            .replace("</", "<\\/")
+            .replace("\u2028", "\\u2028")
+            .replace("\u2029", "\\u2029"))
 
-const total = DATA.reduce((s,d)=>s+(d.h100e_best||0),0);
-const byStatus = {};
-DATA.forEach(d=>{ byStatus[d.status] = (byStatus[d.status]||0)+1; });
-document.getElementById('stats').innerHTML =
-  `${DATA.length} sites · ~${(total/1e6).toFixed(2)}M H100e total<br>` +
-  Object.keys(STATUS_LABELS).filter(k=>byStatus[k]).map(k=>
-    `${byStatus[k]} ${STATUS_LABELS[k].toLowerCase()}`).join(' · ');
-</script>
-</body>
-</html>
-"""
-html = html.replace("__DATA__", json.dumps(out, ensure_ascii=False))
+html = (html
+        .replace("/*__DASHBOARD_CSS__*/", css)
+        .replace("__DATA__", inline_json(out))
+        .replace("__OPERATORS__", inline_json(operators))
+        .replace("/*__DASHBOARD_JS__*/", js))
 with open(OUT_HTML, "w", encoding="utf-8") as f:
     f.write(html)
 

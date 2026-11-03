@@ -14,7 +14,7 @@ studies:
 | Output | What it is |
 |---|---|
 | `data/published/data_centers.csv` / `.json` | 442 sites, 71 countries, 21 columns, H100e computed three ways |
-| `index.html` | self-contained Leaflet map (dark basemap, status-coloured pins) |
+| `index.html` | self-contained interactive dashboard (Leaflet atlas, PUE/WUE chart, scenario lab) |
 | `README.md` | methodology, status table, country-level summary |
 | `data/us_utility_impacts.csv` + `docs/us_water_energy.md` | 55 US utility territories: prices, rate cases, water, complaint groups |
 | `docs/us_impacts_verification.md` | what was checked against primary sources, what changed, what is still soft |
@@ -57,7 +57,7 @@ say "unverified" rather than invent a plausible figure.
 ├── PROGRESS.xml               # incidents, decisions, changes (append-only)
 ├── README.md                  # public methodology + country summary
 ├── DATA_DICTIONARY.md         # column definitions for all three CSVs
-├── index.html                 # build output — self-contained Leaflet map
+├── index.html                 # build output — self-contained interactive dashboard
 ├── .gitignore
 ├── .env                       # GITHUB_PAT — GITIGNORED, never commit
 │
@@ -74,7 +74,8 @@ say "unverified" rather than invent a plausible figure.
 │   └── operator_efficiency.csv    # 13 operators
 │
 ├── pipeline/
-│   ├── build.py               # STATUS map + build + validation
+│   ├── build.py               # STATUS map + build + validation + dashboard bundling
+│   ├── frontend/              # dashboard template, CSS and JavaScript (edit these)
 │   ├── country_table.py       # regenerates the country table
 │   ├── inventory.py           # per-country name dump for dedupe
 │   ├── archive/               # chronological append/patch scripts (provenance)
