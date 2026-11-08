@@ -242,17 +242,24 @@ so water is `unknown`. This is the shape most Chinese rows take.
 
 ## 7. Consistency flags
 
-Three rows carry `consistency` warnings. The build silently corrects none of
+Two rows carry `consistency` warnings. The build silently corrects none of
 them:
 
 | Site | Accelerator heat | Reported IT load | Likely cause |
 |---|---:|---:|---|
-| Meta Prometheus | 1200–1400 MW | 695 MW | count is a future target, IT load is current |
-| JUPITER / JAIF | 24 MW | 16.7 MW | IT load derived from gross ÷ default PUE understates system power |
-| Domyn Colosseum | 6.9 MW | 5.8 MW | same derivation issue, small site |
+| Meta Prometheus | 1200–1400 MW | 695 MW | The count (~1M) is the full-scale target. The 695 MW is an aggregator figure for today. |
+| Domyn Colosseum | 6.9 MW | 5.8 MW | The press gives "about 7MW" with no basis. 80 NVL72 racks need ~9.6 MW IT. |
 
 The warning is the deliverable. A reader who sees 1.2 GW of GPUs against 695 MW
-of IT should distrust one of the two numbers, and the dataset says which.
+of IT should distrust one of the two numbers, and the dataset says which. For
+Prometheus, Meta's own rack figures put 1M GPUs at ~1.7–1.9 GW IT. That does
+not agree with the "gigawatt-scale" label, so the target count and the 1 GW
+campus figure cannot both be correct.
+
+JUPITER / JAIF had a third warning (24 MW of heat against 16.7 MW IT). The
+cause was our TDP: the platform row uses the GH200 maximum of 1,000 W, but JSC
+configures each JUPITER GH200 at 680 W. A site TDP in `build_gpu_cooling.py`
+now gives 16.3 MW, which is below the IT load.
 
 ---
 

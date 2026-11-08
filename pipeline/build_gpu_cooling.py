@@ -80,6 +80,18 @@ NOTE_HARDWARE_EXCLUDE = {
     "DataVolt TAS-1 (Tashkent IT Park DC)",
 }
 
+# Site-specific TDP where the operator publishes the configured power and it
+# differs from the platform figure in gpu_platforms.csv. GH200 is configurable
+# 450-1000 W; the platform row carries the 1000 W maximum.
+SITE_TDP_OVERRIDE = {
+    "JUPITER / JAIF (Exascale AI Factory)": (
+        680,
+        "site: JUPITER Booster GH200 superchip TDP 680 W (A. Herten, JSC, "
+        "'Building JUPITER', RIKEN FugakuNEXT seminar, 2 Dec 2025, slide 4, "
+        "https://www.r-ccs.riken.jp/assets/uploads/sites/2/2025/12/FugakuNEXT_11th_ApplicationSeminar.pdf)",
+    ),
+}
+
 COLS = [
     "name", "operator", "country", "status",
     "gpu_types_raw", "gpu_evidence",
@@ -307,6 +319,9 @@ def main():
         platform_source = matched[0]["source_url"] if matched else ""
 
         tdp_w, tdp_low, tdp_high, tdp_basis = aggregate_tdp(matched)
+        if name in SITE_TDP_OVERRIDE and matched:
+            tdp_w, tdp_basis = SITE_TDP_OVERRIDE[name]
+            tdp_low = tdp_high = tdp_w
         count = as_int(site.get("announced_gpu_count"))
         count_known = count is not None and count > 0
 

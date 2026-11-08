@@ -35,6 +35,36 @@
 
   <entries>
 
+    <entry id="C-016" date="2026-11-08" type="change" area="cooling"
+           title="Heat-vs-IT warnings checked against primary sources; JUPITER TDP corrected" status="done">
+      <detail>
+        JUPITER: the warning (24 MW of heat against 16.7 MW IT) came from our
+        TDP. gpu_platforms.csv carries the GH200 maximum of 1,000 W; JSC
+        configures each JUPITER Booster GH200 at 680 W (A. Herten, JSC,
+        "Building JUPITER", RIKEN FugakuNEXT seminar, 2 Dec 2025, slide 4; slide
+        3 gives a 17 MW HPL limit). build_gpu_cooling.py now has a
+        SITE_TDP_OVERRIDE for this row: heat 16.3 MW, no warning.
+        Prometheus and Domyn keep their warnings, because the sources really
+        conflict. verify_apply6.py adds source notes (no numeric change): Meta's
+        19 Oct 2026 post gives ~1M GPUs at full scale and no MW figure; 695 MW
+        is from datacenter.fyi; Meta's own rack power (~120 kW per 72 GB200,
+        ~135 kW per 72 GB300) implies ~1.7-1.9 GW IT for 1M GPUs. Domyn's
+        "about 7MW" (The Next Web) has no gross/IT basis and is low for 80
+        NVL72 racks (~9.6 MW IT).
+      </detail>
+      <files>
+        <file>pipeline/build_gpu_cooling.py</file>
+        <file>pipeline/verification/verify_apply6.py</file>
+        <file>data/canonical/data_centers.csv</file>
+        <file>data/published/data_centers.csv</file>
+        <file>data/published/data_centers.json</file>
+        <file>data/gpu_cooling.csv</file>
+        <file>data/gpu_cooling.json</file>
+        <file>index.html</file>
+        <file>docs/gpu_cooling.md</file>
+      </files>
+    </entry>
+
     <entry id="C-015" date="2026-11-08" type="change" area="pipeline"
            title="Status moved into the canonical CSV; shared map points flagged; Leaflet pinned with SRI" status="done">
       <detail>
