@@ -35,6 +35,42 @@
 
   <entries>
 
+    <entry id="C-011" date="2026-11-07" type="change" area="cooling"
+           title="Per-site accelerator and cooling dataset with water caveats" status="done">
+      <detail>
+        Added data/gpu_platforms.csv (41 accelerator platforms: TDP, rack
+        system, rack cooling, heat-to-liquid share, source, match rule) and a
+        generated data/gpu_cooling.csv/.json covering all 442 sites, built by
+        pipeline/build_gpu_cooling.py. The study separates rack cooling (air,
+        direct-to-chip, immersion) from facility heat rejection (evaporative,
+        dry closed loop, hybrid) and rejects the premise that the accelerator
+        vendor determines water use. Formulas: accelerator heat = count x TDP /
+        1e6; cooling thermal load ~= IT load; cooling electricity = IT load x
+        (PUE - 1); water = IT MW x 8,760 x 1,000 x operator fleet WUE. Mixed
+        generations get a TDP/heat range, never a single point. Coverage: 177
+        sites with a named platform (158 from gpu_types, 19 from notes), 74 with
+        an announced count, 51 with an accelerator-heat estimate (36 single TDP,
+        15 ranged), 307 with IT load and cooling electricity, 94 with a
+        fleet-scaled water estimate. Hardware confidence B 38 / C 66 / D 338 and
+        no A, because no site combines an official TDP, a published count and
+        site-specific cooling evidence. Four explicitly waterless sites carry
+        zero water and negligible dependency. Three rows keep heat-above-IT-load
+        warnings (Meta Prometheus, JUPITER, Domyn Colosseum) rather than being
+        silently corrected. No water figure is presented as a site measurement.
+      </detail>
+      <files>
+        <file>data/gpu_platforms.csv</file>
+        <file>data/gpu_cooling.csv</file>
+        <file>data/gpu_cooling.json</file>
+        <file>pipeline/build_gpu_cooling.py</file>
+        <file>docs/gpu_cooling.md</file>
+        <file>DATA_DICTIONARY.md</file>
+        <file>README.md</file>
+        <file>AGENTS.md</file>
+        <file>PROGRESS.xml</file>
+      </files>
+    </entry>
+
     <entry id="C-010" date="2026-11-02" type="change" area="frontend"
            title="Compute Atlas interactive efficiency dashboard" status="done">
       <detail>

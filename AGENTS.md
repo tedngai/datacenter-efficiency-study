@@ -19,6 +19,7 @@ studies:
 | `data/us_utility_impacts.csv` + `docs/us_water_energy.md` | 55 US utility territories: prices, rate cases, water, complaint groups |
 | `docs/us_impacts_verification.md` | what was checked against primary sources, what changed, what is still soft |
 | `data/operator_efficiency.csv` + `docs/operator_efficiency.md` | PUE / WUE / water-per-MW-year for Google, Meta, Microsoft, AWS, xAI, neoclouds |
+| `data/gpu_platforms.csv` + `data/gpu_cooling.csv` + `docs/gpu_cooling.md` | Per-site accelerator platform, heat, rack cooling, heat rejection, water |
 
 The project is a research product, not a scraper. Every row must be defensible
 to a sceptical reader with a browser.
@@ -71,10 +72,13 @@ say "unverified" rather than invent a plausible figure.
 │   │   ├── data_centers.json  # build output (do not hand-edit)
 │   │   └── country_table.md   # generated country summary
 │   ├── us_utility_impacts.csv # 55 US utility territories
-│   └── operator_efficiency.csv    # 13 operators
+│   ├── operator_efficiency.csv    # 13 operators
+│   ├── gpu_platforms.csv      # 41 accelerator platforms (reference)
+│   └── gpu_cooling.csv        # 442 sites: platform, heat, cooling, water
 │
 ├── pipeline/
 │   ├── build.py               # STATUS map + build + validation + dashboard bundling
+│   ├── build_gpu_cooling.py   # per-site accelerator / cooling / water dataset
 │   ├── frontend/              # dashboard template, CSS and JavaScript (edit these)
 │   ├── country_table.py       # regenerates the country table
 │   ├── inventory.py           # per-country name dump for dedupe
@@ -89,7 +93,8 @@ say "unverified" rather than invent a plausible figure.
 ├── docs/
 │   ├── us_water_energy.md         # US impacts report
 │   ├── us_impacts_verification.md # verification log
-│   └── operator_efficiency.md     # analysis + comparability caveats
+│   ├── operator_efficiency.md     # analysis + comparability caveats
+│   └── gpu_cooling.md             # accelerator / cooling / water analysis
 │
 └── scripts/push.ps1           # token-safe push helper
 ```
