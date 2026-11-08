@@ -207,8 +207,9 @@ Use `scripts/push.ps1`. It does three things:
 
 1. reads `.env` at runtime,
 2. disables the git credential helper for the invocation,
-3. pushes to `https://x-access-token:<token>@github.com/...`, so the token never
-   reaches `.git/config`.
+3. sends the token as a one-time HTTP `Authorization` header
+   (`-c http.https://github.com/.extraheader=...`). The token never goes into the
+   remote URL, `.git/config` or the git output.
 
 If `.env` is missing, stop and ask the owner for a new token. If a token ever
 reaches chat, a log or a commit, **rotate it immediately** and log the incident
