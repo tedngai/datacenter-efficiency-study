@@ -35,6 +35,25 @@
 
   <entries>
 
+    <entry id="D-010" date="2026-11-08" type="decision" area="repo"
+           title="Split the licence: MIT for code, CC BY 4.0 for data and docs" status="accepted">
+      <detail>
+        The repository had no licence, so a reader could not tell what reuse was
+        permitted. This is a hobby study for academic and community use, not a
+        commercial product. Decision: MIT for `pipeline/`, `scripts/` and
+        `.opencode/`; CC BY 4.0 for `data/`, `docs/` and the top-level markdown.
+        Attribution is the only condition on the data, which matches the
+        source-linked premise. `LICENSE-DATA.md` gives the citation form and
+        sends the reader to the `source_url` column for a single figure or row.
+        The copyright holder is recorded as "Ted Ngai". Correct this line if the
+        legal name is different.
+      </detail>
+      <files>
+        <file>LICENSE</file>
+        <file>LICENSE-DATA.md</file>
+      </files>
+    </entry>
+
     <entry id="C-018" date="2026-11-08" type="change" area="frontend"
            title="Dashboard reworked around the power, water and who-pays thesis" status="done">
       <detail>
