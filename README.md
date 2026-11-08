@@ -99,10 +99,14 @@ so every value here is an estimate. The build computes four estimates.
 `name, operator, city, state_province, country, latitude, longitude, power_capacity_mw,
 it_load_mw, announced_gpu_count, gpu_types, cluster_peak_pflops, h100e_gpu,
 h100e_third_party, h100e_flops, h100e_power, h100e_best, h100e_method, status,
-status_note, source_url`
+status_note, source_url, location_shared_with`
 
 - `power_capacity_mw` = gross facility/utility power. `it_load_mw` = IT load where
   reported.
+- `location_shared_with` = the number of other sites at the same point (to ~1 km).
+  41 sites share a point with at least one other site, for example seven in
+  Riyadh. Those coordinates are probably a city centre, not the campus. The map
+  spreads such sites on a small ring and marks them as approximate.
 - Blank = not published or not found. **We invented no values**. Where a figure is
   a rumor or analyst estimate, `status_note` says so.
 - `cluster_peak_pflops` appears only where officially announced. Most are blank,

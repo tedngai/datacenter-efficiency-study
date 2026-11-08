@@ -35,6 +35,40 @@
 
   <entries>
 
+    <entry id="C-015" date="2026-11-08" type="change" area="pipeline"
+           title="Status moved into the canonical CSV; shared map points flagged; Leaflet pinned with SRI" status="done">
+      <detail>
+        Status: the STATUS dict in build.py was keyed by site name, so a renamed
+        row became "unknown" with only a warning. pipeline/archive/migrate_status.py
+        copied the values from the last published build into a `status` column
+        in data/canonical/data_centers.csv (before `notes`). No status changed:
+        199 / 35 / 117 / 91. build.py now stops on any value outside the four
+        allowed ones. The dead clean_cell() helper (it referenced an undefined
+        variable) is removed.
+        Shared points: build.py adds `location_shared_with` (other sites with
+        the same coordinates to 2 dp). 41 sites share a point, for example 7 in
+        Riyadh and 5 in Queretaro. The dashboard panel marks these as
+        approximate, and the map spreads each group on a ~4 km ring so every
+        site can be clicked. Stored coordinates are unchanged.
+        Leaflet 1.9.4 CSS and JS now carry sha256 integrity hashes, computed
+        from the unpkg files and checked against jsDelivr (identical).
+      </detail>
+      <files>
+        <file>pipeline/build.py</file>
+        <file>pipeline/archive/migrate_status.py</file>
+        <file>pipeline/frontend/dashboard.js</file>
+        <file>pipeline/frontend/dashboard.css</file>
+        <file>pipeline/frontend/index.template.html</file>
+        <file>data/canonical/data_centers.csv</file>
+        <file>data/published/data_centers.csv</file>
+        <file>data/published/data_centers.json</file>
+        <file>index.html</file>
+        <file>README.md</file>
+        <file>AGENTS.md</file>
+        <file>DATA_DICTIONARY.md</file>
+      </files>
+    </entry>
+
     <entry id="C-014" date="2026-11-08" type="change" area="data"
            title="H100e conversions brought in line with the stated rules; USA/UK renamed" status="done">
       <detail>

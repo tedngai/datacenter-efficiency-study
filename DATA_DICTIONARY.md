@@ -29,9 +29,14 @@ One row per site. `pipeline/build.py` generates this file from
 | `h100e_power` | float | H100e from power: 500 per MW IT (417 per MW gross at PUE 1.2) |
 | `h100e_best` | float | Published estimate. Uses the strongest available method. |
 | `h100e_method` | text | Which method produced `h100e_best` |
-| `status` | enum | `operational` / `partially_operational` / `under_construction` / `planned` |
-| `status_note` | text | Qualification, date or source for the status |
+| `status` | enum | `operational` / `partially_operational` / `under_construction` / `planned`. Set in the canonical CSV. The build rejects any other value. |
+| `status_note` | text | Qualification, date or source for the status (the canonical `notes` column) |
 | `source_url` | text | Primary source for the row |
+| `location_shared_with` | integer | Number of other sites within ~1 km (coordinates equal to 2 dp). Above 0 means the point is probably a city centre, not the campus. Computed by the build. |
+
+The canonical file has the same identity, power, GPU and `h100e_gpu` /
+`h100e_third_party` columns, plus `status`, `notes` and `source_url`. The build
+computes the other columns.
 
 **H100e factors:** H100/H200/H800/GH200 = 1.0. B200/GB200 = 2.25.
 GB300/B300 = 2.5. A100 = 0.315. Trainium2 = 0.34. Ascend 910B = 0.35.

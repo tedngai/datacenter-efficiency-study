@@ -150,6 +150,7 @@ h2 em { color: #65855a; }
 .panel-kicker button { border: 0; background: none; color: #a7b7ab; font-size: 18px; padding: 0; }
 .panel-title { font-size: 21px; line-height: 1.25; letter-spacing: -.035em; margin: 0 0 8px; }
 .panel-location { color: #93a69a; font-size: 10px; line-height: 1.5; margin: 0 0 18px; }
+.panel-approx { color: var(--orange); font-size: 10px; line-height: 1.5; margin: -10px 0 16px; }
 .panel-status { display: inline-flex; align-items: center; gap: 7px; font-size: 9px; color: #c4d0c7; border: 1px solid rgba(255,255,255,.13); padding: 6px 9px; border-radius: 100px; margin-bottom: 22px; }
 .panel-status i { width: 6px; height: 6px; border-radius: 50%; }
 .panel-hero-metric { border-top: 1px solid rgba(255,255,255,.11); border-bottom: 1px solid rgba(255,255,255,.11); padding: 18px 0; margin-bottom: 18px; }

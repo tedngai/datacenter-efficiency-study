@@ -143,6 +143,32 @@
     return $("#size-metric").value === "power" ? powerOf(d) : d.h100e_best;
   }
 
+  // Sites that share one (often city-centre) point would stack into a single
+  // clickable marker. Spread each such group on a small ring (~4 km) so every
+  // site can be selected once the map is zoomed in. The order comes from the
+  // full dataset, so a marker does not jump when the filters change. The
+  // panel tells the reader the point is approximate.
+  const pointKey = d => `${d.latitude.toFixed(2)}|${d.longitude.toFixed(2)}`;
+  const displayPoint = new Map();
+  {
+    const groups = new Map();
+    DATA.filter(d => d.latitude != null && d.longitude != null).forEach(d => {
+      const key = pointKey(d);
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(d);
+    });
+    groups.forEach(sites => {
+      sites.sort((a, b) => a.name.localeCompare(b.name));
+      sites.forEach((d, i) => {
+        if (sites.length === 1) { displayPoint.set(d.name, [d.latitude, d.longitude]); return; }
+        const angle = 2 * Math.PI * i / sites.length;
+        const r = 0.04;
+        const lngScale = Math.max(Math.cos(d.latitude * Math.PI / 180), 0.2);
+        displayPoint.set(d.name, [d.latitude + r * Math.sin(angle), d.longitude + r * Math.cos(angle) / lngScale]);
+      });
+    });
+  }
+
   function updateMarkers() {
     markerBySite.clear();
     if (!map || !markerLayer) return;
@@ -155,7 +181,7 @@
       const radius = value ? 4 + 12 * Math.sqrt(value / maxValue) : 3.5;
       const selected = selectedSite && selectedSite.name === d.name;
       const status = statusOf(d);
-      const marker = L.circleMarker([d.latitude, d.longitude], {
+      const marker = L.circleMarker(displayPoint.get(d.name), {
         radius: selected ? radius + 2 : radius,
         color: selected ? "#ffffff" : status.color,
         weight: selected ? 2.5 : 1,
@@ -199,6 +225,7 @@
       <div class="panel-kicker"><span>SITE PROFILE</span><button type="button" data-close-site aria-label="Close site profile">×</button></div>
       <h3 class="panel-title">${esc(d.name)}</h3>
       <p class="panel-location">${esc(d.operator)}<br>${esc(locationOf(d))}</p>
+      ${d.location_shared_with > 0 ? `<p class="panel-approx">Approximate location. ${d.location_shared_with === 1 ? "One other site uses" : `${d.location_shared_with} other sites use`} this map point, so the coordinates are probably a city centre, not the campus.</p>` : ""}
       <span class="panel-status"><i style="background:${status.color}"></i>${status.long}</span>
       <div class="panel-hero-metric">
         <strong>${d.h100e_best ? num(d.h100e_best) : "—"}</strong><small>H100e</small>
@@ -219,7 +246,7 @@
     $("#site-panel").innerHTML = panelDetail(d);
     updateMarkers();
     if (map && moveMap && d.latitude != null && d.longitude != null) {
-      map.flyTo([d.latitude, d.longitude], Math.max(map.getZoom(), 5), { duration: 0.65 });
+      map.flyTo(displayPoint.get(d.name), Math.max(map.getZoom(), 5), { duration: 0.65 });
       const marker = markerBySite.get(d.name);
       if (marker) marker.openTooltip();
     }

@@ -78,7 +78,7 @@ We expect you to **disagree with the owner when the data says so**. Say
 │   └── gpu_cooling.csv        # 442 sites: platform, heat, cooling, water
 │
 ├── pipeline/
-│   ├── build.py               # STATUS map + build + validation + dashboard bundling
+│   ├── build.py               # build + validation + dashboard bundling
 │   ├── build_gpu_cooling.py   # per-site accelerator / cooling / water dataset
 │   ├── frontend/              # dashboard template, CSS and JavaScript (edit these)
 │   ├── country_table.py       # regenerates the country table
@@ -127,9 +127,10 @@ python pipeline/verification/verify_eia.py
 powershell -File scripts/push.ps1
 ```
 
-`build.py` checks that every row has a status and that `source_url` aligns
-with the status map. Watch for `WARN: rows without status`. It means the
-canonical CSV gained a row that `STATUS` does not know about.
+`build.py` stops on a bad column set or a non-numeric number. It also stops on a
+`source_url` that does not start with `http`, or a `status` that is not one of
+the four values in §5. Status is a column in the canonical CSV. Set it when you
+add a row.
 
 PowerShell 5 does **not** support `&&`. Use `;` or separate commands.
 
