@@ -61,6 +61,10 @@ We expect you to **disagree with the owner when the data says so**. Say
 ├── README.md                  # public methodology + country summary
 ├── DATA_DICTIONARY.md         # column definitions for all five CSVs
 ├── index.html                 # build output — self-contained interactive dashboard
+├── PUBLISHING.md               # deploy checklist for GitHub Pages
+├── LICENSE                    # MIT — covers the code
+├── LICENSE-DATA.md            # CC BY 4.0 — covers the data and docs
+├── .nojekyll                  # serve the root as static files, with no Jekyll
 ├── .gitignore
 ├── .env                       # GITHUB_PAT — GITIGNORED, never commit
 │
@@ -135,6 +139,11 @@ powershell -File scripts/push.ps1
 `source_url` that does not start with `http`, or a `status` that is not one of
 the four values in §5. Status is a column in the canonical CSV. Set it when you
 add a row.
+
+GitHub Pages serves the repository root at
+<https://tedngai.github.io/datacenter-efficiency-study/>. `.nojekyll` disables
+the Jekyll build. Read `PUBLISHING.md` before you change the frontend or the
+paths.
 
 PowerShell 5 does **not** support `&&`. Use `;` or separate commands.
 

@@ -35,6 +35,34 @@
 
   <entries>
 
+    <entry id="C-019" date="2026-11-08" type="change" area="repo"
+           title="Dashboard published on GitHub Pages" status="done">
+      <detail>
+        The project had no public URL. The owner asked for GitHub Pages, with the
+        same pattern as the tutorial site. The repository root is now the site
+        root at https://tedngai.github.io/datacenter-efficiency-study/.
+        `.nojekyll` stops the Jekyll build: `index.html` is a pre-built static
+        file, and Jekyll would slow the deploy and drop underscore paths.
+        `index.template.html` gains a canonical link, Open Graph and Twitter
+        card tags, and a 1200x630 share image at `assets/og-card.png`. That
+        image is a screenshot of the hero, taken from the local server. README
+        and AGENTS.md name the live URL. `PUBLISHING.md` records the deploy
+        checklist and one known gap: the `docs/*.md` links open as plain text,
+        because Pages does not render Markdown at this path. No absolute path
+        was added, so the site works from the project prefix. The build
+        reproduced all 442 rows and 349 H100e estimates with no data change.
+      </detail>
+      <files>
+        <file>.nojekyll</file>
+        <file>assets/og-card.png</file>
+        <file>pipeline/frontend/index.template.html</file>
+        <file>index.html</file>
+        <file>README.md</file>
+        <file>PUBLISHING.md</file>
+        <file>AGENTS.md</file>
+      </files>
+    </entry>
+
     <entry id="D-010" date="2026-11-08" type="decision" area="repo"
            title="Split the licence: MIT for code, CC BY 4.0 for data and docs" status="accepted">
       <detail>

@@ -4,6 +4,8 @@ A source-linked inventory of **442 major AI and hyperscale data center
 campuses** in 71 countries. Companion studies cover US electricity prices,
 water and operator efficiency. Every row names its source.
 
+**Live dashboard: <https://tedngai.github.io/datacenter-efficiency-study/>**
+
 **For environmental and community groups, start with
 [`docs/community_brief.md`](docs/community_brief.md).**
 
@@ -12,9 +14,9 @@ water and operator efficiency. Every row names its source.
 **Most AI data center capacity is not built yet. So the main community question
 is about decisions that are still open, not about damage that is already done.**
 
-- **Most of the load is a plan.** We track 123 GW of stated capacity. 70% of it
-  is planned or under construction, and only 17% is fully operational. In the
-  US the figures are 68 GW, 66% and 15%.
+- **Most of the load is a plan.** We track 123 GW of stated capacity. Planned
+  and under-construction sites hold 70% of it, and operational sites hold 17%.
+  In the US the figures are 68 GW, 66% and 15%.
 - **Electricity costs reach households through the regional market.** PJM's
   market monitor estimates that data center load added $9.33 billion to the
   $14.69 billion 2025/26 capacity auction. Rate design decides who pays that
