@@ -76,7 +76,7 @@
           <p class="section-index">01 / GLOBAL INFRASTRUCTURE</p>
           <h2>Where the compute<br><em>is being built.</em></h2>
         </div>
-        <p>Circle area represents estimated scale; color represents build status. Select any site to inspect the evidence behind the number.</p>
+        <p>Circle area shows estimated scale. Color shows build status. Select any site to inspect the evidence behind the number.</p>
       </div>
 
       <div class="atlas-toolbar" aria-label="Map filters">
@@ -170,7 +170,7 @@
         </div>
         <aside class="operator-card" id="operator-detail" aria-live="polite"></aside>
       </div>
-      <p class="comparison-warning reveal"><strong>Read before comparing:</strong> reporting years, site boundaries, and WUE definitions differ. Nebius's WUE is one Finland site; Crusoe's PUE is a design range; Google's WUE is derived from consumption. PUE measures facility overhead—not useful compute per joule.</p>
+      <p class="comparison-warning reveal"><strong>Read before comparing:</strong> reporting years, site boundaries, and WUE definitions differ. Nebius's WUE is one Finland site. Crusoe's PUE is a design range, and Google's WUE is derived from consumption. PUE measures facility overhead, not useful compute per joule.</p>
 
       <details class="disclosure-table reveal">
         <summary><span>See all 13 operator disclosures</span><span class="summary-meta">Transparency is part of the metric <b>+</b></span></summary>
@@ -218,7 +218,7 @@
         <aside class="matrix-card" id="cooling-matrix" aria-live="polite"></aside>
       </div>
 
-      <p class="comparison-warning reveal"><strong>What this shows — and what it does not.</strong> The points collapse onto operator-level rows, because a campus's PUE is usually its operator's fleet figure and its water figure is the operator's fleet WUE applied to site IT load. Neither is a meter reading. That clustering is the finding: at this level of disclosure, site efficiency <em>is</em> operator efficiency. The matrix is the part that is genuinely per-site: a liquid-cooled rack can still sit behind an evaporative plant, and an air-cooled hall can run on dry coolers.</p>
+      <p class="comparison-warning reveal"><strong>What this shows — and what it does not.</strong> The points collapse onto operator-level rows. A campus's PUE is usually its operator's fleet figure, and its water figure is the operator's fleet WUE applied to site IT load. Neither is a meter reading. That clustering is the finding: at this level of disclosure, site efficiency <em>is</em> operator efficiency. The matrix is the part that is genuinely per-site. A liquid-cooled rack can still sit behind an evaporative plant, and an air-cooled hall can run on dry coolers.</p>
 
       <details class="disclosure-table site-ledger reveal" open>
         <summary><span>All 442 sites · efficiency ledger</span><span class="summary-meta">Sort any column <b>+</b></span></summary>
@@ -260,7 +260,7 @@
           <span id="ledger-count">—</span>
           <button class="show-more" id="ledger-more" type="button">Show more sites <span aria-hidden="true">↓</span></button>
         </div>
-        <p class="ledger-note"><b>*</b> Industry default PUE of 1.20 — no operator disclosure for this site. <b>≈</b> Water intensity built on a stated WUE estimate (xAI, 1.0 L/kWh), not an operator disclosure. H100e/MW is the site's best compute estimate divided by IT load; power-based estimates sit at 500 by construction. Waterless designs stay at 0 here but are dropped from the chart, whose log axis cannot plot zero, so the ledger's “PUE + water” filter returns one more site than the chart.</p>
+        <p class="ledger-note"><b>*</b> Industry default PUE of 1.20 — no operator disclosure for this site. <b>≈</b> Water intensity built on a stated WUE estimate (xAI, 1.0 L/kWh), not an operator disclosure. H100e/MW is the site's best compute estimate divided by IT load. Power-based estimates sit at 500 by construction. Waterless designs stay at 0 here but are dropped from the chart, whose log axis cannot plot zero. The ledger's “PUE + water” filter therefore returns one more site than the chart.</p>
       </details>
     </section>
 
@@ -281,7 +281,7 @@
       </div>
       <div class="scenario-results" id="scenario-results"></div>
       <div class="scenario-delta" id="scenario-delta"></div>
-      <p class="scenario-note">Annual electricity = IT MW × PUE × 8,760 hours. Water uses each operator's disclosed or derived WUE normalizer. Assumes constant load; excludes embodied resources and local grid emissions. Operators missing either metric are not offered.</p>
+      <p class="scenario-note">Annual electricity = IT MW × PUE × 8,760 hours. Water uses each operator's disclosed or derived WUE normalizer. It assumes constant load and excludes embodied resources and local grid emissions. Operators that miss either metric are not offered.</p>
     </section>
 
     <section class="method-section shell" id="methodology">

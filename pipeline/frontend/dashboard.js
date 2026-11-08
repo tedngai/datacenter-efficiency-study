@@ -182,7 +182,7 @@
     return `
       <div class="panel-kicker"><span>AT A GLANCE</span><span>TOP ${top.length}</span></div>
       <h3 class="panel-title">${sites.length === DATA.length ? "The compute frontier" : "Your selection"}</h3>
-      <p class="panel-list-intro">Largest sites in the current filter, by best H100e estimate. Select a campus to inspect its scale and source.</p>
+      <p class="panel-list-intro">The largest sites in the current filter, by best H100e estimate. Select a campus to inspect its scale and source.</p>
       <div class="panel-site-list">${top.map((d, index) => `
         <button class="panel-site-item" type="button" data-site="${esc(d.name)}">
           <span class="rank">${String(index + 1).padStart(2, "0")}</span>
@@ -193,7 +193,7 @@
 
   function panelDetail(d) {
     const status = statusOf(d);
-    const note = d.status_note || "No additional site note is published for this row.";
+    const note = d.status_note || "This row has no additional site note.";
     const longNote = note.length > 270;
     return `
       <div class="panel-kicker"><span>SITE PROFILE</span><button type="button" data-close-site aria-label="Close site profile">×</button></div>
@@ -202,7 +202,7 @@
       <span class="panel-status"><i style="background:${status.color}"></i>${status.long}</span>
       <div class="panel-hero-metric">
         <strong>${d.h100e_best ? num(d.h100e_best) : "—"}</strong><small>H100e</small>
-        <p>${d.h100e_best ? `Best estimate · ${METHODS[d.h100e_method] || esc(d.h100e_method)}` : "No defensible H100e estimate is available"}</p>
+        <p>${d.h100e_best ? `Best estimate · ${METHODS[d.h100e_method] || esc(d.h100e_method)}` : "No defensible H100e estimate exists"}</p>
       </div>
       <div class="panel-metrics">
         <div><span>GROSS POWER</span><b>${powerOf(d) != null ? `${num(powerOf(d))} MW` : "Not published"}</b></div>
@@ -210,8 +210,8 @@
         <div><span>ANNOUNCED GPUs</span><b>${d.announced_gpu_count != null ? num(d.announced_gpu_count) : "Not published"}</b></div>
         <div><span>ACCELERATORS</span><b>${esc(d.gpu_types || "Not published")}</b></div>
       </div>
-      <div class="panel-note" id="panel-note"><span>RESEARCH NOTE</span><p>${esc(note)}</p>${longNote ? '<button type="button" data-expand-note>Read full note ↓</button>' : ""}</div>
-      <a class="source-button" href="${safeUrl(d.source_url)}" target="_blank" rel="noopener noreferrer"><span>Open primary source</span><span>↗</span></a>`;
+      <div class="panel-note" id="panel-note"><span>RESEARCH NOTE</span><p>${esc(note)}</p>${longNote ? '<button type="button" data-expand-note>Read the full note ↓</button>' : ""}</div>
+      <a class="source-button" href="${safeUrl(d.source_url)}" target="_blank" rel="noopener noreferrer"><span>Open the primary source</span><span>↗</span></a>`;
   }
 
   function selectSite(d, moveMap = true) {
@@ -242,7 +242,7 @@
     const more = $("#show-more-sites");
     more.hidden = sorted.length <= 10;
     more.innerHTML = visibleCount >= sorted.length
-      ? `Show first 10 sites <span aria-hidden="true">↑</span>`
+      ? `Show the first 10 sites <span aria-hidden="true">↑</span>`
       : `Show more sites <span aria-hidden="true">↓</span> <span style="color:#60776a">${Math.min(visibleCount, sorted.length)} / ${sorted.length}</span>`;
   }
 
@@ -251,8 +251,8 @@
     if (selectedSite && !filteredSites.some(d => d.name === selectedSite.name)) selectedSite = null;
     $("#map-count").textContent = `${filteredSites.length} site${filteredSites.length === 1 ? "" : "s"}`;
     $("#filter-summary").textContent = filteredSites.length === DATA.length
-      ? `Showing all ${DATA.length} sites · ${countries.length} countries.`
-      : `Showing ${filteredSites.length} of ${DATA.length} sites · ${compact(filteredSites.reduce((sum, d) => sum + (d.h100e_best || 0), 0))} H100e in selection.`;
+      ? `Showing all ${DATA.length} sites in ${countries.length} countries.`
+      : `Showing ${filteredSites.length} of ${DATA.length} sites. The selection holds ${compact(filteredSites.reduce((sum, d) => sum + (d.h100e_best || 0), 0))} H100e.`;
     if (!selectedSite) $("#site-panel").innerHTML = panelList(filteredSites);
     updateMarkers();
     renderRanking();
@@ -303,7 +303,7 @@
     if (expandButton) {
       const note = $("#panel-note");
       note.classList.toggle("expanded");
-      expandButton.textContent = note.classList.contains("expanded") ? "Collapse note ↑" : "Read full note ↓";
+      expandButton.textContent = note.classList.contains("expanded") ? "Collapse the note ↑" : "Read the full note ↓";
     }
   });
   $("#site-ranking").addEventListener("click", event => {
@@ -372,11 +372,11 @@
         <div class="operator-metric"><span>PUE</span><strong>${d.pue_value != null ? num(d.pue_value, 2) : "ND"}</strong><small>facility / IT energy</small></div>
         <div class="operator-metric"><span>WUE</span><strong>${d.wue_value != null ? num(d.wue_value, 3) : "ND"}</strong><small>litres / IT kWh</small></div>
       </div>
-      <p class="operator-overhead">${overhead != null ? `<strong>${overhead} units</strong> of non-IT facility overhead for every 100 units of IT energy.` : "PUE is not disclosed, so facility overhead cannot be calculated."}<br>Water normalizer: <strong>${d.water_value != null ? compact(d.water_value) : "—"} gal</strong> per MW-year.</p>
+      <p class="operator-overhead">${overhead != null ? `<strong>${overhead} units</strong> of non-IT facility overhead for every 100 units of IT energy.` : "The operator does not disclose PUE, so we cannot calculate facility overhead."}<br>Water normalizer: <strong>${d.water_value != null ? compact(d.water_value) : "—"} gal</strong> per MW-year.</p>
       <div class="operator-scope"><span>PUE BOUNDARY</span><p>${esc(d.pue_scope)}</p></div>
       <div class="operator-scope"><span>WUE BASIS</span><p>${esc(d.wue_basis)}</p></div>
       <div class="operator-scope"><span>REPORTING CAVEAT</span><p class="operator-note">${esc(d.notes)}</p></div>
-      <a class="operator-source" href="${safeUrl(d.source_url)}" target="_blank" rel="noopener noreferrer"><span>View company disclosure</span><span>↗</span></a>`;
+      <a class="operator-source" href="${safeUrl(d.source_url)}" target="_blank" rel="noopener noreferrer"><span>View the company disclosure</span><span>↗</span></a>`;
   }
 
   function renderEfficiencyChart() {
@@ -420,8 +420,8 @@
         <text class="chart-sub-label" x="${px + dx}" y="${py + dy + 12}">${num(d.pue_value, 2)} / ${num(d.wue_value, 3)}</text>
       </g>`;
     }).join("");
-    svg.innerHTML = `<title id="chart-title">Operator PUE and WUE comparison</title><desc id="chart-desc">Scatter plot of operators with both power and water usage effectiveness values. Lower values are better. Select a point for scope and reporting caveats.</desc>${content}`;
-    $("#chart-coverage").textContent = `${data.length} shown · ${OPERATORS.length - plottableOperators.length} operators lack a complete pair`;
+    svg.innerHTML = `<title id="chart-title">Operator PUE and WUE comparison</title><desc id="chart-desc">Scatter plot of operators with both power and water usage effectiveness values. Lower values are better. Select a point to read its scope and reporting caveats.</desc>${content}`;
+    $("#chart-coverage").textContent = `${data.length} shown. ${OPERATORS.length - plottableOperators.length} operators lack a complete pair.`;
 
     $$(".chart-point", svg).forEach(point => {
       const showTooltip = event => {
@@ -608,9 +608,9 @@
     }).join("");
     // The static frame goes in first, then the bubbles are appended, so the
     // tooltip wiring below always attaches to freshly parsed nodes.
-    svg.innerHTML = `<title id="site-chart-title">Site PUE and water intensity</title><desc id="site-chart-desc">Each bubble is a distinct combination of operator-disclosed PUE and water intensity; bubble area is the number of campuses at that position.</desc>${content}`;
+    svg.innerHTML = `<title id="site-chart-title">Site PUE and water intensity</title><desc id="site-chart-desc">Each bubble is a distinct combination of operator-disclosed PUE and water intensity. Bubble area is the number of campuses at that position.</desc>${content}`;
     svg.insertAdjacentHTML("beforeend", bubbles);
-    $("#site-chart-coverage").textContent = `${data.length} sites · ${groups.length} distinct positions · size = number of sites`;
+    $("#site-chart-coverage").textContent = `${data.length} sites in ${groups.length} distinct positions. Size shows the number of sites.`;
     $("#site-chart-legend").innerHTML = ["evaporative", "hybrid", "dry_closed_loop", "unknown"].map(key => {
       const n = data.filter(c => (c.heat_rejection || "unknown") === key).length;
       if (!n) return "";
@@ -688,9 +688,9 @@
     $("#cooling-matrix").innerHTML = `
       <p class="mini-label">RACK COOLING × HEAT REJECTION</p>
       <h3>Two decisions, not one</h3>
-      <p class="matrix-intro">A liquid-cooled rack can still evaporate water at the plant. Counts of the ${COOLING.length} sites by the two independent layers.</p>
+      <p class="matrix-intro">A liquid-cooled rack can still evaporate water at the plant. These counts cover the ${COOLING.length} sites across the two independent layers.</p>
       <div class="matrix-panel"><div class="matrix-scroll">${table}</div></div>
-      <p class="matrix-foot">Water is set by the right-hand column, not the left.</p>`;
+      <p class="matrix-foot">The right-hand column sets water use, not the left.</p>`;
   }
 
   let ledgerSort = { key: "it_load_mw", dir: -1 };
@@ -738,11 +738,11 @@
         <td><span class="conf-badge conf-${conf}">${conf}</span></td>
       </tr>`;
     }).join("") : '<tr><td colspan="9" class="empty-row">No sites match those filters.</td></tr>';
-    $("#ledger-count").textContent = `${shown.length} of ${rows.length} sites shown · ${COOLING.length} in dataset`;
+    $("#ledger-count").textContent = `${shown.length} of ${rows.length} sites shown. The dataset holds ${COOLING.length}.`;
     const more = $("#ledger-more");
     more.hidden = rows.length <= 25;
     more.innerHTML = ledgerVisible >= rows.length
-      ? `Show first 25 sites <span aria-hidden="true">↑</span>`
+      ? `Show the first 25 sites <span aria-hidden="true">↑</span>`
       : `Show more sites <span aria-hidden="true">↓</span> <span style="color:#60776a">${Math.min(ledgerVisible, rows.length)} / ${rows.length}</span>`;
   }
 
@@ -840,7 +840,7 @@
     const waterSaver = resultA.waterMGal < resultB.waterMGal ? a : b;
     const energySaver = resultA.facilityGWh < resultB.facilityGWh ? a : b;
     const energyDifference = Math.abs(resultA.facilityGWh - resultB.facilityGWh);
-    $("#scenario-delta").innerHTML = `<span>At this load, <strong>${esc(waterSaver.operator)}</strong> uses <strong>${num(waterDifference, waterDifference < 10 ? 2 : 1)} million fewer gallons</strong> per year; <strong>${esc(energySaver.operator)}</strong> uses <strong>${num(energyDifference, 1)} GWh less facility electricity</strong>.</span>`;
+    $("#scenario-delta").innerHTML = `<span>At this load, <strong>${esc(waterSaver.operator)}</strong> uses <strong>${num(waterDifference, waterDifference < 10 ? 2 : 1)} million fewer gallons</strong> per year. <strong>${esc(energySaver.operator)}</strong> uses <strong>${num(energyDifference, 1)} GWh less facility electricity</strong>.</span>`;
   }
 
   ["load-slider", "operator-a", "operator-b"].forEach(id => {
