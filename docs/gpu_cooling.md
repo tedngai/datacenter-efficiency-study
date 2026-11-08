@@ -9,8 +9,8 @@ Cooling is two separate decisions — how heat leaves the **rack**, and how the
 **facility** rejects it to the sky. A rack full of liquid-cooled GPUs can sit in
 a campus that evaporates billions of litres a year. An air-cooled hall can run
 on dry coolers with almost no water. Of the 442 sites, 177 name an accelerator
-platform (specific model or family placeholder). Only **51** have enough
-evidence (model, count, TDP) to estimate accelerator heat. Only **94** have a
+platform (specific model or family placeholder). Only **52** have enough
+evidence (model, count, TDP) to estimate accelerator heat. Only **93** have a
 water figure, and every one of those is an operator-fleet scaling, not a site
 measurement.
 
@@ -124,15 +124,15 @@ water in the stated design", not "metered zero".
 | Any accelerator platform (model or family) | 177 | 40% |
 | — from `gpu_types` | 158 | |
 | — from site notes | 19 | |
-| Announced accelerator count | 74 | 17% |
-| Accelerator heat estimate | 51 | 12% |
+| Announced accelerator count | 75 | 17% |
+| Accelerator heat estimate | 52 | 12% |
 | — single TDP | 36 | |
-| — TDP range | 15 | |
-| IT load / thermal load | 307 | 69% |
-| Cooling electricity | 307 | 69% |
-| Water estimate (fleet-scaled) | 94 | 21% |
+| — TDP range | 16 | |
+| IT load / thermal load | 306 | 69% |
+| Cooling electricity | 306 | 69% |
+| Water estimate (fleet-scaled) | 93 | 21% |
 
-Confidence in the **hardware and heat** estimate: **A 0, B 38, C 66, D 338**.
+Confidence in the **hardware and heat** estimate: **A 0, B 39, C 65, D 338**.
 There is no A because no site combines an officially published TDP, a published
 count and a site-specific cooling disclosure. That is a finding, not a defect.
 
@@ -258,7 +258,7 @@ of IT should distrust one of the two numbers, and the dataset says which.
 
 ## 8. What is still unknown
 
-- **Counts.** 368 of 442 sites publish no accelerator count. Without a count
+- **Counts.** 367 of 442 sites publish no accelerator count. Without a count
   there is no heat total, only a per-chip TDP.
 - **Models.** 265 sites name no accelerator at all. Notes often say "AI-ready"
   or "GPU-capable", which is a marketing description, not hardware.

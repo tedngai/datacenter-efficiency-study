@@ -49,8 +49,8 @@ interface:
   each operator's reporting year, boundary, water basis, and disclosure grade.
 - **Site efficiency:** the same question asked of every campus: cooling energy and
   water per MW. A coverage strip states how many sites can answer it.
-  Of 442 sites, 307 have a power denominator, 127 an operator-disclosed PUE, 93 a
-  water intensity, and 88 both. Those 88 collapse onto **six distinct positions**,
+  Of 442 sites, 306 have a power denominator, 127 an operator-disclosed PUE, 92 a
+  water intensity, and 87 both. Those 87 collapse onto **six distinct positions**,
   because both numbers are operator-level. Bubble size shows how many campuses
   share a position. A rack-cooling × heat-rejection matrix covers all 442 sites,
   and the ledger below it is sortable and filterable. The page marks PUE values
@@ -73,10 +73,18 @@ so every value here is an estimate. The build computes four estimates.
    (dense FP8 compute ratio vs H100's 1,979 TFLOPS):
    - H100 / H200 / H800 / unspecified "GPUs" = **1.0**
    - B200 / GB200 = **2.25**. GB300/B300 = **2.5**
-   - A100 = **0.315**. Trainium2 = **0.34**. Ascend 910B ≈ **0.35**
+   - A100 = **0.315**. Trainium2 = **0.34**. Ascend 910B ≈ **0.35**. L40S = **0.19**
+   - AMD MI355X = **2.5** (5.0 PF dense OCP-FP8 per AMD ÷ 1.979 = 2.54, rounded
+     like B300)
+   - **Mixed generations.** If the site publishes a count per model, we add up
+     count × factor for each model. If it does not, and the models have different
+     factors, `h100e_gpu` stays blank and `h100e_best` uses the next method. If
+     only part of the fleet has a published count, we convert that part and the
+     note calls the value a floor.
 2. **`h100e_third_party`** — estimates from Epoch AI's data center directory,
    recorded during research. We use these for several Stargate sites, China sites,
-   DayOne and others.
+   DayOne and others. A third-party H100e always goes in this column, also when
+   the third party derived it from GPU counts.
 3. **`h100e_flops`** — announced cluster peak PFLOPS (dense FP8-equivalent) ÷ 1.979.
 4. **`h100e_power`** — power-based estimate. Assume 60% of IT load powers H100-class
    accelerator systems at ~1.2 kW per GPU, which gives **500 H100e per MW of IT
@@ -114,12 +122,18 @@ Each site has a `status` column (also color-coded on the map):
 
 So **only 199 of 442 sites (45%) are fully operational**. Gigawatt-scale projects
 still under construction dominate the field. Judged by H100e, the split is
-starker. Roughly two-thirds of the total tracked compute sits in sites that are
-not yet fully operational. The biggest single estimates — Stargate Saline, Port
-Washington, Hyperion, Prometheus, Stargate UAE — are all still ramping or under
-construction.
+starker. About **81%** of the total tracked H100e sits in sites that are not yet
+fully operational. 70% sits in sites that are only planned or under
+construction. Fully operational sites hold 11.6M H100e (19%). The biggest single
+estimates — Fermi America, Wonder Valley, Stargate Saline, Port Washington,
+Hyperion, Stargate UAE — are all planned or under construction.
 
-**Regional coverage note**: the first research pass was thin on Asia and empty on
+(Before the Nov 2026 review this paragraph said "roughly two-thirds". That was
+wrong: the share was 81% then too.)
+
+**Regional coverage note**: the counts in this note are the totals after each
+research pass. Later passes added more sites, so the current counts are in the
+country table below. The first research pass was thin on Asia and empty on
 Latin America. Later deep-dives expanded China (24 sites, the "Eastern Data,
 Western Computing" intelligent computing centers). Malaysia grew to 22 sites,
 because Johor is one of the fastest-growing AI DC markets. They also expanded
@@ -188,13 +202,15 @@ into `cluster_peak_pflops`.
 
 - **Scope**: major AI/hyperscale campuses only (roughly 100 MW+ or named 10k+ GPU
   clusters). We exclude ordinary colo/enterprise data centers and national-lab
-  supercomputers (Frontier, El Capitan, JUPITER…).
+  supercomputers (Frontier, El Capitan…). The exceptions are systems that are
+  notable AI systems, for example JUPITER/JAIF and the EuroHPC AI factories.
 - **Estimates span very different confidence levels**. An Epoch AI projection for
   a 2028 build-out and a measured IT load are not equally reliable. Read
   `status_note` before you quote any number.
 - Power-based H100e is an upper-bound-style estimate. It credits the whole campus
   to H100-class accelerators, which overstates sites that host general cloud
-  workloads.
+  workloads. **It supplies 41.6M of the 61.4M total (68%).** Most of that is
+  nameplate capacity at sites that are not built yet.
 - We compiled the data via web research from operator press releases, regulator
   filings, Epoch AI, DataCenterDynamics, and press coverage (sources in
   `source_url`). The data is current as of **November 2026**. The field moves
@@ -204,15 +220,23 @@ into `cluster_peak_pflops`.
 
 ## Headline numbers (as of compilation)
 
-- **442 campuses**, 353 with a quantifiable H100e estimate
-- **~64.0M H100e** total across tracked sites, heavily skewed by gigawatt-scale
-  builds still under construction (see status classification above). The two
-  largest figures, Fermi America's ~4.6M and Wonder Valley's ~3.1M H100e
-  power-based estimates, are speculative proposals without named tenants.
+- **442 campuses**, 349 with a quantifiable H100e estimate
+- **~61.4M H100e** total across tracked sites. This is not a count of installed
+  compute:
+  - 68% (41.6M) is power-based, 26% (15.7M) third-party, 7% (4.1M) from GPU counts.
+  - 70% (43.1M) is at sites that are only planned or under construction.
+    Fully operational sites hold 11.6M (19%).
+  - The two largest figures, Fermi America's ~4.6M and Wonder Valley's ~3.1M
+    H100e power-based estimates, are speculative proposals without named tenants.
 - Largest tracked sites: Stargate Saline Township MI (~2.9M), Stargate Port
-  Washington WI (~2.6M), Meta Prometheus OH (~2.25M) and Meta Hyperion LA (~2.1M
-  power-est). Also Stargate UAE (~2.0M), xAI Colossus 2 (~1.1M) and Stargate
-  Abilene TX (~1.0M)
+  Washington WI (~2.6M) and Meta Hyperion LA (~2.1M power-est). Also Stargate
+  UAE (~2.0M), xAI Colossus 2 (~1.1M) and Stargate Abilene TX (~1.0M).
+- Nov 2026 review: the total was ~64.0M. A correction pass
+  (`pipeline/verification/verify_apply5.py`) applied the mixed-generation rule
+  and moved Epoch estimates to the third-party column. It also removed an
+  unverified 1,289 MW figure for Meta Prineville. Meta Prometheus changed from
+  2.25M (1M-GPU target × GB200 factor) to 347,500 (695 MW IT). See
+  `PROGRESS.xml` C-entry for every row.
 
 ## US local impacts (water & energy prices)
 
@@ -262,10 +286,10 @@ direct-to-chip liquid, immersion) and facility heat rejection (evaporative
 towers, dry coolers, hybrid) are separate decisions. Google's liquid-cooled TPUs
 still reject heat through cooling towers. NVIDIA's liquid racks can run on dry
 coolers, but only if the operator builds them. Of 442 sites, 177 name a platform,
-and 51 have enough evidence for an accelerator-heat estimate (36 single TDP, 15
-ranged). 94 carry a water figure, and every one is an operator-fleet WUE scaling,
+and 52 have enough evidence for an accelerator-heat estimate (36 single TDP, 16
+ranged). 93 carry a water figure, and every one is an operator-fleet WUE scaling,
 not a site measurement. Two of those (xAI) rest on a stated 1.0 L/kWh estimate
-rather than a disclosure. Hardware confidence is B 38 / C 66 / D 338, with no A.
+rather than a disclosure. Hardware confidence is B 39 / C 65 / D 338, with no A.
 No site combines an official TDP, a published count and site-specific cooling
 evidence.
 
@@ -285,19 +309,19 @@ type and a rejection type.
 
 | Country | Sites | MW (known) | H100e (known) |
 |---|---:|---:|---:|
-| USA | 121 | 69,422 | 38,316,893 |
-| China | 29 | 1,926 | 853,920 |
+| United States | 121 | 68,148 | 35,895,726 |
+| China | 29 | 1,926 | 836,420 |
 | Malaysia | 25 | 4,481 | 2,624,634 |
 | India | 25 | 7,560 | 3,002,471 |
 | Mexico | 23 | 1,828 | 838,280 |
 | Canada | 20 | 10,404 | 4,341,931 |
 | Japan | 16 | 2,094 | 880,405 |
-| South Korea | 13 | 913 | 449,789 |
+| South Korea | 13 | 913 | 441,789 |
 | Saudi Arabia | 12 | 2,616 | 1,152,050 |
 | South Africa | 11 | 887 | 374,834 |
 | Brazil | 10 | 3,282 | 1,297,416 |
-| Australia | 9 | 2,550 | 1,174,155 |
-| UK | 9 | 990 | 519,734 |
+| Australia | 9 | 2,550 | 1,173,667 |
+| United Kingdom | 9 | 990 | 519,734 |
 | United Arab Emirates | 8 | 1,360 | 2,171,001 |
 | Germany | 7 | 260 | 148,435 |
 | France | 6 | 2,430 | 1,073,833 |
@@ -307,22 +331,22 @@ type and a rejection type.
 | Israel | 4 | 196 | 89,382 |
 | Finland | 3 | 985 | 428,167 |
 | Denmark | 3 | 810 | 357,500 |
-| Norway | 3 | 272 | 275,773 |
 | Spain | 3 | 400 | 160,000 |
 | Ireland | 3 | 675 | 301,250 |
 | Netherlands | 3 | 350 | 151,800 |
+| Norway | 3 | 272 | 146,606 |
 | Turkey | 3 | 300 | 125,003 |
 | Chile | 3 | 270 | 125,000 |
 | Nigeria | 3 | 177 | 88,500 |
 | Kazakhstan | 2 | 300 | 126,011 |
-| Taiwan | 2 | 400 | 147,500 |
+| Taiwan | 2 | 400 | 150,000 |
 | Indonesia | 2 | 190 | 132,386 |
 | Bangladesh | 2 | 200 | 83,333 |
 | Singapore | 2 | 206 | 103,000 |
 | Vietnam | 2 | 144 | 61,333 |
 | Thailand | 2 | 147 | 65,167 |
 | Kenya | 2 | 30 | 11,250 |
-| Pakistan | 2 | 10 | 3,642 |
+| Pakistan | 2 | 10 | 4,042 |
 | Uruguay | 2 | - | - |
 | Argentina | 1 | 500 | 208,333 |
 | Trinidad and Tobago | 1 | 450 | 187,500 |

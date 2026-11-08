@@ -35,7 +35,13 @@ One row per site. `pipeline/build.py` generates this file from
 
 **H100e factors:** H100/H200/H800/GH200 = 1.0. B200/GB200 = 2.25.
 GB300/B300 = 2.5. A100 = 0.315. Trainium2 = 0.34. Ascend 910B = 0.35.
-L40S = 0.19. Unspecified = 1.0. Leave mixed generations blank with a note.
+L40S = 0.19. AMD MI355X = 2.5. Unspecified = 1.0.
+
+**Mixed generations:** if the source gives a count per model, `h100e_gpu` is the
+sum of count × factor for each model. If it does not, and the factors differ,
+leave `h100e_gpu` blank with a note. If only part of the fleet has a count,
+convert that part and call it a floor in the note. A third-party H100e goes in
+`h100e_third_party`, never in `h100e_gpu`.
 
 ---
 

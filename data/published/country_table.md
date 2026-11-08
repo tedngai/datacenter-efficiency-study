@@ -1,18 +1,18 @@
 | Country | Sites | MW (known) | H100e (known) |
 |---|---:|---:|---:|
-| USA | 121 | 69,422 | 38,316,893 |
-| China | 29 | 1,926 | 853,920 |
+| United States | 121 | 68,148 | 35,895,726 |
+| China | 29 | 1,926 | 836,420 |
 | Malaysia | 25 | 4,481 | 2,624,634 |
 | India | 25 | 7,560 | 3,002,471 |
 | Mexico | 23 | 1,828 | 838,280 |
 | Canada | 20 | 10,404 | 4,341,931 |
 | Japan | 16 | 2,094 | 880,405 |
-| South Korea | 13 | 913 | 449,789 |
+| South Korea | 13 | 913 | 441,789 |
 | Saudi Arabia | 12 | 2,616 | 1,152,050 |
 | South Africa | 11 | 887 | 374,834 |
 | Brazil | 10 | 3,282 | 1,297,416 |
-| Australia | 9 | 2,550 | 1,174,155 |
-| UK | 9 | 990 | 519,734 |
+| Australia | 9 | 2,550 | 1,173,667 |
+| United Kingdom | 9 | 990 | 519,734 |
 | United Arab Emirates | 8 | 1,360 | 2,171,001 |
 | Germany | 7 | 260 | 148,435 |
 | France | 6 | 2,430 | 1,073,833 |
@@ -22,22 +22,22 @@
 | Israel | 4 | 196 | 89,382 |
 | Finland | 3 | 985 | 428,167 |
 | Denmark | 3 | 810 | 357,500 |
-| Norway | 3 | 272 | 275,773 |
 | Spain | 3 | 400 | 160,000 |
 | Ireland | 3 | 675 | 301,250 |
 | Netherlands | 3 | 350 | 151,800 |
+| Norway | 3 | 272 | 146,606 |
 | Turkey | 3 | 300 | 125,003 |
 | Chile | 3 | 270 | 125,000 |
 | Nigeria | 3 | 177 | 88,500 |
 | Kazakhstan | 2 | 300 | 126,011 |
-| Taiwan | 2 | 400 | 147,500 |
+| Taiwan | 2 | 400 | 150,000 |
 | Indonesia | 2 | 190 | 132,386 |
 | Bangladesh | 2 | 200 | 83,333 |
 | Singapore | 2 | 206 | 103,000 |
 | Vietnam | 2 | 144 | 61,333 |
 | Thailand | 2 | 147 | 65,167 |
 | Kenya | 2 | 30 | 11,250 |
-| Pakistan | 2 | 10 | 3,642 |
+| Pakistan | 2 | 10 | 4,042 |
 | Uruguay | 2 | - | - |
 | Argentina | 1 | 500 | 208,333 |
 | Trinidad and Tobago | 1 | 450 | 187,500 |

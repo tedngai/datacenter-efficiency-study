@@ -146,8 +146,18 @@ Keep thin rows when the site is notable, with an honest note.
 
 **H100e factors.** H100/H200/H800/GH200 = 1.0. B200/GB200 = 2.25.
 GB300/B300 = 2.5. A100 = 0.315. Trainium2 = 0.34. Ascend 910B = 0.35.
-L40S = 0.19. Unspecified = 1.0. **Mixed GPU generations get no single factor.**
-Leave `h100e_*` blank and explain in `notes`.
+L40S = 0.19. AMD MI355X = 2.5. Unspecified = 1.0.
+
+**Mixed GPU generations get no single factor.**
+- If the source gives a count per model, `h100e_gpu` = the sum of count × factor
+  for each model. Write the arithmetic in `notes`.
+- If it does not, and the models have different factors, leave `h100e_gpu` blank
+  and explain in `notes`. `h100e_best` then uses the next method.
+- If only part of the fleet has a count, convert that part and call it a floor
+  in `notes`.
+
+**Third-party H100e** (Epoch AI etc.) goes in `h100e_third_party`, never in
+`h100e_gpu`, also when the third party derived it from GPU counts.
 
 **Power-based estimate.** 500 H100e per MW of IT load, or ≈417 per MW of gross
 facility power at PUE 1.2.
@@ -206,9 +216,11 @@ in `PROGRESS.xml`.
 
 ---
 
-## 8. Current state (2 Nov 2026)
+## 8. Current state (8 Nov 2026)
 
-- **442 sites · 71 countries · 353 with H100e · ~64.0M H100e.**
+- **442 sites · 71 countries · 349 with H100e · ~61.4M H100e.**
+  68% of the total is power-based, and 70% is at planned or under-construction
+  sites. Operational sites hold 11.6M. Do not quote the total without this.
 - Status: 199 operational / 35 partially operational / 117 under construction /
   91 planned.
 - **121 US sites**, grouped into **55 utility territories**.

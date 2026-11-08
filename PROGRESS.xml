@@ -11,21 +11,21 @@
 -->
 <progress project="datacenter-efficiency-study"
           repo="https://github.com/tedngai/datacenter-efficiency-study"
-          updated="2026-11-07"
+          updated="2026-11-08"
           schema="1">
 
   <summary>
     Global inventory of major AI/hyperscale data centers quantified in H100e,
     plus US utility-territory impacts (energy prices and water) and an
     operator-efficiency comparison. Current release: 442 sites, 71 countries,
-    ~64.0M H100e, 121 US sites across 55 utility territories, 13 operators.
+    ~61.4M H100e, 121 US sites across 55 utility territories, 13 operators.
   </summary>
 
   <state>
     <sites>442</sites>
     <countries>71</countries>
-    <sites_with_h100e>353</sites_with_h100e>
-    <total_h100e>64001926</total_h100e>
+    <sites_with_h100e>349</sites_with_h100e>
+    <total_h100e>61428504</total_h100e>
     <us_sites>121</us_sites>
     <us_utility_rows>55</us_utility_rows>
     <operator_rows>13</operator_rows>
@@ -34,6 +34,80 @@
   </state>
 
   <entries>
+
+    <entry id="C-014" date="2026-11-08" type="change" area="data"
+           title="H100e conversions brought in line with the stated rules; USA/UK renamed" status="done">
+      <detail>
+        A project review found rows that broke D-003 and the AGENTS.md factor
+        table. pipeline/verification/verify_apply5.py applied 27 checked edits
+        (each one asserts the old value, else MISS) and 18 note additions.
+
+        Mixed generations with no per-model split, h100e_gpu blanked:
+        Meta Prometheus (2,250,000; was a 1M-GPU target x 2.25 for a GB200/GB300
+        mix; best now 347,500 from 695 MW IT), Stargate Norway (225,000), KISTI
+        HANGANG No.6 (8,000), Data Vault Pakistan (100), China Telecom Zhongwei
+        (10,500), China Mobile Hohhot (7,000).
+        xAI Colossus 1: 247,500 matched no breakdown; Epoch split 150k H100 +
+        50k H200 + 30k B200 = 267,500, filed as third-party.
+        Wrong factor: Foxconn Kaohsiung GB300 22,500 -> 25,000.
+        Count never converted: Fairwater Atlanta 337,500 (150k GB200, DC-10
+        only, a floor); Firmus Southgate 46,000; Vultr Springfield 60,000.
+        Epoch estimates moved from h100e_gpu to h100e_third_party (values
+        unchanged, method label now correct): DayOne Nusajaya, DayOne Kempas,
+        Huawei Wuhu, Huawei Horinger, Alibaba Zhangbei.
+        xAI QTS Atlanta: announced_gpu_count 12,448 filled from its own note.
+        Power fields: Fairwater Atlanta 640 MW moved from gross to IT (note says
+        340 + 300 MW IT). Nebius Vineland gross 300 MW removed (below its 315 MW
+        IT; no source). Meta Prineville 1,289 MW IT removed: sole source is
+        dcmap.us, and per-building trackers show ~48 MW per building; figure kept
+        in notes as unverified, so the site has no H100e until a primary source
+        exists.
+        Floors noted (value unchanged): SK Broadband Gasan, NHN Gwangju, LG AEX,
+        Start Campus SINES.
+        Country names: USA -> United States (121 rows), UK -> United Kingdom
+        (9 rows), per AGENTS.md section 5. data/raw is provenance and is left
+        as scraped.
+
+        Review false positives, left unchanged: Microsoft Sweden (20,000 GPUs
+        span three sites, already blank by design), Sakura Ishikari (3,900 is a
+        correct per-model sum), Killarney, Serbia, TamIA, E2E Chennai.
+
+        Headline: ~64.0M -> ~61.4M H100e; 353 -> 349 sites with H100e
+        (Prineville, KISTI, China Mobile Hohhot, China Telecom Zhongwei lost
+        theirs). README previously said "roughly two-thirds" of H100e is at
+        sites not fully operational; the true share was 81% before and is 81%
+        now. Power-based estimates are 68% of the total. Cooling knock-on:
+        heat estimates 51 -> 52, IT load 307 -> 306, water 94 -> 93, confidence
+        B 38 -> 39, C 66 -> 65. The three pre-existing heat-vs-IT warnings
+        (Prometheus, JUPITER, Domyn) are unchanged and still open.
+      </detail>
+      <files>
+        <file>pipeline/verification/verify_apply5.py</file>
+        <file>data/canonical/data_centers.csv</file>
+        <file>data/published/data_centers.csv</file>
+        <file>data/published/data_centers.json</file>
+        <file>data/published/country_table.md</file>
+        <file>data/gpu_cooling.csv</file>
+        <file>data/gpu_cooling.json</file>
+        <file>index.html</file>
+        <file>README.md</file>
+        <file>AGENTS.md</file>
+        <file>DATA_DICTIONARY.md</file>
+        <file>docs/gpu_cooling.md</file>
+      </files>
+    </entry>
+
+    <entry id="D-008" date="2026-11-08" type="decision" area="method"
+           title="Mixed-generation and third-party H100e rules made explicit; MI355X factor added" status="accepted">
+      <detail>
+        Clarifies D-003 (not superseded). A per-model breakdown is converted as
+        the sum of count x factor; a mix with different factors and no
+        breakdown leaves h100e_gpu blank; a partial count is converted and
+        called a floor. Third-party H100e always goes in h100e_third_party.
+        New factor: AMD MI355X = 2.5 (AMD spec page: 5.0 PF dense OCP-FP8;
+        5.0 / 1.979 = 2.54, rounded the same way as B300/GB300).
+      </detail>
+    </entry>
 
     <entry id="C-013" date="2026-11-08" type="change" area="docs"
            title="Prose rewritten in Simplified Technical English (ASD-STE100)" status="done">
