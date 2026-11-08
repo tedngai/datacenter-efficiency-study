@@ -35,6 +35,24 @@
 
   <entries>
 
+    <entry id="C-020" date="2026-11-08" type="change" area="frontend"
+           title="Footer links to the Data-Driven Design tutorial site" status="done">
+      <detail>
+        The owner asked for a link to the tutorial site. The footer gains a
+        fourth group, "ELSEWHERE", with one link to
+        https://tedngai.github.io/datadrivendesign/. The desktop grid changed
+        from three columns (1.7fr .7fr .8fr) to four (1.6fr .7fr .8fr .6fr).
+        The mobile rule (1fr 1fr) needed no change: the new group takes its own
+        row. Checked at 1440 px and 390 px. The label stays on one line on
+        desktop, and the footer keeps its order on mobile.
+      </detail>
+      <files>
+        <file>pipeline/frontend/index.template.html</file>
+        <file>pipeline/frontend/dashboard.css</file>
+        <file>index.html</file>
+      </files>
+    </entry>
+
     <entry id="C-019" date="2026-11-08" type="change" area="repo"
            title="Dashboard published on GitHub Pages" status="done">
       <detail>

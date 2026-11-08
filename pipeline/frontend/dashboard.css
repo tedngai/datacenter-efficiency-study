@@ -330,7 +330,7 @@ table { border-collapse: collapse; width: 100%; text-align: left; }
 .method-callout a span { margin-left: 12px; }
 
 /* Footer */
-.footer { display: grid; grid-template-columns: 1.7fr .7fr .8fr; gap: 50px; border-top: 1px solid var(--line); padding-top: 42px; padding-bottom: 25px; }
+.footer { display: grid; grid-template-columns: 1.6fr .7fr .8fr .6fr; gap: 50px; border-top: 1px solid var(--line); padding-top: 42px; padding-bottom: 25px; }
 .footer-brand { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 12px; }
 .footer-brand strong { font-size: 13px; }
 .footer-brand p { grid-column: 1 / -1; color: var(--muted); font-size: 9px; line-height: 1.7; margin: 10px 0 0; }
