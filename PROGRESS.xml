@@ -18,22 +18,58 @@
     Global inventory of major AI/hyperscale data centers quantified in H100e,
     plus US utility-territory impacts (energy prices and water) and an
     operator-efficiency comparison. Current release: 442 sites, 71 countries,
-    ~64.7M H100e, 121 US sites across 55 utility territories, 13 operators.
+    ~64.0M H100e, 121 US sites across 55 utility territories, 13 operators.
   </summary>
 
   <state>
     <sites>442</sites>
     <countries>71</countries>
     <sites_with_h100e>353</sites_with_h100e>
-    <total_h100e>64700000</total_h100e>
+    <total_h100e>64001926</total_h100e>
     <us_sites>121</us_sites>
     <us_utility_rows>55</us_utility_rows>
     <operator_rows>13</operator_rows>
     <status operational="199" partially_operational="35"
-            under_construction="116" planned="92"/>
+            under_construction="117" planned="91"/>
   </state>
 
   <entries>
+
+    <entry id="C-013" date="2026-11-08" type="change" area="docs"
+           title="Prose rewritten in Simplified Technical English (ASD-STE100)" status="done">
+      <detail>
+        Installed the asd-ste100 skill under .opencode/skills/asd-ste100 and
+        rewrote the seven markdown docs plus the dashboard copy. The bundled
+        linter (ste-lint.py --baseline 9999) reports 0 violations across 11,757
+        words, down from 305 baseline violations: README 69, us_water_energy 56,
+        us_impacts_verification 50, gpu_cooling 36, DATA_DICTIONARY 33, AGENTS 32,
+        operator_efficiency 29.
+
+        Scope: README, AGENTS, DATA_DICTIONARY, the four docs, and the
+        user-facing strings in pipeline/frontend/index.template.html and
+        pipeline/frontend/dashboard.js. PROGRESS.xml history and Python
+        comments/docstrings were left alone. Every fact, number, source URL,
+        table row, grade and caveat was preserved. Element IDs, data attributes
+        and JS identifiers are unchanged.
+
+        Also corrected two stale figures in AGENTS.md section 8 and the
+        PROGRESS state block: status counts are 199/35/117/91 (not 116/92) and
+        total H100e is ~64.0M (not 64.7M). Both now match
+        data/published/data_centers.csv, which is the source of truth.
+      </detail>
+      <files>
+        <file>README.md</file>
+        <file>AGENTS.md</file>
+        <file>DATA_DICTIONARY.md</file>
+        <file>docs/us_water_energy.md</file>
+        <file>docs/us_impacts_verification.md</file>
+        <file>docs/operator_efficiency.md</file>
+        <file>docs/gpu_cooling.md</file>
+        <file>pipeline/frontend/index.template.html</file>
+        <file>pipeline/frontend/dashboard.js</file>
+        <file>.opencode/skills/asd-ste100/SKILL.md</file>
+      </files>
+    </entry>
 
     <entry id="C-012" date="2026-11-07" type="change" area="frontend"
            title="Site-efficiency view: all 442 campuses scored on disclosed evidence" status="done">

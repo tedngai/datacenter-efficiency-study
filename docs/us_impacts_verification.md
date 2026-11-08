@@ -1,8 +1,8 @@
 # Verification log — US water & energy impacts
 
-Companion to `data/us_utility_impacts.csv` (55 utility-territory rows covering all 121
-tracked US sites) and `us_water_energy.md`. This file records what was
-independently checked, what was wrong, and what is still soft.
+Companion to `data/us_utility_impacts.csv` (55 utility-territory rows covering all
+121 tracked US sites) and `us_water_energy.md`. This file records what we checked
+independently, what was wrong, and what is still soft.
 
 Date of check: November 2026.
 
@@ -10,7 +10,7 @@ Date of check: November 2026.
 
 ## 1. Method
 
-Three kinds of claim were checked, each against a different class of source.
+We checked three kinds of claim. Each kind used a different class of source.
 
 **Energy prices → EIA, one source for all rows.**
 - 2021: EIA *Electric Power Annual 2021*, Table 2.10 (`/electricity/annual/archive/2021/xls/epa_02_10.xlsx`)
@@ -20,30 +20,30 @@ Three kinds of claim were checked, each against a different class of source.
 - National average for context: 13.66¢ (2021) → 16.48¢ (2024) → 17.23¢ (2025)
   → 18.19¢ (2026 YTD), residential, all sectors.
 
-Scripts: `verify_eia.py` (builds the state table), `verify_apply.py`,
-`verify_apply2.py`, `verify_apply3.py` (apply corrections; each prints
-`OK`/`MISS` per edit so nothing is silently skipped).
+Scripts: `verify_eia.py` builds the state table. `verify_apply.py`,
+`verify_apply2.py` and `verify_apply3.py` apply corrections. Each script prints
+`OK`/`MISS` per edit, so no edit disappears silently.
 
 **Water volumes → primary disclosures and filings.**
 - Google 2026 Environmental Report, p.97 ("Water use by data center location",
-  calendar 2025) — the only hyperscaler publishing site-level withdrawal *and*
-  consumption.
-- Utility/city disclosures (Loudoun Water, Columbus DPU, Hillsboro, Cheyenne BPU,
-  Kuna, Las Vegas/SNWA, Albuquerque/Bernalillo, Amarillo), rate-case and service
-  agreements (Ridgeland MS water-service agreement; SRBC docket 20260301;
-  Cheyenne–Meta agreement), state-engineer filings (New Mexico), and Meta's and
-  Microsoft's sustainability reporting.
+  calendar 2025). Google is the only hyperscaler that publishes site-level
+  withdrawal *and* consumption.
+- Utility and city disclosures (Loudoun Water, Columbus DPU, Hillsboro, Cheyenne
+  BPU, Kuna, Las Vegas/SNWA, Albuquerque/Bernalillo, Amarillo). Rate-case and
+  service agreements (Ridgeland MS water-service agreement, SRBC docket
+  20260301, Cheyenne–Meta agreement). State-engineer filings (New Mexico), plus
+  Meta and Microsoft sustainability reporting.
 - Press used only where it quotes a primary number (Nebraska Examiner/Flatwater
-  for the 732M-gal figure; Amarillo Globe-News for the water contract).
+  for the 732M-gal figure, Amarillo Globe-News for the water contract).
 
 **Rate events → orders and dockets.**
-- Virginia SCC final order in the Dominion biennial review (25 Nov 2025): GS-5
-  class for ≥25 MW, effective 1 Jan 2027, 85% distribution / 60% generation
-  minimum take.
-- PJM 2025/26 Base Residual Auction results (total cost to load $14.7B; the
-  $269.92/MW-day clearing price is the widely reported figure, not stated in the
-  report text itself).
-- Georgia PSC Residential Rate Survey (Georgia Power 500 kWh = $87.75 / 17.55¢).
+- Virginia SCC final order in the Dominion biennial review (25 Nov 2025) sets a
+  GS-5 class for ≥25 MW. It takes effect 1 Jan 2027, with an 85% distribution
+  and 60% generation minimum take.
+- PJM 2025/26 Base Residual Auction results: total cost to load $14.7B. The
+  $269.92/MW-day clearing price is the widely reported figure. The report text
+  does not state it.
+- Georgia PSC Residential Rate Survey: Georgia Power 500 kWh = $87.75 / 17.55¢.
 - Wisconsin PSC docket 5-UR-111 (approved 12.38% residential) and 5-UR-112
   (pending, +10.28% / +5.52%).
 - Umatilla Electric Cooperative rate notices (~+$12/mo, Oct 2025).
@@ -52,11 +52,11 @@ Scripts: `verify_eia.py` (builds the state table), `verify_apply.py`,
 
 ## 2. The systematic error that mattered
 
-The 2021 baselines originally supplied were **~1¢/kWh too low in most states**,
-and several 2025 figures were mid-year quotes, forecast "typical bill ÷ 1,000 kWh"
+The 2021 baselines we first supplied were **~1¢/kWh too low in most states**.
+Several 2025 figures were mid-year quotes, forecast "typical bill ÷ 1,000 kWh"
 arithmetic, or a monthly peak presented as an annual average.
 
-Examples of the original vs EIA:
+Examples of the original claim vs EIA:
 
 | State | Original 2021 claim | EIA 2021 | Original 2025 claim | EIA 2025 |
 |---|---|---|---|---|
@@ -70,18 +70,18 @@ Examples of the original vs EIA:
 
 Two consequences:
 
-1. **Direction was usually right, magnitude was not.** Understating the 2021 base
-   understates the increase; e.g. Virginia's rise is **+41.7%** to 2026 YTD, not
-   the "+30–60%" band originally written.
-2. **One row had the sign wrong.** Alabama Montgomery was described as *above* the
-   national average (13.09¢ vs 16.48¢). It is **below** it (12.96¢ vs 17.23¢ in
-   2025); Alabama's high bills come from consumption per household, not price per
-   kWh. Corrected, with the distinction spelled out.
+1. **Direction was usually right, magnitude was not.** An understated 2021 base
+   understates the increase. For example, Virginia's rise is **+41.7%** to 2026
+   YTD, not the "+30–60%" band we first wrote.
+2. **One row had the sign wrong.** We once described Alabama Montgomery as *above*
+   the national average (13.09¢ vs 16.48¢). It is **below** it (12.96¢ vs 17.23¢
+   in 2025). Alabama's high bills come from consumption per household, not price
+   per kWh. We fixed it and spelled out the distinction.
 
-The Wyoming "9.14¢ in 2024" figure could not be reconciled with any EIA series
-and was **removed** rather than patched.
+The Wyoming "9.14¢ in 2024" figure did not reconcile with any EIA series. We
+**removed** it rather than patch it.
 
-### Verified state series now in the CSV (residential, ¢/kWh)
+### Checked state series now in the CSV (residential, ¢/kWh)
 
 | State | 2021 | 2024 | 2025 | 2026 YTD | 2021→2026 |
 |---|---|---|---|---|---|
@@ -120,9 +120,9 @@ and was **removed** rather than patched.
 | **US** | **13.66** | **16.48** | **17.23** | **18.19** | **+33.2%** |
 
 These are **state averages**, not utility-specific rates. Where the utility is
-known to sit off the state average, the row says so (Dominion above the Virginia
-average; TVA distributors below the Alabama average; MidAmerican below the Iowa
-average; Grant County PUD far below the Washington average).
+known to sit off the state average, the row says so. Dominion sits above the
+Virginia average. TVA distributors sit below the Alabama average, MidAmerican
+below the Iowa average, and Grant County PUD far below the Washington average.
 
 ---
 
@@ -131,87 +131,88 @@ average; Grant County PUD far below the Washington average).
 | Claim | Was | Now | Source |
 |---|---|---|---|
 | Google Council Bluffs | "~1.4B gal (2024)" | **1,746.4M gal withdrawn / 1,346.0M consumed (2025)** | Google 2026 Env. Report p.97 |
-| Google New Albany OH | "~127M gal/yr" | **1,008.1M withdrawn / 835.7M consumed (2025)**; Lancaster 307.1/135.8, Lockbourne 460.8/359.5 | same |
+| Google New Albany OH | "~127M gal/yr" | **1,008.1M withdrawn / 835.7M consumed (2025)**. Lancaster 307.1/135.8, Lockbourne 460.8/359.5 | same |
 | Google Nebraska | "732M gal 2025, up from ~135M in **2024**" | 732.1M in 2025, up from **134.7M in 2023** (46.6M in 2022) | Google reporting via Nebraska Examiner, Jul 2026 |
 | Google Lenoir NC | "344M gal consumed, #8 site" | 378.3M withdrawn / 344.3M consumed — still #8 by withdrawal among Google US sites | Google 2026 Env. Report p.97 |
-| Loudoun County VA | "899M gal (2023)" | 899M gal **potable** *plus* 815M gal reclaimed (>1B total); 750M+ reclaimed delivered to ~40 customers in 2025 | Loudoun Water / Hanover analysis |
-| Microsoft Goodyear AZ | "1.2M gpd allowed (wording up to 3M)" | **1.2M gpd of wastewater capacity** at full build-out ($36M toward the $90M 157th Ave plant); original plan up to 5M gpd (~1.83B gal/yr), buildings 4–5 now air-cooled | AZ Tech Council / council amendment |
+| Loudoun County VA | "899M gal (2023)" | 899M gal **potable** *plus* 815M gal reclaimed (>1B total). 750M+ reclaimed delivered to ~40 customers in 2025 | Loudoun Water / Hanover analysis |
+| Microsoft Goodyear AZ | "1.2M gpd allowed (wording up to 3M)" | **1.2M gpd of wastewater capacity** at full build-out ($36M toward the $90M 157th Ave plant). The original plan was up to 5M gpd (~1.83B gal/yr). Buildings 4–5 now use air cooling | AZ Tech Council / council amendment |
 | Fermi America Amarillo | "$8.72/1,000 gal — double the standard rate" | $8.72/1,000 gal — **the highest industrial water rate the city has ever charged** ("double" was not supported) | Amarillo Globe-News, 29 Oct 2025 |
 
 ### Downgraded to "reported, unverified"
 
-- **AWS Ridgeland MS, 3.67 MGD peak-day** — the figure is *not* in the water-service
-  agreement text (checked in full). The agreement does support the ~93M gal/yr
-  average and the $53.7M water/sewer split. Row now says so explicitly.
-- **xAI Memphis, 1.3 MGD contract demand** — source is a paywalled Commercial
-  Appeal piece; the 812,502 gpd actual draw and the 19¢ vs 32¢ per-100-gallon
-  disparity are documented elsewhere and stand.
+- **AWS Ridgeland MS, 3.67 MGD peak-day** — the figure is *not* in the
+  water-service agreement text (we checked it in full). The agreement does
+  support the ~93M gal/yr average and the $53.7M water/sewer split. The row now
+  says so explicitly.
+- **xAI Memphis, 1.3 MGD contract demand** — the source is a paywalled
+  Commercial Appeal piece. The 812,502 gpd actual draw and the 19¢ vs 32¢
+  per-100-gallon disparity appear in other sources and stand.
 
-### Re-verified as-is (no change)
+### Re-checked as-is (no change)
 
 - **Loudoun Water:** data centers ≈9% of average-day potable use.
-- **xAI Memphis:** 812,502 gpd from the Memphis Sand Aquifer; ~25M gal bought in
-  March; 19¢/100 gal vs 32¢ for residents.
-- **Meta Eagle Mountain:** >35M gal in 2024; the 2018 agreement keeps monthly use
-  confidential and requires the city to alert Meta when records are requested
-  (confirmed to the Salt Lake Tribune, Jan 2026).
+- **xAI Memphis:** 812,502 gpd from the Memphis Sand Aquifer, ~25M gal bought in
+  March, 19¢/100 gal vs 32¢ for residents.
+- **Meta Eagle Mountain:** >35M gal in 2024. The 2018 agreement keeps monthly use
+  confidential. It also requires the city to alert Meta when records are
+  requested (reported to the Salt Lake Tribune, Jan 2026).
 - **Meta Prineville:** 117.5M gal (445,000 m³) of city water in 2020.
-- **Fermi Amarillo:** 2.5 MGD authorization; up to 18.5 MGD claimed by the company.
+- **Fermi Amarillo:** 2.5 MGD authorization. The company claims up to 18.5 MGD.
 - **Microsoft Goodyear:** $36M contribution to the wastewater plant.
 - **Umatilla Electric:** ~+$12/mo (~$0.43/day) Oct 2025, ~$8M revenue gap.
 - **Dominion GS-5:** ≥25 MW, effective 1 Jan 2027, 85%/60% minimums, $565.7M
   (2026) + $209.9M (2027), +$11.24/mo then +$2.36/mo, ROE 9.8%.
-- **We Energies:** 5-UR-111 approved at 12.38% residential; 2027–28 request
-  +10.28% / +5.52%.
+- **We Energies:** 5-UR-111 approved at 12.38% residential. The 2027–28 request
+  is +10.28% / +5.52%.
 - **Georgia Power:** $87.75 / 17.55¢ for 500 kWh (PSC survey).
 - **MidAmerican:** no base electric rate increase since 2014 (city of Norwalk
-  statement; consistent with Electric Tariff No. 2 filed Aug 2014).
-- **MEC (Boydton VA):** 2021 SCC filing confirms a data-center special rate in
-  Mecklenburg Electric Cooperative territory — the dataset's "AEP serves Boydton"
+  statement, consistent with Electric Tariff No. 2 filed Aug 2014).
+- **MEC (Boydton VA):** a 2021 SCC filing records a data-center special rate in
+  Mecklenburg Electric Cooperative territory. The dataset's "AEP serves Boydton"
   attribution was wrong.
-- **PJM 2025/26 BRA:** total cost to load $14.7B; $269.92/MW-day clearing price
-  (widely reported; not in the report text).
+- **PJM 2025/26 BRA:** total cost to load $14.7B. The $269.92/MW-day clearing
+  price is widely reported but not in the report text.
 
 ---
 
-## 4. Verification grades
+## 4. Grade definitions
 
 Each row carries a `verification` column:
 
 | Grade | Meaning | Rows |
 |---|---|---|
 | **A** | Price (EIA) **and** the water/rate-case claims checked against primary sources | **25** |
-| **B** | Price (EIA) verified; water figure is secondary reporting or not published | **30** |
-| **C** | Water/rate verified; price not independently checked | **0** |
-| **D** | Not re-verified | **0** |
+| **B** | Price (EIA) checked. The water figure is secondary reporting or not published | **30** |
+| **C** | Water/rate checked. Price not independently checked | **0** |
+| **D** | Not re-checked | **0** |
 
-The `D` grade is now empty. Of the seven rows that started there, six were
-re-graded once the utility-name mismatch that bypassed the first grading map was
-fixed, and the seventh — an empty New Mexico "statewide context" stub — was
-**deleted**; its content duplicates the Los Lunas row, which is graded A.
+The `D` grade is now empty. Seven rows started there. We re-graded six of them
+once we fixed the utility-name mismatch that bypassed the first grading map. We
+**removed** the seventh, an empty New Mexico "statewide context" stub. Its
+content duplicates the Los Lunas row, which carries grade A.
 
 Upgrades in this pass: MidAmerican (D→A, after the Google report replaced the
-"1.4B gal" estimate), Richmond/Henrico, Chesterfield, Huntsville, AEP Texas and
-Texas West (D→B, once the utility-name mismatch that bypassed the first grading
-map was fixed), and both New York rows (C→B, after EIA price anchors were added).
+"1.4B gal" estimate). Richmond/Henrico, Chesterfield, Huntsville, AEP Texas and
+Texas West (D→B, once we fixed the utility-name mismatch that bypassed the first
+grading map). Both New York rows (C→B, after we added EIA price anchors).
 
 ---
 
-## 5. What is still not verified
+## 5. What is still not checked
 
 - **Utility-specific rates.** Every price trend is a state average except where a
-  docket number is cited (Dominion, We Energies, Umatilla, Georgia PSC, PNM, I&M,
+  docket number appears (Dominion, We Energies, Umatilla, Georgia PSC, PNM, I&M,
   Evergy, OPPD). A utility-level EIA-861 series would be the next step.
-- **2026 is Jan–Aug YTD**, not a full year; the last four months can move the
+- **2026 is Jan–Aug YTD**, not a full year. The last four months can move the
   annual figure by a few tenths of a cent.
-- **Water years are not aligned.** Google is calendar 2025; utility fiscal years,
-  city pumpage and state-engineer data are all different periods. Withdrawal and
-  consumption are mixed across sources — rows say which when known.
+- **Water years are not aligned.** Google is calendar 2025. Utility fiscal years,
+  city pumpage and state-engineer data all use different periods. Sources mix
+  withdrawal and consumption, and rows say which when known.
 - **Company-only claims** (closed-loop, "zero withdrawal", future recycling
-  plants) are labelled as company claims, not measurements.
+  plants) are company claims, not measurements.
 - **Territory attribution** is approximate where co-ops and IOUs overlap
-  (Boydton, the Permian, northern Virginia co-op edges). The Mecklenburg fix shows
-  how easily this goes wrong.
-- **AWS Berwick ≈ AWS Salem Township** may be a single $20B campus, and
-  **QTS Cedar Rapids vs Google Cedar Rapids** may be the same MISO load. Both
-  remain flagged in the main dataset, not resolved.
+  (Boydton, the Permian, northern Virginia co-op edges). The Mecklenburg fix
+  shows how easily this goes wrong.
+- **AWS Berwick ≈ AWS Salem Township** may be a single $20B campus. **QTS Cedar
+  Rapids vs Google Cedar Rapids** may be the same MISO load. We flag both in the
+  main dataset and have not resolved them.

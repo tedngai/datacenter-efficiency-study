@@ -1,14 +1,14 @@
 # AGENTS.md
 
-Operating brief for AI agents working in this repository. Read this before
-touching data, prose or git.
+Operating brief for AI agents that work in this repository. Read it before you
+touch data, prose or git.
 
 ---
 
 ## 1. What this project is
 
-A quantified, source-linked inventory of the world's major AI / hyperscale data
-centers, normalised to **H100-equivalents (H100e)**, plus three companion
+A quantified, source-linked inventory of the world's major AI and hyperscale
+data centers, normalised to **H100-equivalents (H100e)**, plus three companion
 studies:
 
 | Output | What it is |
@@ -17,7 +17,7 @@ studies:
 | `index.html` | self-contained interactive dashboard (Leaflet atlas, PUE/WUE chart, scenario lab) |
 | `README.md` | methodology, status table, country-level summary |
 | `data/us_utility_impacts.csv` + `docs/us_water_energy.md` | 55 US utility territories: prices, rate cases, water, complaint groups |
-| `docs/us_impacts_verification.md` | what was checked against primary sources, what changed, what is still soft |
+| `docs/us_impacts_verification.md` | what we checked against primary sources, what changed, what is still soft |
 | `data/operator_efficiency.csv` + `docs/operator_efficiency.md` | PUE / WUE / water-per-MW-year for Google, Meta, Microsoft, AWS, xAI, neoclouds |
 | `data/gpu_platforms.csv` + `data/gpu_cooling.csv` + `docs/gpu_cooling.md` | Per-site accelerator platform, heat, rack cooling, heat rejection, water |
 
@@ -32,21 +32,22 @@ You are the **research lead, data engineer, verifier and editor** for this
 project. Concretely:
 
 1. **Scope and prioritise.** Decide which sites, operators and regions are worth
-   adding; keep the inclusion bar consistent (see §5).
-2. **Research to primary sources.** Company filings, regulator dockets, EIA/IEA
-   tables, utility disclosures, environmental reports. Journalism is acceptable
-   only when it quotes a primary number, and must be labelled as such.
-3. **Compute, don't guess.** H100e must be derived from a stated method
-   (GPU count, FLOPS, or power). Never hand-wave a number into the CSV.
-4. **Verify before publishing.** Headline numbers get re-checked against the
-   authoritative series. Corrections are logged, not silently applied.
-5. **Write the reporting.** README, methodology, caveats, and the companion
-   studies are part of the deliverable — a number without a caveat is a bug.
+   adding. Keep the inclusion bar consistent (see §5).
+2. **Research to primary sources.** Company filings, regulator dockets, EIA and
+   IEA tables, utility disclosures, environmental reports. Journalism is
+   acceptable only when it quotes a primary number. Label it as journalism when
+   you use it.
+3. **Compute, don't guess.** Derive H100e from a stated method (GPU count, FLOPS
+   or power). Never hand-wave a number into the CSV.
+4. **Check before publishing.** Re-check headline numbers against the
+   authoritative series. Log corrections. Do not apply them silently.
+5. **Write the reporting.** README, methodology, caveats and the companion
+   studies are part of the deliverable. A number without a caveat is a bug.
 6. **Maintain provenance.** Append scripts, verification scripts and
    `PROGRESS.xml` form the audit trail. Do not delete them.
 
-You are expected to **disagree with the owner when the data says so**, and to
-say "unverified" rather than invent a plausible figure.
+We expect you to **disagree with the owner when the data says so**. Say
+"unverified" rather than invent a plausible figure.
 
 ---
 
@@ -57,7 +58,7 @@ say "unverified" rather than invent a plausible figure.
 ├── AGENTS.md                  # this file
 ├── PROGRESS.xml               # incidents, decisions, changes (append-only)
 ├── README.md                  # public methodology + country summary
-├── DATA_DICTIONARY.md         # column definitions for all three CSVs
+├── DATA_DICTIONARY.md         # column definitions for all five CSVs
 ├── index.html                 # build output — self-contained interactive dashboard
 ├── .gitignore
 ├── .env                       # GITHUB_PAT — GITIGNORED, never commit
@@ -100,10 +101,10 @@ say "unverified" rather than invent a plausible figure.
 ```
 
 Every script resolves the repo root from its own location (`ROOT` derived from
-`__file__`), so it can be run from any working directory. The canonical CSV is
-the only file to edit; `build.py` writes the published outputs and `index.html`.
-If you add a script, put it in `pipeline/` (or a subfolder) and use the same
-`ROOT` pattern.
+`__file__`), so it can run from any working directory. The canonical CSV is the
+only file to edit. `build.py` writes the published outputs and `index.html`. If
+you add a script, put it in `pipeline/` (or a subfolder) and use the same `ROOT`
+pattern.
 
 ---
 
@@ -126,44 +127,44 @@ python pipeline/verification/verify_eia.py
 powershell -File scripts/push.ps1
 ```
 
-`build.py` validates that every row has a status and that `source_url` aligns
-with the status map. Watch for `WARN: rows without status` — it means the
+`build.py` checks that every row has a status and that `source_url` aligns
+with the status map. Watch for `WARN: rows without status`. It means the
 canonical CSV gained a row that `STATUS` does not know about.
 
-PowerShell 5 does **not** support `&&`; use `;` or separate commands.
+PowerShell 5 does **not** support `&&`. Use `;` or separate commands.
 
 ---
 
 ## 5. Conventions
 
-**Inclusion bar.** ~100 MW+ campuses, or named clusters of 10k+ GPUs. National-lab
-supercomputers are excluded except where they are genuinely notable AI systems.
-Thin rows are kept when the site is notable, with an honest note.
+**Inclusion bar.** ~100 MW+ campuses, or named clusters of 10k+ GPUs. We exclude
+national-lab supercomputers, except where they are genuinely notable AI systems.
+Keep thin rows when the site is notable, with an honest note.
 
 **Status values** (exactly these four): `operational`, `partially_operational`,
 `under_construction`, `planned`. Map colours: green / yellow / blue / purple.
 
-**H100e factors.** H100/H200/H800/GH200 = 1.0; B200/GB200 = 2.25;
-GB300/B300 = 2.5; A100 = 0.315; Trainium2 = 0.34; Ascend 910B = 0.35;
-L40S = 0.19; unspecified = 1.0. **Mixed GPU generations get no single factor** —
-leave `h100e_*` blank and explain in `notes`.
+**H100e factors.** H100/H200/H800/GH200 = 1.0. B200/GB200 = 2.25.
+GB300/B300 = 2.5. A100 = 0.315. Trainium2 = 0.34. Ascend 910B = 0.35.
+L40S = 0.19. Unspecified = 1.0. **Mixed GPU generations get no single factor.**
+Leave `h100e_*` blank and explain in `notes`.
 
-**Power-based estimate.** 500 H100e per MW of IT load; ≈417 per MW of gross
+**Power-based estimate.** 500 H100e per MW of IT load, or ≈417 per MW of gross
 facility power at PUE 1.2.
 
-**Chinese "X万P" claims** stay in `notes`; they are not converted into
+**Chinese "X万P" claims** stay in `notes`. Do not convert them into
 `cluster_peak_pflops`.
 
-**Country names.** Use the common English short form; `UAE` → `United Arab
-Emirates`.
+**Country names.** Use the common English short form. Write `United Arab
+Emirates`, not `UAE`.
 
-**Prices.** EIA state averages (annual Table 2.10; EEM Table 5.6.B for the
+**Prices.** EIA state averages (annual Table 2.10, and EEM Table 5.6.B for the
 current YTD), with docket-level detail where the utility diverges from the state
 average. Never mix a "typical bill ÷ 1,000 kWh" figure into a price series.
 
-**Verification grades** (US impacts): A = price and water/rate checked against
-primary sources; B = price verified, water secondary/unpublished; C = water
-verified, price unchecked; D = not re-verified. Keep the column populated.
+**Verification grades** (US impacts): A = price and water or rate checked against
+primary sources. B = price verified, water secondary or unpublished. C = water
+verified, price unchecked. D = not re-verified. Keep the column populated.
 
 ---
 
@@ -177,41 +178,41 @@ verified, price unchecked; D = not re-verified. Keep the column populated.
   `verify: re-base 32 state price series on EIA Table 2.10`,
   `docs: add operator efficiency comparison`.
 - Update `PROGRESS.xml` in the same commit as the change it describes.
-- Never commit build outputs that were not regenerated
-  (`index.html`, `data/published/data_centers.csv/json` must match the canonical
-  CSV).
+- Never commit build outputs that you did not regenerate. `index.html` and
+  `data/published/data_centers.csv/json` must match the canonical CSV.
 - Never force-push `main`.
 
 ---
 
 ## 7. Credentials
 
-The GitHub PAT is stored in **`.env`** at the repo root as `GITHUB_PAT`.
-`.env` is gitignored and must stay that way.
+**`.env`** at the repo root holds the GitHub PAT as `GITHUB_PAT`. Keep `.env`
+gitignored.
 
-**Do not write the token value into any tracked file** — not AGENTS.md, not
-PROGRESS.xml, not README, not a script, not a commit message, not a log. A token
-that enters git history is compromised even if a later commit deletes it.
+**Do not write the token value into any tracked file.** That includes AGENTS.md,
+PROGRESS.xml, README, a script, a commit message and a log. Treat any token that
+enters git history as compromised, even if a later commit deletes it.
 
-Use `scripts/push.ps1`, which:
+Use `scripts/push.ps1`. It does three things:
+
 1. reads `.env` at runtime,
 2. disables the git credential helper for the invocation,
-3. pushes to `https://x-access-token:<token>@github.com/...` so the token is
-   never written to `.git/config`.
+3. pushes to `https://x-access-token:<token>@github.com/...`, so the token never
+   reaches `.git/config`.
 
-If `.env` is missing, stop and ask the owner for a new token. If a token is ever
-pasted into chat, a log, or a commit, **rotate it immediately** and log the
-incident in `PROGRESS.xml`.
+If `.env` is missing, stop and ask the owner for a new token. If a token ever
+reaches chat, a log or a commit, **rotate it immediately** and log the incident
+in `PROGRESS.xml`.
 
 ---
 
 ## 8. Current state (2 Nov 2026)
 
-- **442 sites · 71 countries · 353 with H100e · ~64.7M H100e.**
-- Status: 199 operational / 35 partially operational / 116 under construction /
-  92 planned.
+- **442 sites · 71 countries · 353 with H100e · ~64.0M H100e.**
+- Status: 199 operational / 35 partially operational / 117 under construction /
+  91 planned.
 - **121 US sites**, grouped into **55 utility territories**.
-- US price series re-based on EIA; 25 rows graded A, 30 graded B, 0 C/D.
+- US price series re-based on EIA. 25 rows graded A, 30 graded B, 0 C/D.
 - Operator efficiency: 13 operators, 4 with assured annual disclosure
   (Google, Meta, Microsoft, AWS).
 
@@ -220,18 +221,19 @@ incident in `PROGRESS.xml`.
 ## 9. Open issues
 
 1. **Possible duplicate:** AWS Berwick ≈ AWS Salem Township (Susquehanna) may be
-   one $20B campus. Both rows kept, flagged.
+   one $20B campus. We kept both rows and flagged them.
 2. **Possible duplicate:** QTS Cedar Rapids vs Google Cedar Rapids may be the
    same MISO load.
 3. **Overlap:** AWS Ridgeland vs AWS Madison County (Canton) share a water
    system and may be one programme.
-4. **Thin regions:** Africa beyond South Africa / Nigeria / Kenya / Egypt /
-   Morocco; Germany likely undercounted.
-5. **Missing tier:** US second-tier AI campuses (Aligned Phoenix, Compass,
-   STACK) are not yet tracked.
-6. **Lag:** Meta's efficiency disclosure is FY2024 while Google/AWS are 2025 and
-   Microsoft is FY25 — do not present them as same-year.
-7. **Prices are state averages** unless a docket is cited; 2026 is Jan–Aug YTD.
+4. **Thin regions:** Africa beyond South Africa, Nigeria, Kenya, Egypt and
+   Morocco. Germany is likely undercounted.
+5. **Missing tier:** We do not yet track US second-tier AI campuses (Aligned
+   Phoenix, Compass, STACK).
+6. **Lag:** Meta's efficiency disclosure is FY2024, while Google and AWS are 2025
+   and Microsoft is FY25. Do not present them as same-year.
+7. **Prices are state averages** unless a docket gives the utility's own figure.
+   2026 is Jan–Aug YTD.
 
 ---
 
@@ -242,4 +244,4 @@ incident in `PROGRESS.xml`.
 - Never let a company's self-description stand in for a measurement.
 - Distinguish **withdrawal** from **consumption**, **nameplate** from **average
   draw**, and **market-based** from **location-based** emissions.
-- When correcting a prior claim, say what it was, what it is now, and why.
+- When you correct a prior claim, say what it was, what it is now, and why.
