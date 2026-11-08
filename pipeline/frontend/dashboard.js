@@ -56,7 +56,6 @@
   const operatorColor = name => OPERATOR_COLORS[name] || "#82dfb5";
 
   /* ---------- Dataset summary ---------- */
-  const totalH100e = DATA.reduce((sum, d) => sum + (d.h100e_best || 0), 0);
   const totalPower = DATA.reduce((sum, d) => sum + (powerOf(d) || 0), 0);
   const countries = [...new Set(DATA.map(d => d.country).filter(Boolean))].sort();
   const statusCounts = Object.keys(STATUS).reduce((acc, key) => {
@@ -64,18 +63,35 @@
     return acc;
   }, {});
 
-  $("#hero-total").textContent = compact(totalH100e, 1);
-  $("#stat-sites").textContent = num(DATA.length);
+  // Capacity (MW) by status: the headline for a community reader. Same
+  // convention as the country table: gross power where published, else IT load.
+  const powerByStatus = (rows) => Object.keys(STATUS).reduce((acc, key) => {
+    acc[key] = rows.filter(d => (d.status || "unknown") === key).reduce((sum, d) => sum + (powerOf(d) || 0), 0);
+    return acc;
+  }, {});
+  const pct = (part, whole) => whole ? Math.round(part / whole * 100) : 0;
+  const worldMW = powerByStatus(DATA);
+  const usMW = powerByStatus(DATA.filter(d => d.country === "United States"));
+  const pipelineShare = (mw, total) => pct(mw.planned + mw.under_construction, total);
+  const totalUS = Object.values(usMW).reduce((a, b) => a + b, 0);
+  const worldPipeline = `${pipelineShare(worldMW, totalPower)}%`;
+
+  $("#hero-total").textContent = num(totalPower / 1000, 1);
+  $("#hero-sites").textContent = num(DATA.length);
+  $("#hero-pipeline-text").textContent = worldPipeline;
+  $("#thesis-pipeline").textContent = worldPipeline;
+  $("#hero-share").textContent = `${worldPipeline} planned or under construction`;
+  $("#stat-us").textContent = `${num(totalUS / 1000, 1)} GW`;
+  $("#stat-us-pipeline").textContent = `${pipelineShare(usMW, totalUS)}%`;
   $("#stat-countries").textContent = num(countries.length);
-  $("#stat-power").textContent = `${compact(totalPower, 1)} GW`.replace("k GW", " GW");
-  $("#stat-operational").textContent = `${Math.round(statusCounts.operational / DATA.length * 100)}%`;
+  $("#stat-operational").textContent = `${pct(worldMW.operational, totalPower)}%`;
 
   const activeStatusKeys = Object.keys(STATUS).filter(key => statusCounts[key]);
   $("#hero-status-stack").innerHTML = activeStatusKeys.map(key =>
-    `<span style="width:${statusCounts[key] / DATA.length * 100}%;background:${STATUS[key].color}" title="${STATUS[key].long}: ${statusCounts[key]}"></span>`
+    `<span style="width:${worldMW[key] / totalPower * 100}%;background:${STATUS[key].color}" title="${STATUS[key].long}: ${num(worldMW[key] / 1000, 1)} GW, ${statusCounts[key]} sites"></span>`
   ).join("");
   $("#hero-status-key").innerHTML = activeStatusKeys.map(key =>
-    `<div><i style="background:${STATUS[key].color}"></i><span>${STATUS[key].label}</span><b>${statusCounts[key]}</b></div>`
+    `<div><i style="background:${STATUS[key].color}"></i><span>${STATUS[key].label}</span><b>${num(worldMW[key] / 1000, 1)} GW</b></div>`
   ).join("");
 
   /* ---------- Reveal motion ---------- */
@@ -140,7 +156,7 @@
   }
 
   function markerValue(d) {
-    return $("#size-metric").value === "power" ? powerOf(d) : d.h100e_best;
+    return $("#size-metric").value === "h100e_best" ? d.h100e_best : powerOf(d);
   }
 
   // Sites that share one (often city-centre) point would stack into a single
@@ -201,19 +217,19 @@
   }
 
   function panelList(sites) {
-    const top = [...sites].sort((a, b) => (b.h100e_best || 0) - (a.h100e_best || 0)).slice(0, 6);
+    const top = [...sites].sort((a, b) => (powerOf(b) || 0) - (powerOf(a) || 0)).slice(0, 6);
     if (!top.length) {
       return '<div class="panel-kicker"><span>NO MATCHES</span></div><h3 class="panel-title">Nothing fits those filters.</h3><p class="panel-list-intro">Try another country, status, or search term.</p>';
     }
     return `
       <div class="panel-kicker"><span>AT A GLANCE</span><span>TOP ${top.length}</span></div>
-      <h3 class="panel-title">${sites.length === DATA.length ? "The compute frontier" : "Your selection"}</h3>
-      <p class="panel-list-intro">The largest sites in the current filter, by best H100e estimate. Select a campus to inspect its scale and source.</p>
+      <h3 class="panel-title">${sites.length === DATA.length ? "The largest requests for power" : "Your selection"}</h3>
+      <p class="panel-list-intro">The largest sites in the current filter, by stated power. Select a campus to see its status, its note and its source.</p>
       <div class="panel-site-list">${top.map((d, index) => `
         <button class="panel-site-item" type="button" data-site="${esc(d.name)}">
           <span class="rank">${String(index + 1).padStart(2, "0")}</span>
           <span><strong>${esc(d.name)}</strong><small>${esc(d.country)}</small></span>
-          <b>${d.h100e_best ? compact(d.h100e_best) : "—"}</b>
+          <b>${powerOf(d) != null ? `${num(powerOf(d))} MW` : "—"}</b>
         </button>`).join("")}</div>`;
   }
 
@@ -228,12 +244,12 @@
       ${d.location_shared_with > 0 ? `<p class="panel-approx">Approximate location. ${d.location_shared_with === 1 ? "One other site uses" : `${d.location_shared_with} other sites use`} this map point, so the coordinates are probably a city centre, not the campus.</p>` : ""}
       <span class="panel-status"><i style="background:${status.color}"></i>${status.long}</span>
       <div class="panel-hero-metric">
-        <strong>${d.h100e_best ? num(d.h100e_best) : "—"}</strong><small>H100e</small>
-        <p>${d.h100e_best ? `Best estimate · ${METHODS[d.h100e_method] || esc(d.h100e_method)}` : "No defensible H100e estimate exists"}</p>
+        <strong>${powerOf(d) != null ? num(powerOf(d)) : "—"}</strong><small>MW</small>
+        <p>${powerOf(d) == null ? "No power figure published" : d.power_capacity_mw != null ? `Stated gross power · ${d.status === "operational" ? "capacity, not average draw" : "a request, not a load yet"}` : "IT load only · gross power not published"}</p>
       </div>
       <div class="panel-metrics">
-        <div><span>GROSS POWER</span><b>${powerOf(d) != null ? `${num(powerOf(d))} MW` : "Not published"}</b></div>
         <div><span>IT LOAD</span><b>${d.it_load_mw != null ? `${num(d.it_load_mw)} MW` : "Not published"}</b></div>
+        <div><span>COMPUTE (H100e)</span><b>${d.h100e_best ? `${num(d.h100e_best)} · ${METHODS[d.h100e_method] || esc(d.h100e_method)}` : "No estimate"}</b></div>
         <div><span>ANNOUNCED GPUs</span><b>${d.announced_gpu_count != null ? num(d.announced_gpu_count) : "Not published"}</b></div>
         <div><span>ACCELERATORS</span><b>${esc(d.gpu_types || "Not published")}</b></div>
       </div>
@@ -253,17 +269,17 @@
   }
 
   function renderRanking() {
-    const sorted = [...filteredSites].sort((a, b) => (b.h100e_best || 0) - (a.h100e_best || 0));
-    const max = Math.max(...sorted.map(d => d.h100e_best || 0), 1);
+    const sorted = [...filteredSites].sort((a, b) => (powerOf(b) || 0) - (powerOf(a) || 0));
+    const max = Math.max(...sorted.map(d => powerOf(d) || 0), 1);
     const shown = sorted.slice(0, visibleCount);
     $("#site-ranking").innerHTML = shown.length ? shown.map((d, index) => {
       const status = statusOf(d);
       return `<tr>
         <td><button class="site-name-button" type="button" data-site="${esc(d.name)}"><span class="rank-num">${String(index + 1).padStart(2, "0")}</span>${esc(d.name)}<small>${esc(d.country)} · ${esc(d.operator)}</small></button></td>
         <td><span class="table-status"><i style="background:${status.color}"></i>${status.label}</span></td>
-        <td>${powerOf(d) != null ? `${num(powerOf(d))} MW` : "—"}</td>
-        <td class="estimate-cell">${d.h100e_best ? num(d.h100e_best) : "—"}<div class="estimate-bar" style="width:${(d.h100e_best || 0) / max * 100}%"></div></td>
-        <td class="method-cell">${METHODS[d.h100e_method] || "—"}</td>
+        <td>${d.it_load_mw != null ? `${num(d.it_load_mw)} MW` : "—"}</td>
+        <td class="estimate-cell">${powerOf(d) != null ? `${num(powerOf(d))} MW` : "—"}<div class="estimate-bar" style="width:${(powerOf(d) || 0) / max * 100}%"></div></td>
+        <td class="method-cell">${d.h100e_best ? `${compact(d.h100e_best)} · ${METHODS[d.h100e_method] || "—"}` : "—"}</td>
       </tr>`;
     }).join("") : '<tr><td colspan="5" class="empty-row">No sites match the current filters.</td></tr>';
     const more = $("#show-more-sites");
@@ -279,7 +295,7 @@
     $("#map-count").textContent = `${filteredSites.length} site${filteredSites.length === 1 ? "" : "s"}`;
     $("#filter-summary").textContent = filteredSites.length === DATA.length
       ? `Showing all ${DATA.length} sites in ${countries.length} countries.`
-      : `Showing ${filteredSites.length} of ${DATA.length} sites. The selection holds ${compact(filteredSites.reduce((sum, d) => sum + (d.h100e_best || 0), 0))} H100e.`;
+      : `Showing ${filteredSites.length} of ${DATA.length} sites. The selection holds ${num(filteredSites.reduce((sum, d) => sum + (powerOf(d) || 0), 0) / 1000, 1)} GW of stated power.`;
     if (!selectedSite) $("#site-panel").innerHTML = panelList(filteredSites);
     updateMarkers();
     renderRanking();
@@ -306,7 +322,7 @@
   $("#reset-filters").addEventListener("click", () => {
     $("#site-search").value = "";
     $("#country-filter").value = "";
-    $("#size-metric").value = "h100e_best";
+    $("#size-metric").value = "power";
     activeStatusKeys.forEach(key => activeStatuses.add(key));
     selectedSite = null;
     visibleCount = 10;
@@ -869,6 +885,140 @@
     const energyDifference = Math.abs(resultA.facilityGWh - resultB.facilityGWh);
     $("#scenario-delta").innerHTML = `<span>At this load, <strong>${esc(waterSaver.operator)}</strong> uses <strong>${num(waterDifference, waterDifference < 10 ? 2 : 1)} million fewer gallons</strong> per year. <strong>${esc(energySaver.operator)}</strong> uses <strong>${num(energyDifference, 1)} GWh less facility electricity</strong>.</span>`;
   }
+
+  /* ---------- Who pays: state prices ---------- */
+  const US_AVG_RISE = 33.2; // EIA, US residential average 13.66 -> 18.19 c/kWh, 2021 -> 2026 YTD
+  const mean = values => values.reduce((a, b) => a + b, 0) / (values.length || 1);
+  const rankOf = values => {
+    const order = values.map((v, i) => [v, i]).sort((a, b) => a[0] - b[0]);
+    const out = new Array(values.length);
+    for (let i = 0; i < order.length;) {
+      let j = i;
+      while (j + 1 < order.length && order[j + 1][0] === order[i][0]) j += 1;
+      for (let k = i; k <= j; k += 1) out[order[k][1]] = (i + j) / 2;
+      i = j + 1;
+    }
+    return out;
+  };
+  const spearman = (xs, ys) => {
+    const rx = rankOf(xs), ry = rankOf(ys), mx = mean(rx), my = mean(ry);
+    let num_ = 0, dx = 0, dy = 0;
+    rx.forEach((x, i) => { num_ += (x - mx) * (ry[i] - my); dx += (x - mx) ** 2; dy += (ry[i] - my) ** 2; });
+    return num_ / Math.sqrt(dx * dy);
+  };
+  {
+    const core = STATES.filter(d => d.pjm_core), rest = STATES.filter(d => !d.pjm_core);
+    $("#who-pjm").textContent = `+${mean(core.map(d => d.rise_pct)).toFixed(0)}%`;
+    $("#who-pjm-label").textContent = `Average residential price rise in the ${core.length} tracked states mostly inside PJM (${core.map(d => d.state).join(", ")}).`;
+    $("#who-other").textContent = `+${mean(rest.map(d => d.rise_pct)).toFixed(0)}%`;
+    $("#who-other-label").textContent = `Average in the other ${rest.length} tracked states. The US average rose ${US_AVG_RISE}%.`;
+    $("#who-rho").textContent = spearman(STATES.map(d => d.operating_mw), STATES.map(d => d.rise_pct)).toFixed(2);
+    $("#state-chart-heading").textContent = `${STATES.length} states with a tracked site`;
+  }
+
+  let stateSort = "rise";
+  function renderStateChart() {
+    const svg = $("#state-chart");
+    const rows = [...STATES].sort((a, b) => stateSort === "mw"
+      ? b.operating_mw - a.operating_mw || b.rise_pct - a.rise_pct
+      : b.rise_pct - a.rise_pct);
+    // Draw at the real pixel width so the labels stay legible on a phone.
+    const W = Math.max(320, Math.round(svg.getBoundingClientRect().width) || 760), top = 26, rowH = 18.5, left = 36, right = W < 520 ? 70 : 96;
+    const H = top + rows.length * rowH + 30;
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const maxPct = Math.ceil(Math.max(...rows.map(d => d.rise_pct)) / 10) * 10;
+    const x = v => left + (W - left - right) * v / maxPct;
+    const ticks = [];
+    for (let t = 0; t <= maxPct; t += 10) ticks.push(t);
+    const bars = rows.map((d, i) => {
+      const y = top + i * rowH;
+      const fill = d.pjm_core ? "var(--orange)" : "#9bb59a";
+      return `<g class="state-row" tabindex="0" data-state="${esc(d.state)}">
+        <rect x="0" y="${y}" width="${W}" height="${rowH}" fill="transparent"/>
+        <text class="chart-label" x="${left - 10}" y="${y + rowH / 2 + 3.5}" text-anchor="end">${esc(d.state)}</text>
+        <rect x="${left}" y="${y + 3}" width="${Math.max(x(d.rise_pct) - left, 1)}" height="${rowH - 6}" rx="2" fill="${fill}"/>
+        <text class="chart-sub-label" x="${x(d.rise_pct) + 6}" y="${y + rowH / 2 + 3}">+${d.rise_pct.toFixed(1)}%</text>
+        <text class="chart-sub-label state-mw" x="${W - 4}" y="${y + rowH / 2 + 3}" text-anchor="end">${d.operating_mw ? `${num(d.operating_mw)} MW` : "0 MW"}</text>
+      </g>`;
+    }).join("");
+    svg.innerHTML = `<title>Residential electricity price rise by state</title>
+      ${ticks.map(t => `<line class="chart-grid" x1="${x(t)}" x2="${x(t)}" y1="${top - 6}" y2="${H - 26}"/><text class="chart-axis-label" x="${x(t)}" y="${H - 10}" text-anchor="middle">${t}%</text>`).join("")}
+      <line x1="${x(US_AVG_RISE)}" x2="${x(US_AVG_RISE)}" y1="${top - 12}" y2="${H - 26}" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="4 3"/>
+      <text class="chart-sub-label" x="${x(US_AVG_RISE) + 5}" y="${top - 12}">US avg +${US_AVG_RISE}%</text>
+      <text class="chart-sub-label" x="${W - 4}" y="${top - 12}" text-anchor="end">AI MW</text>
+      ${bars}`;
+  }
+  renderStateChart();
+  {
+    let resizeTimer = null;
+    window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(renderStateChart, 150); });
+  }
+  $("#state-sort").addEventListener("click", event => {
+    const button = event.target.closest("[data-sort]");
+    if (!button) return;
+    stateSort = button.dataset.sort;
+    $$("#state-sort button").forEach(b => b.classList.toggle("active", b === button));
+    renderStateChart();
+  });
+  {
+    const tip = $("#state-tooltip");
+    const show = row => {
+      const d = STATES.find(s => s.state === row.dataset.state);
+      if (!d) return;
+      const box = row.getBoundingClientRect(), wrap = $("#state-chart").parentElement.getBoundingClientRect();
+      tip.innerHTML = `<strong>${esc(d.state)}${d.pjm_core ? " · mostly PJM" : ""}</strong><span>${d.price_2021.toFixed(2)}¢ → ${d.price_2026_ytd.toFixed(2)}¢ per kWh</span><span>+${d.rise_pct.toFixed(1)}% · ${num(d.operating_mw)} MW tracked AI operating</span>`;
+      tip.style.left = `${box.left - wrap.left + box.width / 2}px`;
+      tip.style.top = `${box.top - wrap.top}px`;
+      tip.classList.add("visible");
+    };
+    const svg = $("#state-chart");
+    svg.addEventListener("mouseover", e => { const r = e.target.closest(".state-row"); if (r) show(r); });
+    svg.addEventListener("focusin", e => { const r = e.target.closest(".state-row"); if (r) show(r); });
+    svg.addEventListener("mouseleave", () => tip.classList.remove("visible"));
+    svg.addEventListener("focusout", () => tip.classList.remove("visible"));
+  }
+
+  /* ---------- Who pays: utility finder ---------- */
+  let selectedUtility = UTILITIES[0] ? UTILITIES[0].region : null;
+  const utilityText = u => [u.region, u.utility, u.utility_type, u.our_sites_covered].join(" ").toLowerCase();
+  const gradeOf = u => (u.verification || "").trim().charAt(0).toUpperCase();
+  const field = (label, value) => value && value.trim()
+    ? `<div class="utility-field"><span>${label}</span><p>${esc(value)}</p></div>` : "";
+  function renderUtilityDetail(u) {
+    if (!u) { $("#utility-detail").innerHTML = '<p class="utility-empty">No territory matches that search.</p>'; return; }
+    const sources = (u.sources || "").split(";").map(x => x.trim()).filter(Boolean);
+    $("#utility-detail").innerHTML = `
+      <div class="utility-head"><div><p class="mini-label">${esc(u.utility_type)}</p><h3>${esc(u.region)}</h3><p class="utility-name">${esc(u.utility)}</p></div><span class="grade-badge" title="${esc(u.verification)}">${esc(gradeOf(u) || "?")}</span></div>
+      ${field("TRACKED SITES", u.our_sites_covered)}
+      ${field("RESIDENTIAL PRICE, 2021 → 2026", u.energy_price_trend_2021_2026)}
+      ${field("RATE CASES AND TARIFFS", u.energy_rate_events)}
+      ${field("NAMED GROUPS ON BILLS", u.bill_complaint_groups)}
+      ${field("WATER USE", u.water_consumption)}
+      ${field("WATER DISPUTES", u.water_complaints)}
+      ${field("VERIFICATION", u.verification)}
+      ${sources.length ? `<div class="utility-field"><span>SOURCES (${sources.length})</span><ul class="utility-sources">${sources.map(src => /^https?:\/\//i.test(src)
+        ? `<li><a href="${safeUrl(src)}" target="_blank" rel="noopener noreferrer">${esc(src.replace(/^https?:\/\/(www\.)?/i, "").slice(0, 70))} ↗</a></li>`
+        : `<li>${esc(src)}</li>`).join("")}</ul></div>` : ""}`;
+  }
+  function renderUtilities() {
+    const q = ($("#utility-search").value || "").trim().toLowerCase();
+    const rows = UTILITIES.filter(u => !q || utilityText(u).includes(q));
+    if (!rows.some(u => u.region === selectedUtility)) selectedUtility = rows[0] ? rows[0].region : null;
+    $("#utility-count").textContent = q ? `${rows.length} of ${UTILITIES.length} territories` : `${UTILITIES.length} territories`;
+    $("#utility-list").innerHTML = rows.map(u => `
+      <button type="button" role="listitem" class="utility-item${u.region === selectedUtility ? " active" : ""}" data-region="${esc(u.region)}">
+        <strong>${esc(u.region)}</strong><small>${esc(u.utility)}</small><b>${esc(gradeOf(u))}</b>
+      </button>`).join("") || '<p class="utility-empty">No match. Try a state name or an operator.</p>';
+    renderUtilityDetail(UTILITIES.find(u => u.region === selectedUtility));
+  }
+  renderUtilities();
+  $("#utility-search").addEventListener("input", renderUtilities);
+  $("#utility-list").addEventListener("click", event => {
+    const button = event.target.closest("[data-region]");
+    if (!button) return;
+    selectedUtility = button.dataset.region;
+    renderUtilities();
+  });
 
   ["load-slider", "operator-a", "operator-b"].forEach(id => {
     $(`#${id}`).addEventListener(id === "load-slider" ? "input" : "change", updateScenario);

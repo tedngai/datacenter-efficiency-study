@@ -45,7 +45,7 @@ water and price columns.
 | `docs/community_brief.md` | **Start here.** The thesis and the evidence on power, water and bills, for community readers |
 | `data/published/data_centers.csv` | Final dataset, one row per campus, sorted by best H100e estimate |
 | `data/published/data_centers.json` | Same data as JSON (typed numbers) |
-| `index.html` | Self-contained Compute Atlas dashboard: filterable map, site leaderboard, PUE/WUE explorer, and energy–water scenario lab. Open directly in a browser. |
+| `index.html` | Self-contained dashboard: capacity map, who-pays view (state prices, PJM estimate, utility finder), water and efficiency views, scenario lab. Open directly in a browser. |
 | `data/canonical/data_centers.csv` | Canonical source of truth (edit this, then rebuild) |
 | `data/raw/data_centers_raw.csv` | Original research capture (kept for provenance) |
 | `pipeline/build.py` | Computes H100e columns and regenerates outputs: `python pipeline/build.py` |
@@ -75,28 +75,37 @@ Companion studies:
 
 ## Interactive dashboard
 
-`index.html` combines both published datasets in a responsive, dependency-light
-interface:
+`index.html` follows the thesis, in this order:
 
-- **Global atlas:** search and filter 442 campuses, switch between H100e and power
-  marker sizing, inspect site notes and sources, and export the filtered rows.
-- **Efficiency explorer:** compare PUE and WUE on a log-scale chart, then inspect
-  each operator's reporting year, boundary, water basis, and disclosure grade.
-- **Site efficiency:** the same question asked of every campus: cooling energy and
-  water per MW. A coverage strip states how many sites can answer it.
-  Of 442 sites, 306 have a power denominator, 127 an operator-disclosed PUE, 92 a
-  water intensity, and 87 both. Those 87 collapse onto **six distinct positions**,
-  because both numbers are operator-level. Bubble size shows how many campuses
-  share a position. A rack-cooling × heat-rejection matrix covers all 442 sites,
-  and the ledger below it is sortable and filterable. The page marks PUE values
-  that are the industry default of 1.20, rather than a disclosure, with `*`.
-- **Scenario lab:** compare annual facility electricity, non-IT overhead, and water
-  for two operator profiles at a chosen IT load. Results are unit conversions at
-  full utilization, not campus forecasts.
+- **Overview:** stated power by build status (world and US), and four finding
+  cards: power, bills, water and disclosure.
+- **Capacity map:** search and filter 442 campuses. Marker size and the
+  leaderboard use stated power by default. Compute (H100e) is an option. Each
+  site shows its status, its note and its source, and you can export the
+  filtered rows.
+- **Who pays:** the residential price rise for each state with a tracked site
+  (EIA), colored by PJM membership. Each bar shows the tracked operating AI
+  capacity in that state. A card gives the PJM market monitor's
+  capacity-auction estimate. A finder for
+  the 55 utility territories: prices, rate cases, named groups, water and
+  sources, with the verification grade.
+- **Water:** documented shares of local supply, then the operator PUE/WUE
+  chart and the 13 operator disclosures.
+- **Site evidence:** cooling energy and water per MW for every campus. A
+  coverage strip states how many sites can answer it. Of 442 sites, 306 have a
+  power denominator, 127 an operator-disclosed PUE, 92 a water intensity, and
+  87 both. Those 87 collapse onto **six distinct positions**, because both
+  numbers are operator-level. A rack-cooling × heat-rejection matrix covers all
+  442 sites. The page marks the industry-default PUE of 1.20 with `*`.
+- **Scenario lab:** annual facility electricity and water for two operator
+  profiles at a chosen IT load. These are unit conversions at full
+  utilization, not campus forecasts.
+- **Method:** power, water and compute, and the list of what the page does not
+  track yet.
 
 Edit the sources in `pipeline/frontend/`, then run `python pipeline/build.py` to
-regenerate the self-contained page. The build embeds site and operator values at
-build time. The map tiles, Leaflet, and web fonts need an internet connection.
+regenerate the self-contained page. The build embeds the site, operator,
+cooling, utility and state price values at build time. The map tiles, Leaflet, and web fonts need an internet connection.
 
 ## H100e methodology
 

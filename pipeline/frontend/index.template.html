@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Explore the world's major AI data centers, their H100-equivalent compute, and the energy–water trade-offs behind operator efficiency.">
-  <title>Compute Atlas — The infrastructure behind intelligence</title>
+  <meta name="description" content="A source-linked look at the power, water and electricity-price impacts of the world's major AI data centers, for communities that need a fair assessment.">
+  <title>Power, Water and Who Pays — AI Data Centers</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312251e'/%3E%3Cpath d='M7 7h8v8H7zm10 0h8v8h-8zM7 17h8v8H7zm10 0h8v8h-8z' fill='%23c8f56a'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,16 +16,17 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="topbar">
-    <a class="brand" href="#overview" aria-label="Compute Atlas home">
+    <a class="brand" href="#overview" aria-label="Power, Water and Who Pays home">
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      <span>COMPUTE<span class="brand-slash">/</span>ATLAS</span>
+      <span>POWER<span class="brand-slash">/</span>WATER<span class="brand-slash">/</span>WHO PAYS</span>
     </a>
     <nav class="main-nav" aria-label="Main navigation">
-      <a href="#infrastructure">Infrastructure</a>
-      <a href="#efficiency">Efficiency</a>
-      <a href="#site-efficiency">Site efficiency</a>
+      <a href="#infrastructure">Capacity</a>
+      <a href="#who-pays">Who pays</a>
+      <a href="#efficiency">Water</a>
+      <a href="#site-efficiency">Site evidence</a>
       <a href="#scenario">Scenario lab</a>
-      <a href="#methodology">Methodology</a>
+      <a href="#methodology">Method</a>
     </nav>
     <a class="data-link" href="data/published/data_centers.csv" download>
       <span>Get the data</span>
@@ -36,47 +37,71 @@
   <main id="main">
     <section class="hero shell" id="overview">
       <div class="hero-copy reveal">
-        <p class="eyebrow"><span class="pulse-dot"></span> GLOBAL AI INFRASTRUCTURE · NOV 2026</p>
-        <h1>The infrastructure<br>behind <em>intelligence.</em></h1>
-        <p class="hero-intro">A field guide to the campuses powering AI—and the energy and water required to keep them running.</p>
+        <p class="eyebrow"><span class="pulse-dot"></span> AI DATA CENTERS · POWER, WATER AND BILLS · NOV 2026</p>
+        <h1>Most of it is<br><em>not built yet.</em></h1>
+        <p class="hero-intro">We track <span id="hero-sites">—</span> large AI and hyperscale campuses. <span id="hero-pipeline-text">—</span> of their stated power is planned or under construction. So the cost to a community depends on decisions that are still open: who pays for the grid, how a campus cools, and what it must disclose.</p>
         <div class="hero-actions">
-          <a class="button button-dark" href="#infrastructure">Explore the atlas <span aria-hidden="true">↘</span></a>
-          <a class="text-link" href="#efficiency">Compare efficiency <span aria-hidden="true">→</span></a>
+          <a class="button button-dark" href="#who-pays">See who pays <span aria-hidden="true">↘</span></a>
+          <a class="text-link" href="#infrastructure">Explore the map <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="docs/community_brief.md">Read the brief <span aria-hidden="true">↗</span></a>
         </div>
       </div>
 
-      <div class="hero-card reveal" aria-label="Dataset summary">
+      <div class="hero-card reveal" aria-label="Tracked power capacity by build status">
         <div class="hero-orbit orbit-one"></div>
         <div class="hero-orbit orbit-two"></div>
         <div class="hero-card-head">
-          <span>TRACKED COMPUTE</span>
-          <span class="live-label"><i></i> BEST ESTIMATES</span>
+          <span>TRACKED POWER CAPACITY</span>
+          <span class="live-label"><i></i> NAMEPLATE</span>
         </div>
-        <div class="hero-total"><span id="hero-total">—</span><small>H100e</small></div>
-        <p class="hero-card-caption">One H100e represents the dense FP8 compute of one NVIDIA H100 SXM.</p>
-        <div class="status-stack" id="hero-status-stack" aria-label="Sites by status"></div>
+        <div class="hero-total"><span id="hero-total">—</span><small>GW</small></div>
+        <p class="hero-card-caption">Stated capacity, not current draw. Gross facility power where published, else IT load. A partially operational site carries its full target.</p>
+        <div class="status-stack" id="hero-status-stack" aria-label="Capacity by status"></div>
         <div class="hero-status-key" id="hero-status-key"></div>
         <div class="hero-card-foot">
-          <span>Capacity is not current draw.</span>
+          <span id="hero-share">—</span>
           <a href="#methodology">Read the method ↗</a>
         </div>
       </div>
 
-      <div class="hero-stats reveal" aria-label="Dataset key figures">
-        <div class="hero-stat"><strong id="stat-sites">—</strong><span>major campuses</span></div>
-        <div class="hero-stat"><strong id="stat-countries">—</strong><span>countries represented</span></div>
-        <div class="hero-stat"><strong id="stat-power">—</strong><span>known gross power</span></div>
-        <div class="hero-stat"><strong id="stat-operational">—</strong><span>fully operational</span></div>
+      <div class="hero-stats reveal" aria-label="Key figures">
+        <div class="hero-stat"><strong id="stat-us">—</strong><span>tracked in the US</span></div>
+        <div class="hero-stat"><strong id="stat-us-pipeline">—</strong><span>of US capacity is planned or building</span></div>
+        <div class="hero-stat"><strong id="stat-operational">—</strong><span>of capacity is fully operational</span></div>
+        <div class="hero-stat"><strong id="stat-countries">—</strong><span>countries</span></div>
       </div>
+    </section>
+
+    <section class="thesis-strip shell reveal" aria-label="Four findings">
+      <a class="thesis-card" href="#infrastructure">
+        <span class="thesis-tag">01 · POWER</span>
+        <strong id="thesis-pipeline">—</strong>
+        <p>of tracked capacity is a plan. A planned gigawatt is a request for power, not a load. The tariff, the water contract and the permit are still open.</p>
+      </a>
+      <a class="thesis-card" href="#who-pays">
+        <span class="thesis-tag">02 · BILLS</span>
+        <strong>$9.33B</strong>
+        <p>of PJM's $14.69B 2025/26 capacity auction came from data center load, by the market monitor's estimate. Rate design decides who pays it.</p>
+      </a>
+      <a class="thesis-card" href="#efficiency">
+        <span class="thesis-tag">03 · WATER</span>
+        <strong>500×</strong>
+        <p>is the spread in water per kWh between evaporative and closed-loop designs. The cooling plant decides the water, not the chip.</p>
+      </a>
+      <a class="thesis-card" href="#operator-disclosures">
+        <span class="thesis-tag">04 · DISCLOSURE</span>
+        <strong>4 of 13</strong>
+        <p>operators publish assured annual energy and water figures. Only Google publishes water by site. Secrecy starts most water disputes.</p>
+      </a>
     </section>
 
     <section class="atlas-section shell reveal" id="infrastructure">
       <div class="section-heading section-heading-light">
         <div>
-          <p class="section-index">01 / GLOBAL INFRASTRUCTURE</p>
-          <h2>Where the compute<br><em>is being built.</em></h2>
+          <p class="section-index">01 / CAPACITY</p>
+          <h2>Where the load<br><em>is coming.</em></h2>
         </div>
-        <p>Circle area shows estimated scale. Color shows build status. Select any site to inspect the evidence behind the number.</p>
+        <p>Circle area shows stated power. Color shows build status. Purple and blue sites are not running yet. Select a site to see its source.</p>
       </div>
 
       <div class="atlas-toolbar" aria-label="Map filters">
@@ -93,8 +118,8 @@
         <label class="select-field">
           <span class="sr-only">Choose marker size metric</span>
           <select id="size-metric">
-            <option value="h100e_best">Size: H100e</option>
             <option value="power">Size: power</option>
+            <option value="h100e_best">Size: compute (H100e)</option>
           </select>
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>
         </label>
@@ -116,17 +141,17 @@
       </div>
       <div class="atlas-caption">
         <span id="filter-summary">Showing the complete inventory.</span>
-        <span>Power-based H100e is an upper-bound-style estimate. Read each site's note before quoting.</span>
+        <span>Power is nameplate capacity, not average draw. Read each site's note before you quote it.</span>
       </div>
 
       <div class="ranking-block">
         <div class="ranking-head">
-          <div><p class="mini-label">FILTERED LEADERBOARD</p><h3>Largest campuses by H100e</h3></div>
+          <div><p class="mini-label">FILTERED LEADERBOARD</p><h3>Largest campuses by stated power</h3></div>
           <button class="button button-outline-light button-small" id="export-filtered" type="button">Export selection <span aria-hidden="true">↓</span></button>
         </div>
         <div class="table-scroll">
           <table class="site-table">
-            <thead><tr><th>Rank / campus</th><th>Status</th><th>Power</th><th>Estimate</th><th>Method</th></tr></thead>
+            <thead><tr><th>Rank / campus</th><th>Status</th><th>IT load</th><th>Power</th><th>Compute (H100e)</th></tr></thead>
             <tbody id="site-ranking"></tbody>
           </table>
         </div>
@@ -134,13 +159,88 @@
       </div>
     </section>
 
+    <section class="who-section shell" id="who-pays">
+      <div class="section-heading reveal">
+        <div>
+          <p class="section-index">02 / WHO PAYS</p>
+          <h2>Bills rose everywhere.<br><em>The link runs through the market.</em></h2>
+        </div>
+        <p>Residential prices rose in every state where we track a site. The rise follows the regional power market more than local AI capacity. The measured data center cost is in the PJM capacity market, and rate design decides who carries it.</p>
+      </div>
+
+      <div class="finding-grid who-findings reveal">
+        <article><span class="finding-number" id="who-pjm">—</span><div><strong>PJM states, 2021 → 2026</strong><p id="who-pjm-label">—</p></div></article>
+        <article><span class="finding-number" id="who-other">—</span><div><strong>Other tracked states</strong><p id="who-other-label">—</p></div></article>
+        <article><span class="finding-number" id="who-rho">—</span><div><strong>Weak link to local AI capacity</strong><p>Rank correlation between each state's price rise and the operating AI capacity we track there. State averages, with no controls for fuel or storm costs.</p></div></article>
+      </div>
+
+      <div class="efficiency-grid reveal">
+        <div class="chart-card">
+          <div class="chart-head">
+            <div><p class="mini-label">RESIDENTIAL PRICE RISE, 2021 → 2026 YTD (EIA)</p><h3 id="state-chart-heading">States with a tracked site</h3></div>
+            <div class="segmented" id="state-sort" aria-label="Sort states">
+              <button class="active" type="button" data-sort="rise">By price rise</button>
+              <button type="button" data-sort="mw">By AI capacity</button>
+            </div>
+          </div>
+          <div class="chart-wrap">
+            <svg id="state-chart" viewBox="0 0 760 640" role="img" aria-labelledby="state-chart-title state-chart-desc">
+              <title id="state-chart-title">Residential electricity price rise by state</title>
+              <desc id="state-chart-desc">Bar chart of the 2021 to 2026 year-to-date rise in residential electricity price for each state with a tracked site. States mostly inside PJM have a different color. The tracked operating AI capacity shows at the right of each bar.</desc>
+            </svg>
+            <div class="chart-tooltip" id="state-tooltip" role="tooltip"></div>
+          </div>
+          <div class="chart-foot"><span><i class="key-swatch key-pjm"></i> Mostly in PJM <i class="key-swatch key-other"></i> Other <i class="key-line"></i> US average</span><span>MW = tracked operating AI capacity · EIA Table 2.10 and EPM Table 5.6.B</span></div>
+        </div>
+        <aside class="operator-card imm-card">
+          <div class="operator-top"><p class="mini-label">THE PJM MEASUREMENT</p><span class="mini-label">PRIMARY SOURCE</span></div>
+          <h3 class="operator-name">$9.33B</h3>
+          <p class="operator-year">DATA CENTER LOAD · 2025/26 CAPACITY AUCTION</p>
+          <div class="operator-metrics">
+            <div class="operator-metric"><span>AUCTION TOTAL</span><strong>$14.69B</strong><small>actual result</small></div>
+            <div class="operator-metric"><span>WITHOUT DC LOAD</span><strong>$5.35B</strong><small>monitor's model</small></div>
+          </div>
+          <p class="operator-overhead">The model removes 7.9 GW of existing and forecast data center load. The monitor concludes that data center load growth is the main reason for the high capacity prices.</p>
+          <div class="operator-scope"><span>READ THIS FIRST</span><p>It is a with-and-without model of the auction, not an accounting of bills. It covers all data centers in PJM, not only the AI campuses on this page. Each state passes capacity costs into bills in its own way.</p></div>
+          <a class="source-button" href="https://www.monitoringanalytics.com/reports/reports/2025/IMM_Analysis_of_the_20252026_RPM_Base_Residual_Auction_Part_G_20250603_Revised.pdf" target="_blank" rel="noopener noreferrer"><span>PJM market monitor, Part G (Jun 2025)</span><span>↗</span></a>
+        </aside>
+      </div>
+
+      <div class="utility-block reveal">
+        <div class="ranking-head">
+          <div><p class="mini-label">US UTILITY TERRITORIES</p><h3>Find your utility: prices, rate cases, water and named groups</h3></div>
+          <a class="button button-dark button-small" href="data/us_utility_impacts.csv" download>Get the table <span aria-hidden="true">↓</span></a>
+        </div>
+        <div class="utility-controls">
+          <label class="search-field light-field">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
+            <span class="sr-only">Search utilities, places or sites</span>
+            <input id="utility-search" type="search" placeholder="Search a state, utility, town or site…" autocomplete="off">
+          </label>
+          <span class="utility-count" id="utility-count">—</span>
+        </div>
+        <div class="utility-grid">
+          <div class="utility-list" id="utility-list" role="list"></div>
+          <article class="utility-detail" id="utility-detail" aria-live="polite"></article>
+        </div>
+        <p class="comparison-warning"><strong>Read before quoting:</strong> price trends are EIA state averages unless a docket gives the utility's own figure. 2026 is January to August. A listed group is a named, sourced complaint. A territory with no listed group can still have concerns. Grade A: price and water or rate checked against primary sources. Grade B: price checked, water from secondary sources or not published.</p>
+      </div>
+    </section>
+
     <section class="efficiency-section shell" id="efficiency">
       <div class="section-heading reveal">
         <div>
-          <p class="section-index">02 / OPERATOR EFFICIENCY</p>
-          <h2>Efficiency has<br><em>two bottom lines.</em></h2>
+          <p class="section-index">03 / WATER</p>
+          <h2>Water is set<br><em>by design.</em></h2>
         </div>
-        <p>Power Usage Effectiveness tracks facility overhead. Water Usage Effectiveness tracks water per unit of IT energy. Optimizing one can worsen the other.</p>
+        <p>National totals are small, but one campus can take a large share of a town's water. Evaporative cooling saves electricity and uses water. Dry and closed-loop cooling do the reverse. The operator chooses, and a permit can ask.</p>
+      </div>
+
+      <div class="local-share reveal" aria-label="Documented shares of local water supply">
+        <article><strong>~40%</strong><span>The Dalles, Oregon</span><p>Google's share of city water. The city released it only after a records lawsuit.</p></article>
+        <article><strong>~9%</strong><span>Loudoun County, Virginia</span><p>Data centers' share of average-day drinking water (Loudoun Water).</p></article>
+        <article><strong>~3%</strong><span>Columbus area, Ohio</span><p>About 1.2B gallons a year of drinking-quality water (city utilities).</p></article>
+        <article><strong>82%</strong><span>Ridgeland, Mississippi</span><p>Of the system's peak capacity, if the reported 3.7 MGD AWS peak is correct. Not verified.</p></article>
       </div>
 
       <div class="finding-grid reveal">
@@ -172,7 +272,7 @@
       </div>
       <p class="comparison-warning reveal"><strong>Read before comparing:</strong> reporting years, site boundaries, and WUE definitions differ. Nebius's WUE is one Finland site. Crusoe's PUE is a design range, and Google's WUE is derived from consumption. PUE measures facility overhead, not useful compute per joule.</p>
 
-      <details class="disclosure-table reveal">
+      <details class="disclosure-table reveal" id="operator-disclosures">
         <summary><span>See all 13 operator disclosures</span><span class="summary-meta">Transparency is part of the metric <b>+</b></span></summary>
         <div class="table-scroll">
           <table>
@@ -186,7 +286,7 @@
     <section class="site-efficiency-section shell" id="site-efficiency">
       <div class="section-heading reveal">
         <div>
-          <p class="section-index">03 / SITE EFFICIENCY</p>
+          <p class="section-index">04 / SITE EVIDENCE</p>
           <h2>Every campus,<br><em>scored on evidence.</em></h2>
         </div>
         <p>The operator chart above compares six disclosures. This view asks the same question of every campus — how much cooling energy and how much water per megawatt. The 88 campuses we can score collapse onto a handful of positions, because both numbers are operator-level. That is the finding.</p>
@@ -266,7 +366,7 @@
 
     <section class="scenario-section shell reveal" id="scenario">
       <div class="scenario-heading">
-        <div><p class="section-index">04 / SCENARIO LAB</p><h2>Same IT load.<br><em>Different resource bill.</em></h2></div>
+        <div><p class="section-index">05 / SCENARIO LAB</p><h2>Same IT load.<br><em>Different resource bill.</em></h2></div>
         <p>Compare two disclosure profiles at full utilization for one year. This is a unit conversion, not a campus forecast.</p>
       </div>
       <div class="scenario-controls">
@@ -286,39 +386,39 @@
 
     <section class="method-section shell" id="methodology">
       <div class="section-heading reveal">
-        <div><p class="section-index">05 / HOW TO READ THE NUMBERS</p><h2>Three metrics.<br><em>Three different questions.</em></h2></div>
-        <p>Scale, facility efficiency, and water intensity are related—but none can stand in for the others.</p>
+        <div><p class="section-index">06 / HOW TO READ THE NUMBERS</p><h2>Three measures.<br><em>Three different questions.</em></h2></div>
+        <p>Power, water and compute are related, but none can stand in for the others. For local impacts, use power and water. Compute is a scale measure only.</p>
       </div>
       <div class="method-grid reveal">
-        <article class="method-card">
-          <span class="method-number">01</span><div class="method-icon compute-icon" aria-hidden="true"><i></i><i></i><i></i></div>
-          <h3>How much compute?</h3><p class="method-formula">H100e = compute ÷ 1.979 PFLOPS</p>
-          <p>H100-equivalents normalize announced GPU counts, third-party estimates, peak FLOPS, or power. The most direct available signal wins.</p>
-          <span class="method-tag">SCALE · ESTIMATED</span>
-        </article>
         <article class="method-card featured">
-          <span class="method-number">02</span><div class="method-icon energy-icon" aria-hidden="true">ϟ</div>
-          <h3>How much overhead?</h3><p class="method-formula">PUE = facility energy ÷ IT energy</p>
-          <p>A PUE of 1.10 means 10 units of facility overhead for every 100 units of IT energy. It says nothing about GPU utilization or work per joule.</p>
-          <span class="method-tag">ENERGY · LOWER IS BETTER</span>
+          <span class="method-number">01</span><div class="method-icon energy-icon" aria-hidden="true">ϟ</div>
+          <h3>How much power?</h3><p class="method-formula">energy (MWh) = MW × hours × utilization</p>
+          <p>Stated capacity is the most a campus can draw. Average draw is lower. Meta's 2024 fleet drew about half of the capacity we track for it. PUE is facility energy ÷ IT energy, so a PUE of 1.10 adds 10% for cooling and power losses.</p>
+          <span class="method-tag">POWER · NAMEPLATE IS NOT DRAW</span>
         </article>
         <article class="method-card">
-          <span class="method-number">03</span><div class="method-icon water-icon" aria-hidden="true">◒</div>
+          <span class="method-number">02</span><div class="method-icon water-icon" aria-hidden="true">◒</div>
           <h3>How much water?</h3><p class="method-formula">WUE = water litres ÷ IT kWh</p>
-          <p>WUE can describe withdrawal or consumption. Those are not interchangeable, and a single efficient site is not a fleet-wide result.</p>
+          <p>Withdrawal is the water a campus takes. Consumption is the water it does not return, mostly by evaporation. They are not interchangeable. Outside Google, our site water figures are a fleet average applied to the site, not a meter reading.</p>
           <span class="method-tag">WATER · CHECK THE BASIS</span>
+        </article>
+        <article class="method-card">
+          <span class="method-number">03</span><div class="method-icon compute-icon" aria-hidden="true"><i></i><i></i><i></i></div>
+          <h3>How much compute?</h3><p class="method-formula">H100e = compute ÷ 1.979 PFLOPS</p>
+          <p>H100-equivalents compare sites with different chips. The value comes from announced GPU counts, third-party estimates, peak FLOPS or power. 68% of the total comes from power, so it adds no new information about resource use.</p>
+          <span class="method-tag">SCALE · NOT A RESOURCE MEASURE</span>
         </article>
       </div>
       <div class="method-callout reveal">
-        <div><span class="callout-icon">i</span><p><strong>The honest efficiency metric is still missing.</strong> A comparable answer would fix the reporting year, facility boundary, and utilization—then measure useful work such as tokens or FLOPS per joule.</p></div>
-        <a href="docs/operator_efficiency.md">Full analysis &amp; sources <span aria-hidden="true">↗</span></a>
+        <div><span class="callout-icon">i</span><p><strong>What this page does not track yet.</strong> Air emissions from on-site gas generation. Water used at the power plants that supply a campus. Total data center load per utility (we track large AI campuses only). Metered energy per site. Hourly carbon: "100% renewable" claims are annual, global matches.</p></div>
+        <a href="docs/community_brief.md">Read the community brief <span aria-hidden="true">↗</span></a>
       </div>
     </section>
   </main>
 
   <footer class="footer shell">
-    <div class="footer-brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><strong>COMPUTE/ATLAS</strong><p>A source-linked inventory of major AI infrastructure.<br>Research current as of November 2026.</p></div>
-    <div class="footer-links"><span>DATA &amp; METHOD</span><a href="data/published/data_centers.csv">Site dataset ↗</a><a href="data/operator_efficiency.csv">Operator dataset ↗</a><a href="README.md">Methodology &amp; caveats ↗</a></div>
+    <div class="footer-brand"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span><strong>POWER/WATER/WHO PAYS</strong><p>A source-linked assessment of AI data center power, water and price impacts.<br>Research current as of November 2026.</p></div>
+    <div class="footer-links"><span>DATA &amp; METHOD</span><a href="docs/community_brief.md">Community brief ↗</a><a href="data/published/data_centers.csv">Site dataset ↗</a><a href="data/us_utility_impacts.csv">Utility dataset ↗</a><a href="data/operator_efficiency.csv">Operator dataset ↗</a><a href="README.md">Methodology &amp; caveats ↗</a></div>
     <div class="footer-links"><span>COMPANION RESEARCH</span><a href="docs/us_water_energy.md">US water &amp; energy ↗</a><a href="docs/verification_ledger.md">Verification ledger ↗</a><a href="https://github.com/tedngai/datacenter-efficiency-study">GitHub repository ↗</a></div>
     <div class="footer-bottom"><span>Built for scrutiny, not hype.</span><a href="#overview">Back to top ↑</a></div>
   </footer>
@@ -327,6 +427,8 @@
     const DATA = __DATA__;
     const OPERATORS = __OPERATORS__;
     const COOLING = __COOLING__;
+    const UTILITIES = __UTILITIES__;
+    const STATES = __STATES__;
   </script>
   <script>/*__DASHBOARD_JS__*/</script>
 </body>

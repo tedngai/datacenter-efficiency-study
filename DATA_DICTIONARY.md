@@ -208,3 +208,10 @@ raw value. Operator water intensities differ in the fourth decimal (8.9345 vs
 8.9394 ML/MW-yr), because each site divides its own water total by its own IT
 load. Value equality would stack two bubbles on one pixel and read as a rendering
 artifact.
+
+### 5b. Other data the dashboard embeds
+
+| Name | Source | Description |
+|---|---|---|
+| `UTILITIES` | `data/us_utility_impacts.csv` | The 55 utility rows, unchanged |
+| `STATES` | `price_vs_capacity.state_rows()` | One row per EIA state: `price_2021`, `price_2026_ytd` (¢/kWh), `rise_pct`, `pjm_core`, `operating_mw` (tracked operational and partially operational sites, gross power else IT load) |

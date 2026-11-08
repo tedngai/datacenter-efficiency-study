@@ -35,6 +35,36 @@
 
   <entries>
 
+    <entry id="C-018" date="2026-11-08" type="change" area="frontend"
+           title="Dashboard reworked around the power, water and who-pays thesis" status="done">
+      <detail>
+        Follows D-009. The page was "Compute Atlas" and led with 61.4M H100e; it
+        now leads with stated power by status (123.4 GW, 70% planned or under
+        construction; US 68.1 GW, 66%) and four finding cards. Map size and
+        leaderboard default to power; H100e is an option and a secondary column.
+        New "Who pays" section: EIA state price rise vs tracked operating MW
+        (from price_vs_capacity.state_rows(), so page and brief share one
+        computation), the PJM IMM Part G card ($9.33B of $14.69B, 7.9 GW
+        modeled, with its caveat), and a finder for the 55 utility territories
+        (us_utility_impacts.csv was not on the page before). Water section adds
+        documented local-supply shares (The Dalles ~40%, Loudoun ~9%, Columbus
+        ~3%, Ridgeland 82% of peak if the unverified 3.7 MGD is right). Method
+        cards reordered power, water, compute, plus a "not tracked yet" list.
+        Checked in the browser at 1400 px and 375 px: no console errors, no
+        horizontal overflow; the state chart draws at container width.
+      </detail>
+      <files>
+        <file>pipeline/frontend/index.template.html</file>
+        <file>pipeline/frontend/dashboard.js</file>
+        <file>pipeline/frontend/dashboard.css</file>
+        <file>pipeline/dashboard.py</file>
+        <file>pipeline/verification/price_vs_capacity.py</file>
+        <file>index.html</file>
+        <file>README.md</file>
+        <file>DATA_DICTIONARY.md</file>
+      </files>
+    </entry>
+
     <entry id="D-009" date="2026-11-08" type="decision" area="docs"
            title="Published docs reframed around one thesis for community readers" status="accepted">
       <detail>

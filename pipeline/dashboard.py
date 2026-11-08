@@ -7,6 +7,7 @@ build_gpu_cooling.py (after gpu_cooling.csv is regenerated), so the dashboard
 always embeds the current data regardless of which script ran last.
 """
 import csv
+import importlib.util
 import json
 import os
 import re
@@ -17,6 +18,8 @@ FRONTEND = os.path.join(ROOT, "pipeline", "frontend")
 SITES_JSON = os.path.join(ROOT, "data", "published", "data_centers.json")
 OPERATORS_CSV = os.path.join(ROOT, "data", "operator_efficiency.csv")
 COOLING_CSV = os.path.join(ROOT, "data", "gpu_cooling.csv")
+UTILITIES_CSV = os.path.join(ROOT, "data", "us_utility_impacts.csv")
+PRICE_SCRIPT = os.path.join(ROOT, "pipeline", "verification", "price_vs_capacity.py")
 OUT_HTML = os.path.join(ROOT, "index.html")
 
 COOLING_NUMERIC = {
@@ -110,10 +113,27 @@ def load_cooling():
     return out
 
 
+def load_utilities():
+    """The 55 US utility-territory rows, as published (text fields only)."""
+    with open(UTILITIES_CSV, encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
+def load_states():
+    """EIA state price rise and tracked operating MW, from the same code that
+    docs/community_brief.md quotes, so the page and the brief cannot drift."""
+    spec = importlib.util.spec_from_file_location("price_vs_capacity", PRICE_SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.state_rows()
+
+
 def render():
     sites = load_sites()
     operators = load_operators()
     cooling = load_cooling()
+    utilities = load_utilities()
+    states = load_states()
 
     with open(os.path.join(FRONTEND, "index.template.html"), encoding="utf-8") as handle:
         html = handle.read()
@@ -127,7 +147,10 @@ def render():
             .replace("__DATA__", inline_json(sites))
             .replace("__OPERATORS__", inline_json(operators))
             .replace("__COOLING__", inline_json(cooling))
+            .replace("__UTILITIES__", inline_json(utilities))
+            .replace("__STATES__", inline_json(states))
             .replace("/*__DASHBOARD_JS__*/", js))
     with open(OUT_HTML, "w", encoding="utf-8") as handle:
         handle.write(html)
-    return {"sites": len(sites), "operators": len(operators), "cooling": len(cooling)}
+    return {"sites": len(sites), "operators": len(operators), "cooling": len(cooling),
+            "utilities": len(utilities), "states": len(states)}
