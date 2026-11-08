@@ -22,7 +22,7 @@ appears. Where we know a utility sits off the state average, the row says so.
 
 ## Headline findings
 
-**1. Bills are rising everywhere, but communities blame data centers unevenly.**
+**1. Bills rose in every tracked state. The clearest data center link is the PJM capacity market, not the campus next door.**
 - Sharpest checked residential increases 2021→2026 YTD (EIA state data) in
   tracked-territory states:
   - **PA +53.6%** (13.76¢→21.13¢), **NY +50.2%**, **NJ +47.3%** (16.35¢→24.09¢),
@@ -35,7 +35,17 @@ appears. Where we know a utility sits off the state average, the row says so.
   The NJ rise includes a 17–20% step in Jun 2025, driven by PJM capacity
   auctions.
 - PJM capacity auctions are the biggest single mechanical driver across
-  VA/PA/NJ/IL. The 2025/26 auction cleared ~8x the prior year.
+  VA/PA/NJ/IL. The 2025/26 auction cleared ~8x the prior year. PJM's
+  Independent Market Monitor estimates that existing and forecast data center
+  load (7.9 GW) added **$9.33B** to that auction's $14.69B total. That figure
+  is a with-and-without model result, not a bill accounting
+  ([IMM Part G, 3 Jun 2025](https://www.monitoringanalytics.com/reports/reports/2025/IMM_Analysis_of_the_20252026_RPM_Base_Residual_Auction_Part_G_20250603_Revised.pdf)).
+- The state rise follows market structure more than local AI capacity. The six
+  tracked states mostly inside PJM (PA, NJ, OH, IL, VA, WV) rose by 44% on
+  average. The other 26 tracked states rose by 26%. Across all 32, the rank
+  correlation with tracked operating AI capacity is 0.15, which is weak
+  (`pipeline/verification/price_vs_capacity.py`). State averages have no
+  controls, so this neither proves nor rules out a local effect.
 - Counter-examples where utilities claim data centers LOWER bills:
   - MidAmerican IA (no base electric increase since 2014).
   - **MDU North Dakota** ($45.4M returned to customers from Applied Digital

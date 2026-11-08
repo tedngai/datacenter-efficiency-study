@@ -62,7 +62,8 @@ of them got corrections in the canonical data. The published files were rebuilt.
 | 12 | Bitdeer Milam County | New source URL | The old URL described the Ohio campus. The new URL is the DCD article on the Milam County land purchase. |
 
 The corrections changed the headline totals. The dataset now tracks ~64.0M H100e
-(before: ~64.7M). The status split is 199 operational, 35 partially operational,
+(before: ~64.7M). A later pass (`verify_apply5.py`, Nov 2026) applied the
+mixed-generation rule and brought the total to ~61.4M. See `PROGRESS.xml` C-014. The status split is 199 operational, 35 partially operational,
 117 under construction, 91 planned.
 
 ## Dead links

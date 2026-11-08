@@ -15,7 +15,8 @@ studies:
 |---|---|
 | `data/published/data_centers.csv` / `.json` | 442 sites, 71 countries, 21 columns, H100e computed three ways |
 | `index.html` | self-contained interactive dashboard (Leaflet atlas, PUE/WUE chart, scenario lab) |
-| `README.md` | methodology, status table, country-level summary |
+| `docs/community_brief.md` | the thesis for community readers: power, water and who pays |
+| `README.md` | thesis, methodology, status table, country-level summary |
 | `data/us_utility_impacts.csv` + `docs/us_water_energy.md` | 55 US utility territories: prices, rate cases, water, complaint groups |
 | `docs/us_impacts_verification.md` | what we checked against primary sources, what changed, what is still soft |
 | `data/operator_efficiency.csv` + `docs/operator_efficiency.md` | PUE / WUE / water-per-MW-year for Google, Meta, Microsoft, AWS, xAI, neoclouds |
@@ -89,9 +90,12 @@ We expect you to **disagree with the owner when the data says so**. Say
 │   └── verification/
 │       ├── verify_eia.py      # EIA state price comparison
 │       ├── verify_apply*.py   # correction passes (OK/MISS per edit)
+│       ├── price_vs_capacity.py  # state price rise vs tracked operating MW
 │       └── eia_table.txt      # verified state series (2021–2026 YTD)
 │
 ├── docs/
+│   ├── community_brief.md         # thesis + evidence for community readers
+│   ├── verification_ledger.md     # full-corpus row check (Nov 2026)
 │   ├── us_water_energy.md         # US impacts report
 │   ├── us_impacts_verification.md # verification log
 │   ├── operator_efficiency.md     # analysis + comparability caveats
@@ -252,6 +256,10 @@ in `PROGRESS.xml`.
 ---
 
 ## 10. Tone and reporting standards
+
+- The primary audience is environmental and community groups. Lead with power
+  (MW, MWh), water (withdrawn, consumed, share of local supply) and cost (who
+  pays). H100e is a scale measure, not a resource measure.
 
 - Lead with the finding, then the number, then the caveat.
 - Quantify uncertainty ("±25%", "reported, unverified", "design target").

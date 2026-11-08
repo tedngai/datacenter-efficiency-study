@@ -35,6 +35,40 @@
 
   <entries>
 
+    <entry id="D-009" date="2026-11-08" type="decision" area="docs"
+           title="Published docs reframed around one thesis for community readers" status="accepted">
+      <detail>
+        Owner asked for a clearer message for environmental and community groups
+        that need a fair assessment of power, water and price impacts. Review
+        finding: the docs led with H100e (a compute measure this audience does not
+        need), buried the US impacts work below the fold, and stated no thesis.
+        Thesis adopted: most tracked capacity is not built (70% of 123 GW planned
+        or under construction; US 66% of 68 GW), so the impacts depend on open
+        decisions: who pays for grid capacity, how a campus cools, and what it
+        must disclose. New primary source: PJM IMM Part G (3 Jun 2025), data
+        center load added $9,332,103,858 to the $14,687,047,358 2025/26 BRA
+        (7,927 MW existing plus forecast; with/without model). New check:
+        price_vs_capacity.py, PJM-core states +44.0% vs 26 others +26.0%,
+        Spearman 0.15 vs tracked operating MW (descriptive, no controls).
+        Changes: new docs/community_brief.md; README retitled with a thesis lead
+        and the research-pass history moved to "Coverage history";
+        us_water_energy.md finding 1 restated with the IMM figure;
+        verification_ledger.md notes the later 61.4M total; AGENTS.md map and
+        audience rule. Not yet done: the dashboard still leads with H100e and does
+        not show the utility-territory data. Gaps stated in the brief and not
+        tracked: on-site gas emissions, water at power plants, total data center
+        load per utility, metered MWh, hourly carbon.
+      </detail>
+      <files>
+        <file>docs/community_brief.md</file>
+        <file>README.md</file>
+        <file>docs/us_water_energy.md</file>
+        <file>docs/verification_ledger.md</file>
+        <file>AGENTS.md</file>
+        <file>pipeline/verification/price_vs_capacity.py</file>
+      </files>
+    </entry>
+
     <entry id="C-017" date="2026-11-08" type="change" area="data"
            title="Two abbreviated US state names spelled out" status="done">
       <detail>

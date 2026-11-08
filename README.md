@@ -1,13 +1,48 @@
-# Global AI Data Centers — H100-Equivalent Compute Dataset
+# AI Data Centers: Power, Water and Who Pays
 
-A dataset of **442 major AI and hyperscale data center campuses worldwide**. It
-records power capacity, announced GPU counts, announced FLOPS, and estimated
-compute in **H100-equivalents (H100e)**.
+A source-linked inventory of **442 major AI and hyperscale data center
+campuses** in 71 countries. Companion studies cover US electricity prices,
+water and operator efficiency. Every row names its source.
+
+**For environmental and community groups, start with
+[`docs/community_brief.md`](docs/community_brief.md).**
+
+## The thesis
+
+**Most AI data center capacity is not built yet. So the main community question
+is about decisions that are still open, not about damage that is already done.**
+
+- **Most of the load is a plan.** We track 123 GW of stated capacity. 70% of it
+  is planned or under construction, and only 17% is fully operational. In the
+  US the figures are 68 GW, 66% and 15%.
+- **Electricity costs reach households through the regional market.** PJM's
+  market monitor estimates that data center load added $9.33 billion to the
+  $14.69 billion 2025/26 capacity auction. Rate design decides who pays that
+  cost: minimum-take tariffs, direct assignment of transmission, and
+  bring-your-own generation.
+- **Water is local, and the design sets it.** At the same IT load, the reported and
+  design water intensities differ by a factor of 500 between evaporative and
+  closed-loop designs. One evaporative campus (Google Council Bluffs) consumed
+  more water in 2025 than Meta's whole global fleet in 2024.
+- **Disclosure is the bottleneck.** Only 4 of 13 operators publish assured
+  annual energy and water figures. Only Google publishes water by site.
+  Secrecy, more than volume, starts most of the water disputes in our data.
+
+The data does not support "every data center raises your bill". It also does
+not support "data centers lower your bill". The brief gives the evidence, the
+caveats and the gaps, for example air emissions from on-site gas, which we do
+not track.
+
+**About the compute figures.** The inventory also estimates compute in
+H100-equivalents (H100e), so that sites with different chips can be compared.
+H100e measures scale, not resource use. For power, water and cost, use the MW,
+water and price columns.
 
 ## Files
 
 | File | Description |
 |---|---|
+| `docs/community_brief.md` | **Start here.** The thesis and the evidence on power, water and bills, for community readers |
 | `data/published/data_centers.csv` | Final dataset, one row per campus, sorted by best H100e estimate |
 | `data/published/data_centers.json` | Same data as JSON (typed numbers) |
 | `index.html` | Self-contained Compute Atlas dashboard: filterable map, site leaderboard, PUE/WUE explorer, and energy–water scenario lab. Open directly in a browser. |
@@ -134,69 +169,6 @@ Hyperion, Stargate UAE — are all planned or under construction.
 
 (Before the Nov 2026 review this paragraph said "roughly two-thirds". That was
 wrong: the share was 81% then too.)
-
-**Regional coverage note**: the counts in this note are the totals after each
-research pass. Later passes added more sites, so the current counts are in the
-country table below. The first research pass was thin on Asia and empty on
-Latin America. Later deep-dives expanded China (24 sites, the "Eastern Data,
-Western Computing" intelligent computing centers). Malaysia grew to 22 sites,
-because Johor is one of the fastest-growing AI DC markets. They also expanded
-Japan (15), South Korea (12), Europe (+26, incl. EuroHPC AI factories and
-gigafactory candidates), the Middle East (+19), and Latin America (+15). Most of
-the Latin America entries are an announced pipeline. No operating 50MW+
-AI-dedicated campus or 10k+ GPU cluster exists in the region yet. The
-largest GPU deployment is Mexico's planned 14,480-GPU Coatlicue supercomputer.
-
-A final North America pass added Canada (+14). It includes Meta's first Canadian
-DC, the 1GW Sturgeon campus, Canada's sovereign AI factories from
-TELUS/Bell/Calcul Québec, and the speculative 7.5GW Wonder Valley proposal. It
-also added deeper Mexico (+17, the Querétaro corridor:
-AWS/Google/Oracle/Alibaba regions, ODATA QR01/02/04, Ascenty, Bleeding Edge's
-LatAm-first Blackwell B300 neocloud). It added the first Central America/Caribbean
-entries (+4, all small or speculative. The region has no AI-scale campus yet).
-
-Three final passes added Africa (+15: Teraco Johannesburg/Cape Town, Nigeria's
-Kasi and Rack Centre, Egypt's sovereign AI DC, Morocco's Nexus. No published GPU
-counts exist anywhere on the continent). They added Eastern Europe, the Caucasus
-and Central Asia (+18). That covers EuroHPC AI factories in
-Czechia/Romania/Bulgaria/Lithuania/Slovenia/Hungary, Kazakhstan's Alem H200
-supercomputer and 100k-GPU Data Center Valley, and Armenia's Firebird. They also
-added India/South Asia (+21). That covers the IndiaAI national GPU pool, Yotta's
-Blackwell Ultra buildout, L&T Vyoma's 10k-B300 factory for Together AI,
-Google/Adani Vizag and other gigawatt campuses. Pakistan and Bangladesh get their
-first entries.
-
-A US re-sweep (+63) then filled the biggest remaining hole. It added Google's
-TPU-campus fleet (Columbus/New Albany/Lancaster OH, Bristow VA,
-Omaha/Lincoln/Papillion NE, Mesa AZ, Midlothian TX, Kansas City, Storey County
-NV). Several of those sites carry 100k-330k H100e Epoch estimates. It also added
-Meta's remaining sites (Rosemount, Kuna, Cheyenne, Eagle Mountain, Los Lunas,
-Montgomery, Temple, Bowling Green, El Paso 1GW). It added Microsoft (Pecos 2GW,
-Goodyear, Project Osmium) and AWS (Berwick PA Rainier leg, Richmond County NC,
-Georgia, Arizona).
-It added QTS Richmond (~562MW). It also added the crypto-to-AI conversion wave
-(Hut 8 Beacon Point 1GW for Nvidia, Riot, Cipher/AWS, Bitdeer, MARA, Core
-Scientific, Bitfarms, Applied Digital PF3). It also added neoclouds (Nscale Ward
-County, Vultr's 24k-MI355X Springfield supercluster, CloudBurst, and Fermi
-America's proposed 11GW Amarillo HyperGrid). That last site is now the single
-largest power figure in the dataset, and it is still speculative.
-
-A final country-by-country sweep (+63) closed the remaining regional gaps.
-Australia went from 1 to 9 sites. The additions are AirTrunk
-SYD2/SYD3/MEL1/MEL2, CDC Marsden Park at 720MW (the Southern Hemisphere's
-largest), NEXTDC M3, Firmus's 18,400-GPU GB300 cluster and AWS Sydney. Singapore
-went from 0 to 2 (Nxera Tuas, AirTrunk), and Indonesia 0 to 2 (Oracle and PDG in
-Batam). Thailand went 0 to 2, the Philippines 0 to 1 (VITRO), and New Zealand 0
-to 1 (Datagrid's 1GW Invercargill project). Denmark went from 0 to 3 (Meta Odense
-~475MW, Google Fredericia, CA Skive), and Belgium 0 to 1 (Google Saint-Ghislain).
-Ireland went from 1 to 3 (Meta Clonee, AWS Cruiserath), and the Netherlands 1 to
-3 (Google Eemshaven, Microsoft Middenmeer). Spain gained Microsoft Aragon, France
-SoftBank Bouchain/Eclairion, Italy Trino/Milan, and Sweden atNorth Sollefteå. It
-also added Canada's Saskatchewan/New Brunswick wave, Brazil's RT-One/Ada/Tecto
-buildout, Chile's Cerrillos and Ascenty SCL04/05, and Peru's first entry. Also
-the Saudi Microsoft region, Oman/Jordan 400MW proposals, Israel's Ofek, Kenya's
-iXAfrica, and India's STT Palava/PDG MU1/AdaniConneX Noida/CtrlS Future City
-additions.
 
 Chinese sites mostly use Ascend or heterogeneous chips. Their announced "X万P"
 figures are FP16/mixed-precision and recorded in notes. We do not convert them
@@ -388,6 +360,70 @@ type and a rejection type.
 MW = sum of known gross power, with IT load where gross data is missing. It mixes
 announced, operating and speculative capacity, so treat it as a scale indicator,
 not a current draw. H100e totals are the sum of per-site best estimates.
+
+## Coverage history
+
+The counts in this section are the totals after each research pass. Later
+passes added more sites, so the current counts are in the country table above. The first research pass was thin on Asia and empty on
+Latin America. Later deep-dives expanded China (24 sites, the "Eastern Data,
+Western Computing" intelligent computing centers). Malaysia grew to 22 sites,
+because Johor is one of the fastest-growing AI DC markets. They also expanded
+Japan (15), South Korea (12), Europe (+26, incl. EuroHPC AI factories and
+gigafactory candidates), the Middle East (+19), and Latin America (+15). Most of
+the Latin America entries are an announced pipeline. No operating 50MW+
+AI-dedicated campus or 10k+ GPU cluster exists in the region yet. The
+largest GPU deployment is Mexico's planned 14,480-GPU Coatlicue supercomputer.
+
+A final North America pass added Canada (+14). It includes Meta's first Canadian
+DC, the 1GW Sturgeon campus, Canada's sovereign AI factories from
+TELUS/Bell/Calcul Québec, and the speculative 7.5GW Wonder Valley proposal. It
+also added deeper Mexico (+17, the Querétaro corridor:
+AWS/Google/Oracle/Alibaba regions, ODATA QR01/02/04, Ascenty, Bleeding Edge's
+LatAm-first Blackwell B300 neocloud). It added the first Central America/Caribbean
+entries (+4, all small or speculative. The region has no AI-scale campus yet).
+
+Three final passes added Africa (+15: Teraco Johannesburg/Cape Town, Nigeria's
+Kasi and Rack Centre, Egypt's sovereign AI DC, Morocco's Nexus. No published GPU
+counts exist anywhere on the continent). They added Eastern Europe, the Caucasus
+and Central Asia (+18). That covers EuroHPC AI factories in
+Czechia/Romania/Bulgaria/Lithuania/Slovenia/Hungary, Kazakhstan's Alem H200
+supercomputer and 100k-GPU Data Center Valley, and Armenia's Firebird. They also
+added India/South Asia (+21). That covers the IndiaAI national GPU pool, Yotta's
+Blackwell Ultra buildout, L&T Vyoma's 10k-B300 factory for Together AI,
+Google/Adani Vizag and other gigawatt campuses. Pakistan and Bangladesh get their
+first entries.
+
+A US re-sweep (+63) then filled the biggest remaining hole. It added Google's
+TPU-campus fleet (Columbus/New Albany/Lancaster OH, Bristow VA,
+Omaha/Lincoln/Papillion NE, Mesa AZ, Midlothian TX, Kansas City, Storey County
+NV). Several of those sites carry 100k-330k H100e Epoch estimates. It also added
+Meta's remaining sites (Rosemount, Kuna, Cheyenne, Eagle Mountain, Los Lunas,
+Montgomery, Temple, Bowling Green, El Paso 1GW). It added Microsoft (Pecos 2GW,
+Goodyear, Project Osmium) and AWS (Berwick PA Rainier leg, Richmond County NC,
+Georgia, Arizona).
+It added QTS Richmond (~562MW). It also added the crypto-to-AI conversion wave
+(Hut 8 Beacon Point 1GW for Nvidia, Riot, Cipher/AWS, Bitdeer, MARA, Core
+Scientific, Bitfarms, Applied Digital PF3). It also added neoclouds (Nscale Ward
+County, Vultr's 24k-MI355X Springfield supercluster, CloudBurst, and Fermi
+America's proposed 11GW Amarillo HyperGrid). That last site is now the single
+largest power figure in the dataset, and it is still speculative.
+
+A final country-by-country sweep (+63) closed the remaining regional gaps.
+Australia went from 1 to 9 sites. The additions are AirTrunk
+SYD2/SYD3/MEL1/MEL2, CDC Marsden Park at 720MW (the Southern Hemisphere's
+largest), NEXTDC M3, Firmus's 18,400-GPU GB300 cluster and AWS Sydney. Singapore
+went from 0 to 2 (Nxera Tuas, AirTrunk), and Indonesia 0 to 2 (Oracle and PDG in
+Batam). Thailand went 0 to 2, the Philippines 0 to 1 (VITRO), and New Zealand 0
+to 1 (Datagrid's 1GW Invercargill project). Denmark went from 0 to 3 (Meta Odense
+~475MW, Google Fredericia, CA Skive), and Belgium 0 to 1 (Google Saint-Ghislain).
+Ireland went from 1 to 3 (Meta Clonee, AWS Cruiserath), and the Netherlands 1 to
+3 (Google Eemshaven, Microsoft Middenmeer). Spain gained Microsoft Aragon, France
+SoftBank Bouchain/Eclairion, Italy Trino/Milan, and Sweden atNorth Sollefteå. It
+also added Canada's Saskatchewan/New Brunswick wave, Brazil's RT-One/Ada/Tecto
+buildout, Chile's Cerrillos and Ascenty SCL04/05, and Peru's first entry. Also
+the Saudi Microsoft region, Oman/Jordan 400MW proposals, Israel's Ofek, Kenya's
+iXAfrica, and India's STT Palava/PDG MU1/AdaniConneX Noida/CtrlS Future City
+additions.
 
 ## Regenerating
 
