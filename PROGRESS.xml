@@ -35,6 +35,24 @@
 
   <entries>
 
+    <entry id="C-017" date="2026-11-08" type="change" area="data"
+           title="Two abbreviated US state names spelled out" status="done">
+      <detail>
+        verify_apply7.py: Google Kansas City East "MO" -> "Missouri" and Core
+        Scientific Muskogee "OK" -> "Oklahoma". The per-state price comparison
+        (pipeline/verification/price_vs_capacity.py) groups by state_province,
+        and the codes formed their own groups. No numeric change. xAI Colossus 2
+        keeps "Tennessee / Mississippi" (the site straddles the state line).
+      </detail>
+      <files>
+        <file>pipeline/verification/verify_apply7.py</file>
+        <file>data/canonical/data_centers.csv</file>
+        <file>data/published/data_centers.csv</file>
+        <file>data/published/data_centers.json</file>
+        <file>index.html</file>
+      </files>
+    </entry>
+
     <entry id="C-016" date="2026-11-08" type="change" area="cooling"
            title="Heat-vs-IT warnings checked against primary sources; JUPITER TDP corrected" status="done">
       <detail>
