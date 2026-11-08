@@ -578,48 +578,11 @@ with open(OUT_JSON, "w", encoding="utf-8") as f:
     json.dump(out, f, indent=2)
 
 # ---- index.html (self-contained interactive dashboard) ----
-FRONTEND = os.path.join(ROOT, "pipeline", "frontend")
-with open(os.path.join(ROOT, "data", "operator_efficiency.csv"), encoding="utf-8") as f:
-    operators = list(csv.DictReader(f))
+# Bundling lives in dashboard.py so build_gpu_cooling.py can refresh the page
+# after it regenerates the cooling dataset.
+import dashboard  # noqa: E402  (same directory, after the data is written)
 
-# Numeric chart fields are derived at build time; the original disclosure strings
-# remain intact so ranges, estimates and reporting boundaries stay visible.
-for operator in operators:
-    pue_numbers = [float(v) for v in re.findall(r"\d+(?:\.\d+)?", operator["pue"])]
-    pue_kind = "design" if "design" in operator["pue"].lower() else "reported"
-    operator["pue_kind"] = pue_kind
-    if not pue_numbers:
-        operator["pue_value"] = None
-    elif pue_kind == "design" and len(pue_numbers) >= 2:
-        operator["pue_value"] = (pue_numbers[0] + pue_numbers[1]) / 2
-    else:
-        operator["pue_value"] = pue_numbers[0]
-    wue = operator["wue_l_per_kwh"].strip()
-    water = operator["water_gal_per_mw_year"].replace(",", "").strip()
-    operator["wue_value"] = float(wue) if re.fullmatch(r"\d+(?:\.\d+)?", wue) else None
-    operator["water_value"] = float(water) if re.fullmatch(r"\d+(?:\.\d+)?", water) else None
-
-with open(os.path.join(FRONTEND, "index.template.html"), encoding="utf-8") as f:
-    html = f.read()
-with open(os.path.join(FRONTEND, "dashboard.css"), encoding="utf-8") as f:
-    css = f.read()
-with open(os.path.join(FRONTEND, "dashboard.js"), encoding="utf-8") as f:
-    js = f.read()
-
-# Prevent data strings from closing the inline script element.
-def inline_json(value):
-    return (json.dumps(value, ensure_ascii=False)
-            .replace("</", "<\\/")
-            .replace("\u2028", "\\u2028")
-            .replace("\u2029", "\\u2029"))
-
-html = (html
-        .replace("/*__DASHBOARD_CSS__*/", css)
-        .replace("__DATA__", inline_json(out))
-        .replace("__OPERATORS__", inline_json(operators))
-        .replace("/*__DASHBOARD_JS__*/", js))
-with open(OUT_HTML, "w", encoding="utf-8") as f:
-    f.write(html)
+dashboard.render()
 
 missing_status = [o["name"] for o in out if o["status"] == "unknown"]
 if missing_status:

@@ -493,6 +493,10 @@ def main():
     else:
         print("No accelerator-heat > IT-load inconsistencies.")
 
+    # Refresh the dashboard so index.html embeds the dataset just written.
+    import dashboard
+    dashboard.render()
+
 
 if __name__ == "__main__":
     main()

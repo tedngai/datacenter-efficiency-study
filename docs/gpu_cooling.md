@@ -268,6 +268,24 @@ of IT should distrust one of the two numbers, and the dataset says which.
 
 ---
 
+### How this reads on the dashboard
+
+The `index.html` site-efficiency view applies the rule above literally: a campus
+is plotted only when it has an **operator-disclosed** PUE and a water intensity.
+The industry default of 1.20 that fills 315 rows is an assumption, so it is
+excluded even though it makes the axis look better populated. That leaves 88
+campuses, and they land on six distinct positions — Google 26, Meta 20,
+Microsoft 19, AWS 14, Nebius 5, Crusoe 4.
+
+That result is the point. Once PUE is a fleet figure and water is a fleet WUE,
+site-level efficiency *is* operator-level efficiency, and the scatter says so
+instead of pretending otherwise. The rack-cooling × heat-rejection matrix is the
+one panel that stays genuinely per-site: 34 of 442 sites name both layers, 36 are
+evaporative with no rack evidence, and 39 are direct-to-chip with unknown
+rejection.
+
+---
+
 ## 9. Sources
 
 Vendor and operator engineering:

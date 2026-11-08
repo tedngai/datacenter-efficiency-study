@@ -23,6 +23,7 @@
     <nav class="main-nav" aria-label="Main navigation">
       <a href="#infrastructure">Infrastructure</a>
       <a href="#efficiency">Efficiency</a>
+      <a href="#site-efficiency">Site efficiency</a>
       <a href="#scenario">Scenario lab</a>
       <a href="#methodology">Methodology</a>
     </nav>
@@ -182,9 +183,90 @@
       </details>
     </section>
 
+    <section class="site-efficiency-section shell" id="site-efficiency">
+      <div class="section-heading reveal">
+        <div>
+          <p class="section-index">03 / SITE EFFICIENCY</p>
+          <h2>Every campus,<br><em>scored on evidence.</em></h2>
+        </div>
+        <p>The operator chart above compares six disclosures. This view asks the same question of every campus — how much cooling energy and how much water per megawatt. The 88 campuses we can score collapse onto a handful of positions, because both numbers are operator-level. That is the finding.</p>
+      </div>
+
+      <div class="coverage-strip reveal" id="coverage-strip" aria-label="Efficiency data coverage"></div>
+
+      <div class="site-eff-grid reveal">
+        <div class="chart-card">
+          <div class="chart-head">
+            <div><p class="mini-label">SITE-LEVEL PUE × WATER INTENSITY</p><h3>Cooling energy and water are separate decisions</h3></div>
+            <div class="segmented" id="site-water-filter" aria-label="Filter by heat rejection">
+              <button class="active" type="button" data-filter="all">All</button>
+              <button type="button" data-filter="evaporative">Evaporative</button>
+              <button type="button" data-filter="hybrid">Hybrid</button>
+              <button type="button" data-filter="dry_closed_loop">Dry</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="site-chart-wrap">
+            <svg id="site-efficiency-chart" viewBox="0 0 760 470" role="img" aria-labelledby="site-chart-title site-chart-desc">
+              <title id="site-chart-title">Site PUE and water intensity</title>
+              <desc id="site-chart-desc">Each point is a campus with both an operator-disclosed PUE and a water intensity. Lower is better on both axes.</desc>
+            </svg>
+            <div class="chart-tooltip" id="site-chart-tooltip" role="tooltip"></div>
+          </div>
+          <div class="site-chart-legend" id="site-chart-legend"></div>
+          <div class="chart-foot"><span><i class="design-dot"></i> Bubble size = number of campuses at that position · click to open the largest</span><span id="site-chart-coverage">—</span></div>
+        </div>
+        <aside class="matrix-card" id="cooling-matrix" aria-live="polite"></aside>
+      </div>
+
+      <p class="comparison-warning reveal"><strong>What this shows — and what it does not.</strong> The points collapse onto operator-level rows, because a campus's PUE is usually its operator's fleet figure and its water figure is the operator's fleet WUE applied to site IT load. Neither is a meter reading. That clustering is the finding: at this level of disclosure, site efficiency <em>is</em> operator efficiency. The matrix is the part that is genuinely per-site: a liquid-cooled rack can still sit behind an evaporative plant, and an air-cooled hall can run on dry coolers.</p>
+
+      <details class="disclosure-table site-ledger reveal" open>
+        <summary><span>All 442 sites · efficiency ledger</span><span class="summary-meta">Sort any column <b>+</b></span></summary>
+        <div class="ledger-controls">
+          <label class="search-field ledger-search">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
+            <span class="sr-only">Search sites</span>
+            <input id="ledger-search" type="search" placeholder="Search site or operator…" autocomplete="off">
+          </label>
+          <label class="select-field">
+            <span class="sr-only">Filter by evidence</span>
+            <select id="ledger-filter">
+              <option value="all">All sites</option>
+              <option value="both">PUE + water</option>
+              <option value="pue">PUE only</option>
+              <option value="water">Water only</option>
+              <option value="none">Neither</option>
+            </select>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 8 4 4 4-4"/></svg>
+          </label>
+        </div>
+        <div class="table-scroll">
+          <table class="ledger-table">
+            <thead><tr>
+              <th><button type="button" data-sort="name">Site</button></th>
+              <th><button type="button" data-sort="operator">Operator</button></th>
+              <th><button type="button" data-sort="it_load_mw">IT MW</button></th>
+              <th><button type="button" data-sort="h100e_per_mw">H100e/MW</button></th>
+              <th><button type="button" data-sort="pue_used">PUE</button></th>
+              <th><button type="button" data-sort="water_ml_per_mw_year">Water ML/MW-yr</button></th>
+              <th><button type="button" data-sort="rack_cooling">Rack</button></th>
+              <th><button type="button" data-sort="heat_rejection">Rejection</button></th>
+              <th><button type="button" data-sort="confidence">Conf.</button></th>
+            </tr></thead>
+            <tbody id="ledger-body"></tbody>
+          </table>
+        </div>
+        <div class="ledger-foot">
+          <span id="ledger-count">—</span>
+          <button class="show-more" id="ledger-more" type="button">Show more sites <span aria-hidden="true">↓</span></button>
+        </div>
+        <p class="ledger-note"><b>*</b> Industry default PUE of 1.20 — no operator disclosure for this site. <b>≈</b> Water intensity built on a stated WUE estimate (xAI, 1.0 L/kWh), not an operator disclosure. H100e/MW is the site's best compute estimate divided by IT load; power-based estimates sit at 500 by construction. Waterless designs stay at 0 here but are dropped from the chart, whose log axis cannot plot zero, so the ledger's “PUE + water” filter returns one more site than the chart.</p>
+      </details>
+    </section>
+
     <section class="scenario-section shell reveal" id="scenario">
       <div class="scenario-heading">
-        <div><p class="section-index">03 / SCENARIO LAB</p><h2>Same IT load.<br><em>Different resource bill.</em></h2></div>
+        <div><p class="section-index">04 / SCENARIO LAB</p><h2>Same IT load.<br><em>Different resource bill.</em></h2></div>
         <p>Compare two disclosure profiles at full utilization for one year. This is a unit conversion, not a campus forecast.</p>
       </div>
       <div class="scenario-controls">
@@ -204,7 +286,7 @@
 
     <section class="method-section shell" id="methodology">
       <div class="section-heading reveal">
-        <div><p class="section-index">04 / HOW TO READ THE NUMBERS</p><h2>Three metrics.<br><em>Three different questions.</em></h2></div>
+        <div><p class="section-index">05 / HOW TO READ THE NUMBERS</p><h2>Three metrics.<br><em>Three different questions.</em></h2></div>
         <p>Scale, facility efficiency, and water intensity are related—but none can stand in for the others.</p>
       </div>
       <div class="method-grid reveal">
@@ -244,6 +326,7 @@
   <script>
     const DATA = __DATA__;
     const OPERATORS = __OPERATORS__;
+    const COOLING = __COOLING__;
   </script>
   <script>/*__DASHBOARD_JS__*/</script>
 </body>

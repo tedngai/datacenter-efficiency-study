@@ -175,3 +175,26 @@ so a site resting on a secondary TDP estimate cannot score A.
 **Water.** Never read `water_l_per_year` as a site measurement. It is an
 operator-fleet WUE applied to a site IT load. Four sites with an explicit
 waterless design carry 0 and `negligible`.
+
+### 5a. Fields the dashboard derives (not in the CSV)
+
+`pipeline/dashboard.py` adds these to the embedded JSON only, so the page can
+separate evidence from assumption:
+
+| Field | Description |
+|---|---|
+| `pue_disclosed` | `true` only when `pue_basis` is not `industry default…`. 315 of 442 rows are `false`; the site-efficiency chart refuses to plot them. |
+| `h100e_best`, `h100e_per_mw` | Best H100e estimate joined from `data_centers.json`, and that estimate ÷ `it_load_mw`. Power-based estimates sit at 500 by construction. |
+| `cooling_overhead_pct` | `(pue_used − 1) × 100` — the non-IT share implied by the PUE in use |
+| `water_l_per_mw_year`, `water_ml_per_mw_year` | `water_l_per_year ÷ it_load_mw`, and the same in megalitres |
+
+The ledger marks a water figure with `≈` when `water_estimate_basis` contains
+"estimate" — currently the two xAI rows, which multiply a stated 1.0 L/kWh by
+site IT load rather than using a published WUE. The chart cannot show them
+anyway, because xAI's PUE is the industry default.
+
+The site-efficiency scatter groups campuses by **rounded pixel position**, not by
+raw value. Operator water intensities differ in the fourth decimal (8.9345 vs
+8.9394 ML/MW-yr) because each site divides its own water total by its own IT
+load; value equality would stack two bubbles on one pixel and read as a rendering
+artifact.

@@ -46,6 +46,14 @@ interface:
   marker sizing, inspect site notes and sources, and export the filtered rows.
 - **Efficiency explorer:** compare PUE and WUE on a log-scale chart, then inspect
   each operator's reporting year, boundary, water basis, and disclosure grade.
+- **Site efficiency:** the same question asked of every campus — cooling energy and
+  water per MW — with a coverage strip that states how many sites can answer it.
+  Of 442 sites, 307 have a power denominator, 127 an operator-disclosed PUE, 93 a
+  water intensity, and 88 both. Those 88 collapse onto **six distinct positions**,
+  because both numbers are operator-level; the bubbles are sized by how many
+  campuses share a position. A rack-cooling × heat-rejection matrix covers all 442
+  sites, and the ledger below it is sortable and filterable. PUE values that are
+  the industry default of 1.20 rather than a disclosure are marked `*`.
 - **Scenario lab:** compare annual facility electricity, non-IT overhead, and water
   for two operator profiles at a chosen IT load. Results are unit conversions at
   full utilization, not campus forecasts.
@@ -232,9 +240,21 @@ still reject heat through cooling towers; NVIDIA's liquid racks can run on dry
 coolers, but only if the operator builds them. Of 442 sites, 177 name a platform,
 51 have enough evidence for an accelerator-heat estimate (36 single TDP, 15
 ranged), and 94 carry a water figure — every one an operator-fleet WUE scaling,
-not a site measurement. Hardware confidence is B 38 / C 66 / D 338, with no A:
+not a site measurement; two of those (xAI) rest on a stated 1.0 L/kWh estimate
+rather than a disclosure. Hardware confidence is B 38 / C 66 / D 338, with no A:
 no site combines an official TDP, a published count and site-specific cooling
 evidence.
+
+The dashboard's **site efficiency** view turns that coverage into the headline it
+implies. A campus is only plotted if it has both an *operator-disclosed* PUE and a
+water intensity; the industry-default 1.20 that fills 315 rows does not count as
+evidence. That leaves 88 campuses, and they land on six distinct positions
+(Google 26, Meta 20, Microsoft 19, AWS 14, Nebius 5, Crusoe 4) — because the PUE
+is the operator's fleet figure and the water is the operator's fleet WUE applied
+to site IT load. Bubble area is the number of campuses at that position. The
+rack-cooling × heat-rejection matrix is the part that stays genuinely per-site:
+36 sites are evaporative with no rack evidence, 39 are direct-to-chip with unknown
+rejection, and only 34 of 442 name both a rack cooling type and a rejection type.
 
 ## Country-level summary
 

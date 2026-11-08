@@ -32,6 +32,17 @@
   const num = (value, digits = 0) => value == null || Number.isNaN(Number(value))
     ? "—"
     : Number(value).toLocaleString("en-US", { maximumFractionDigits: digits, minimumFractionDigits: digits });
+  // Explicit solid tints avoid the fill-opacity compositing artefact that
+  // renders a solid core inside a translucent circle in Chrome.
+  const hexToRgb = hex => {
+    const value = hex.replace("#", "");
+    return [0, 2, 4].map(i => parseInt(value.slice(i, i + 2), 16));
+  };
+  const tint = (hex, white = 0.6) => {
+    const [r, g, b] = hexToRgb(hex);
+    const mix = c => Math.round(c + (255 - c) * white);
+    return `rgb(${mix(r)},${mix(g)},${mix(b)})`;
+  };
   const compact = (value, digits = 1) => {
     if (value == null || !Number.isFinite(Number(value))) return "—";
     const n = Number(value);
@@ -463,6 +474,320 @@
   renderOperatorDetail(selectedOperator);
   renderEfficiencyChart();
   renderOperatorTable();
+
+  /* ---------- Site-level efficiency ---------- */
+  const REJECTION_COLORS = {
+    evaporative: "#e7a84d",
+    hybrid: "#69a9ef",
+    dry_closed_loop: "#57c5b6",
+    unknown: "#9ca3af"
+  };
+  const REJECTION_LABELS = {
+    evaporative: "Evaporative",
+    hybrid: "Hybrid",
+    dry_closed_loop: "Dry / closed loop",
+    unknown: "Unknown"
+  };
+  const RACK_LABELS = {
+    air: "Air",
+    air_or_dlc: "Air or DLC",
+    dlc: "Direct-to-chip",
+    dlc_capable: "DLC-capable",
+    hybrid: "Hybrid",
+    immersion: "Immersion",
+    unknown: "Unknown"
+  };
+
+  // A PUE of 1.2 is the industry default we apply when nothing is disclosed.
+  // It is an assumption, so it never counts as site evidence here.
+  const hasPue = c => c.pue_disclosed === true;
+  const hasWater = c => c.water_ml_per_mw_year != null;
+  // xAI publishes no WUE: its water figure multiplies a stated 1.0 L/kWh
+  // estimate. That is a weaker claim than an operator disclosure, so it is
+  // marked in the ledger rather than shown as if it were measured.
+  const assumedWue = c => /estimate/i.test(c.water_estimate_basis || "");
+  const drySites = COOLING.filter(c => hasWater(c) && c.water_ml_per_mw_year === 0);
+  const scoredBoth = COOLING.filter(c => hasPue(c) && hasWater(c) && c.water_ml_per_mw_year > 0);
+
+  function renderCoverage() {
+    const total = COOLING.length || DATA.length;
+    const cards = [
+      { n: total, label: "sites tracked" },
+      { n: COOLING.filter(c => c.it_load_mw != null).length, label: "with a power denominator" },
+      { n: COOLING.filter(hasPue).length, label: "with operator-disclosed PUE" },
+      { n: COOLING.filter(hasWater).length, label: "with a water intensity" },
+      { n: COOLING.filter(c => c.accelerator_heat_mw_low != null).length, label: "with an accelerator heat estimate" },
+      { n: COOLING.filter(c => c.it_load_mw == null).length, label: "no power denominator", cls: "muted" }
+    ];
+    $("#coverage-strip").innerHTML = cards.map(card => `
+      <div class="coverage-card ${card.cls || ""}">
+        <div class="coverage-value"><strong>${num(card.n)}</strong><span>${Math.round(card.n / total * 100)}%</span></div>
+        <div class="coverage-track"><i style="width:${card.n / total * 100}%"></i></div>
+        <p>${card.label}</p>
+      </div>`).join("");
+  }
+
+  let siteWaterFilter = "all";
+
+  function filteredSitePoints() {
+    return scoredBoth.filter(c => siteWaterFilter === "all" || c.heat_rejection === siteWaterFilter);
+  }
+
+  // The scorable campuses sit on only a handful of distinct (PUE, water)
+  // positions, because both numbers are operator-level. Grouping identical
+  // positions and sizing by site count makes that clustering visible instead
+  // of hiding it under overlapping dots. Two campuses only share a position if
+  // the chart cannot tell them apart. The key is therefore the rounded pixel
+  // position, not the raw value: operator water intensities differ in the
+  // fourth decimal (8.9345 vs 8.9394) because each site divides its own water
+  // total by its own IT load, and value equality would stack two bubbles on
+  // one pixel.
+  function groupedSitePoints(data, project) {
+    const groups = new Map();
+    data.forEach(c => {
+      const { px, py } = project(c);
+      const key = `${Math.round(px)}|${Math.round(py)}|${c.heat_rejection}`;
+      if (!groups.has(key)) {
+        groups.set(key, {
+          pue: c.pue_used,
+          water: c.water_ml_per_mw_year,
+          rejection: c.heat_rejection,
+          sites: []
+        });
+      }
+      groups.get(key).sites.push(c);
+    });
+    return [...groups.values()].map(g => ({
+      ...g,
+      pue: g.sites.reduce((sum, c) => sum + c.pue_used, 0) / g.sites.length,
+      water: g.sites.reduce((sum, c) => sum + c.water_ml_per_mw_year, 0) / g.sites.length
+    })).sort((a, b) => b.sites.length - a.sites.length);
+  }
+
+  function renderSiteChart() {
+    const svg = $("#site-efficiency-chart");
+    if (!svg) return;
+    const data = filteredSitePoints();
+    const W = 760, H = 470;
+    const margin = { top: 38, right: 46, bottom: 74, left: 78 };
+    const innerW = W - margin.left - margin.right;
+    const innerH = H - margin.top - margin.bottom;
+    const xMin = 1.05, xMax = 1.32;
+    const yMin = 0.01, yMax = 20;
+    const x = v => margin.left + (v - xMin) / (xMax - xMin) * innerW;
+    const y = v => margin.top + (Math.log10(yMax) - Math.log10(v)) / (Math.log10(yMax) - Math.log10(yMin)) * innerH;
+    const groups = groupedSitePoints(data, c => ({
+      px: x(Math.min(Math.max(c.pue_used, xMin), xMax)),
+      py: y(Math.min(Math.max(c.water_ml_per_mw_year, yMin), yMax))
+    }));
+    const xTicks = [1.05, 1.10, 1.15, 1.20, 1.25, 1.30];
+    const yTicks = [0.01, 0.1, 1, 10];
+    const maxSites = Math.max(...groups.map(g => g.sites.length), 1);
+    const radius = n => 8 + 22 * Math.sqrt(n / maxSites);
+
+    let content = `
+      <rect x="${margin.left}" y="${margin.top}" width="${innerW}" height="${innerH}" fill="#f6f8f2" rx="8"/>
+      ${yTicks.map(t => `<line class="chart-grid" x1="${margin.left}" x2="${W - margin.right}" y1="${y(t)}" y2="${y(t)}"/><text class="chart-axis-label" x="${margin.left - 13}" y="${y(t) + 3}" text-anchor="end">${t}</text>`).join("")}
+      ${xTicks.map(t => `<line class="chart-grid" y1="${margin.top}" y2="${H - margin.bottom}" x1="${x(t)}" x2="${x(t)}"/><text class="chart-axis-label" x="${x(t)}" y="${H - margin.bottom + 23}" text-anchor="middle">${t.toFixed(2)}</text>`).join("")}
+      <text class="chart-axis-title" x="${margin.left + innerW / 2}" y="${H - 18}" text-anchor="middle">POWER USAGE EFFECTIVENESS · LOWER ←</text>
+      <text class="chart-axis-title" transform="translate(20 ${margin.top + innerH / 2}) rotate(-90)" text-anchor="middle">WATER · ML PER MW IT-YEAR (LOG)</text>
+      <text class="chart-sub-label" x="${margin.left + 12}" y="${margin.top + 19}">MORE WATER ↑</text>
+      <text class="chart-sub-label" x="${margin.left + 12}" y="${H - margin.bottom - 12}">BETTER ↙</text>`;
+
+    const bubbles = groups.map((g, i) => {
+      const cx = x(Math.min(Math.max(g.pue, xMin), xMax));
+      const cy = y(Math.min(Math.max(g.water, yMin), yMax));
+      const r = radius(g.sites.length);
+      const color = REJECTION_COLORS[g.rejection] || REJECTION_COLORS.unknown;
+      const operators = [...new Set(g.sites.map(s => s.operator))].slice(0, 2).join(", ");
+      return `<g class="site-group" data-index="${i}" tabindex="0" role="button"
+        aria-label="${g.sites.length} sites at PUE ${num(g.pue, 2)} and ${num(g.water, 2)} megalitres per MW-year: ${esc(operators)}">
+        <circle class="chart-point site-point" cx="${cx}" cy="${cy}" r="${r}" fill="${tint(color, 0.62)}" stroke="${color}" stroke-width="1.6"/>
+        ${g.sites.length > 1 ? `<text class="site-count" x="${cx}" y="${cy + 4}" text-anchor="middle">${g.sites.length}</text>` : ""}
+      </g>`;
+    }).join("");
+    // The static frame goes in first, then the bubbles are appended, so the
+    // tooltip wiring below always attaches to freshly parsed nodes.
+    svg.innerHTML = `<title id="site-chart-title">Site PUE and water intensity</title><desc id="site-chart-desc">Each bubble is a distinct combination of operator-disclosed PUE and water intensity; bubble area is the number of campuses at that position.</desc>${content}`;
+    svg.insertAdjacentHTML("beforeend", bubbles);
+    $("#site-chart-coverage").textContent = `${data.length} sites · ${groups.length} distinct positions · size = number of sites`;
+    $("#site-chart-legend").innerHTML = ["evaporative", "hybrid", "dry_closed_loop", "unknown"].map(key => {
+      const n = data.filter(c => (c.heat_rejection || "unknown") === key).length;
+      if (!n) return "";
+      return `<span><i style="background:${REJECTION_COLORS[key]}"></i>${esc(REJECTION_LABELS[key])} <b>${n}</b></span>`;
+    }).join("");
+
+    $$(".site-group", svg).forEach(node => {
+      const g = groups[Number(node.dataset.index)];
+      if (!g) return;
+      const show = event => {
+        const wrap = $("#site-chart-wrap").getBoundingClientRect();
+        const rect = node.getBoundingClientRect();
+        const clientX = event.clientX || rect.left + rect.width / 2;
+        const clientY = event.clientY || rect.top;
+        const tip = $("#site-chart-tooltip");
+        const names = g.sites.slice(0, 3).map(s => esc(s.name)).join(" · ");
+        const more = g.sites.length > 3 ? ` +${g.sites.length - 3} more` : "";
+        const totalIt = g.sites.reduce((sum, s) => sum + (s.it_load_mw || 0), 0);
+        tip.innerHTML = `<strong>${g.sites.length} campus${g.sites.length === 1 ? "" : "es"} · ${num(totalIt, 0)} MW IT</strong>
+          <span>PUE ${num(g.pue, 2)} · water ${num(g.water, 2)} ML/MW-yr</span>
+          <span>${esc(REJECTION_LABELS[g.rejection] || g.rejection)} heat rejection · fleet WUE, not metered</span>
+          <span>${names}${more}</span>`;
+        tip.style.left = `${clientX - wrap.left}px`;
+        tip.style.top = `${clientY - wrap.top - 8}px`;
+        tip.classList.add("visible");
+      };
+      const hide = () => $("#site-chart-tooltip").classList.remove("visible");
+      node.addEventListener("mouseenter", show);
+      node.addEventListener("mousemove", show);
+      node.addEventListener("focus", show);
+      node.addEventListener("mouseleave", hide);
+      node.addEventListener("blur", hide);
+      const open = () => {
+        const biggest = g.sites.slice().sort((a, b) => (b.it_load_mw || 0) - (a.it_load_mw || 0))[0];
+        const site = biggest && DATA.find(d => d.name === biggest.name);
+        if (!site) return;
+        selectSite(site, true);
+        $("#infrastructure").scrollIntoView({ behavior: "smooth", block: "start" });
+      };
+      node.addEventListener("click", open);
+      node.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") { event.preventDefault(); open(); }
+      });
+    });
+  }
+
+  function renderMatrix() {
+    const rows = ["dlc", "air_or_dlc", "air", "hybrid", "immersion", "dlc_capable", "unknown"];
+    const cols = ["evaporative", "hybrid", "dry_closed_loop", "unknown"];
+    const present = rows.filter(r => COOLING.some(c => c.rack_cooling === r));
+    const counts = {};
+    COOLING.forEach(c => {
+      const key = `${c.rack_cooling}|${c.heat_rejection}`;
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    const max = Math.max(...Object.values(counts), 1);
+    // Cells sit on a light panel, so a single dark ink works at every shade.
+    const shade = n => n
+      ? `rgba(186,232,116,${0.14 + 0.72 * n / max})`
+      : "rgba(18,37,30,.05)";
+    const weight = n => n / max > 0.5 ? 600 : 400;
+    const table = `
+      <table class="matrix-table">
+        <thead><tr><th></th>${cols.map(col => `<th>${esc(REJECTION_LABELS[col])}</th>`).join("")}</tr></thead>
+        <tbody>
+          ${present.map(row => `<tr>
+            <th>${esc(RACK_LABELS[row] || row)}</th>
+            ${cols.map(col => {
+              const n = counts[`${row}|${col}`] || 0;
+              return `<td style="background:${shade(n)};font-weight:${weight(n)}">${n || "·"}</td>`;
+            }).join("")}
+          </tr>`).join("")}
+        </tbody>
+      </table>`;
+    $("#cooling-matrix").innerHTML = `
+      <p class="mini-label">RACK COOLING × HEAT REJECTION</p>
+      <h3>Two decisions, not one</h3>
+      <p class="matrix-intro">A liquid-cooled rack can still evaporate water at the plant. Counts of the ${COOLING.length} sites by the two independent layers.</p>
+      <div class="matrix-panel"><div class="matrix-scroll">${table}</div></div>
+      <p class="matrix-foot">Water is set by the right-hand column, not the left.</p>`;
+  }
+
+  let ledgerSort = { key: "it_load_mw", dir: -1 };
+  let ledgerVisible = 25;
+  let ledgerQuery = "";
+  let ledgerFilter = "all";
+
+  function ledgerRows() {
+    const q = ledgerQuery.toLowerCase();
+    return COOLING.filter(c => {
+      if (q && !`${c.name} ${c.operator} ${c.country}`.toLowerCase().includes(q)) return false;
+      const pue = hasPue(c), water = hasWater(c);
+      if (ledgerFilter === "both") return pue && water;
+      if (ledgerFilter === "pue") return pue && !water;
+      if (ledgerFilter === "water") return water && !pue;
+      if (ledgerFilter === "none") return !pue && !water;
+      return true;
+    }).sort((a, b) => {
+      const av = a[ledgerSort.key], bv = b[ledgerSort.key];
+      const aNull = av == null || av === "" || av === "unknown";
+      const bNull = bv == null || bv === "" || bv === "unknown";
+      if (aNull && bNull) return a.name.localeCompare(b.name);
+      if (aNull) return 1;
+      if (bNull) return -1;
+      if (typeof av === "number" && typeof bv === "number") return (av - bv) * ledgerSort.dir;
+      return String(av).localeCompare(String(bv)) * ledgerSort.dir;
+    });
+  }
+
+  function renderLedger() {
+    const rows = ledgerRows();
+    const shown = rows.slice(0, ledgerVisible);
+    $("#ledger-body").innerHTML = shown.length ? shown.map(c => {
+      const conf = c.confidence || "D";
+      const pue = hasPue(c);
+      return `<tr data-site="${esc(c.name)}">
+        <td><strong>${esc(c.name)}</strong><small>${esc(c.country || "")}</small></td>
+        <td>${esc(c.operator || "")}</td>
+        <td>${c.it_load_mw != null ? num(c.it_load_mw, 0) : "—"}</td>
+        <td>${c.h100e_per_mw != null ? num(c.h100e_per_mw, 0) : "—"}</td>
+        <td class="${pue ? "" : "ledger-assumed"}">${c.pue_used != null ? num(c.pue_used, 2) + (pue ? "" : "*") : "—"}</td>
+        <td>${hasWater(c) ? (assumedWue(c) ? `<span class="ledger-assumed" title="WUE is a stated estimate, not a disclosure">≈${num(c.water_ml_per_mw_year, 2)}</span>` : num(c.water_ml_per_mw_year, 2)) : "—"}</td>
+        <td><span class="ledger-chip" data-rack="${esc(c.rack_cooling)}">${esc(RACK_LABELS[c.rack_cooling] || c.rack_cooling)}</span></td>
+        <td>${esc(REJECTION_LABELS[c.heat_rejection] || c.heat_rejection)}</td>
+        <td><span class="conf-badge conf-${conf}">${conf}</span></td>
+      </tr>`;
+    }).join("") : '<tr><td colspan="9" class="empty-row">No sites match those filters.</td></tr>';
+    $("#ledger-count").textContent = `${shown.length} of ${rows.length} sites shown · ${COOLING.length} in dataset`;
+    const more = $("#ledger-more");
+    more.hidden = rows.length <= 25;
+    more.innerHTML = ledgerVisible >= rows.length
+      ? `Show first 25 sites <span aria-hidden="true">↑</span>`
+      : `Show more sites <span aria-hidden="true">↓</span> <span style="color:#60776a">${Math.min(ledgerVisible, rows.length)} / ${rows.length}</span>`;
+  }
+
+  $("#site-water-filter").addEventListener("click", event => {
+    const button = event.target.closest("[data-filter]");
+    if (!button) return;
+    siteWaterFilter = button.dataset.filter;
+    $$("button", $("#site-water-filter")).forEach(item => item.classList.toggle("active", item === button));
+    renderSiteChart();
+  });
+  $("#ledger-search").addEventListener("input", event => {
+    ledgerQuery = event.target.value.trim();
+    ledgerVisible = 25;
+    renderLedger();
+  });
+  $("#ledger-filter").addEventListener("change", event => {
+    ledgerFilter = event.target.value;
+    ledgerVisible = 25;
+    renderLedger();
+  });
+  $$(".ledger-table [data-sort]").forEach(button => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.sort;
+      ledgerSort = ledgerSort.key === key ? { key, dir: -ledgerSort.dir } : { key, dir: 1 };
+      renderLedger();
+    });
+  });
+  $("#ledger-body").addEventListener("click", event => {
+    const row = event.target.closest("tr[data-site]");
+    if (!row) return;
+    const site = DATA.find(d => d.name === row.dataset.site);
+    if (!site) return;
+    selectSite(site, true);
+    $("#infrastructure").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("#ledger-more").addEventListener("click", () => {
+    const rows = ledgerRows();
+    ledgerVisible = ledgerVisible >= rows.length ? 25 : ledgerVisible + 25;
+    renderLedger();
+  });
+
+  renderCoverage();
+  renderSiteChart();
+  renderMatrix();
+  renderLedger();
 
   /* ---------- Scenario lab ---------- */
   const scenarioOperators = plottableOperators;

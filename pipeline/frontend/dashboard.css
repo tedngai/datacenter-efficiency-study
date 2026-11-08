@@ -460,6 +460,84 @@ table { border-collapse: collapse; width: 100%; text-align: left; }
   .footer { grid-template-columns: 1fr 1fr; gap: 35px 20px; }
   .footer-brand { grid-column: 1 / -1; }
 }
+/* ---------- Site-level efficiency ---------- */
+.site-efficiency-section { margin-bottom: 110px; }
+.coverage-strip { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 26px; }
+.coverage-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px 16px 14px; }
+.coverage-card.muted { background: var(--paper-deep); }
+.coverage-value { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.coverage-value strong { font-size: 26px; letter-spacing: -.05em; font-weight: 600; }
+.coverage-value span { font-family: var(--mono); font-size: 9px; color: var(--muted); }
+.coverage-track { height: 3px; background: var(--line); border-radius: 100px; margin: 12px 0 10px; overflow: hidden; }
+.coverage-track i { display: block; height: 100%; background: var(--ink); border-radius: 100px; }
+.coverage-card.muted .coverage-track i { background: #9aa79c; }
+.coverage-card p { margin: 0; font-size: 9px; line-height: 1.45; color: var(--muted); }
+
+.site-eff-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, .7fr); gap: 18px; align-items: start; }
+#site-efficiency-chart { width: 100%; height: auto; overflow: visible; }
+.matrix-card { background: var(--forest); color: #fff; border-radius: var(--radius); padding: 26px 24px; display: flex; flex-direction: column; }
+.matrix-card h3 { margin: 0 0 8px; font-size: 18px; letter-spacing: -.03em; }
+.matrix-card .mini-label { color: #9db3a4; }
+.matrix-intro { margin: 0 0 16px; color: #b7c6bb; font-size: 10px; line-height: 1.6; }
+.matrix-panel { background: #f7f9f2; border-radius: 10px; padding: 10px 12px; }
+.matrix-scroll { overflow-x: auto; }
+.matrix-table { width: 100%; border-collapse: separate; border-spacing: 3px; font-family: var(--mono); font-size: 9px; }
+.matrix-table th { color: #55665a; font-weight: 500; font-size: 8px; text-align: center; padding: 2px 2px 5px; line-height: 1.3; }
+.matrix-table tbody th { text-align: right; padding-right: 6px; white-space: nowrap; color: #17221c; font-size: 9px; }
+.matrix-table td { text-align: center; padding: 8px 4px; border-radius: 5px; font-size: 11px; font-weight: 500; color: #16281d; }
+.matrix-foot { margin: 14px 0 0; color: var(--lime); font-size: 9px; line-height: 1.5; }
+.site-chart-legend { display: flex; flex-wrap: wrap; gap: 16px; padding: 4px 0 14px; font-family: var(--mono); font-size: 8px; color: var(--muted); }
+.site-chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.site-chart-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.site-chart-legend b { color: var(--ink); font-weight: 500; }
+.site-group { cursor: pointer; }
+.site-group:focus { outline: none; }
+.site-group:focus-visible .site-point { stroke-width: 3; }
+.site-group:hover .site-point { stroke-width: 2.6; }
+.site-count { fill: #12251e; font-family: var(--mono); font-size: 11px; font-weight: 600; pointer-events: none;
+  paint-order: stroke; stroke: #fff; stroke-width: 3px; stroke-linejoin: round; }
+
+.ledger-controls { display: flex; gap: 10px; padding: 0 0 14px; flex-wrap: wrap; }
+.ledger-controls .search-field,
+.ledger-controls .select-field { background: var(--card); border-color: var(--line); }
+.ledger-controls .search-field svg { stroke: #7b887d; }
+.ledger-controls .search-field input { color: var(--ink); }
+.ledger-controls .search-field input::placeholder { color: #9aa79c; }
+.ledger-controls .select-field select { color: var(--ink); }
+.ledger-controls .select-field svg { stroke: #7b887d; }
+.ledger-search { flex: 1 1 240px; }
+.ledger-foot .show-more { width: auto; color: #4b7a5c; font-weight: 600; padding: 0; }
+.ledger-foot .show-more:hover { color: var(--ink); }
+.ledger-table { min-width: 980px; }
+.ledger-table th button { background: none; border: 0; padding: 0; font: inherit; color: inherit; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+.ledger-table th button::after { content: "\2195"; font-size: 8px; color: #9aa79c; }
+.ledger-table td strong { display: block; font-weight: 600; }
+.ledger-table td small { display: block; color: var(--muted); font-size: 8px; margin-top: 2px; }
+.ledger-table tbody tr { cursor: pointer; }
+.ledger-table tbody tr:hover { background: #f0f3ea; }
+.ledger-chip { display: inline-block; padding: 3px 7px; border-radius: 100px; background: var(--paper-deep); font-size: 8px; white-space: nowrap; }
+.ledger-chip[data-rack="dlc"], .ledger-chip[data-rack="immersion"] { background: #dff0e7; color: #1d5c3d; }
+.ledger-chip[data-rack="air"] { background: #eef0e6; color: #5c6455; }
+.ledger-chip[data-rack="unknown"] { background: transparent; color: #9aa79c; }
+.conf-badge { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 50%; font-family: var(--mono); font-size: 9px; background: var(--paper-deep); color: var(--muted); }
+.conf-badge.conf-B { background: #dff0e7; color: #1d5c3d; }
+.conf-badge.conf-C { background: #f3edd4; color: #7a6420; }
+.conf-badge.conf-D { background: #eceee8; color: #8b958c; }
+.ledger-foot { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding-top: 14px; color: var(--muted); font-size: 9px; }
+.ledger-assumed { color: #9aa79c; }
+.ledger-note { margin: 0 0 20px; color: #7b887d; font-size: 8px; line-height: 1.7; max-width: 760px; }
+.ledger-note b { color: var(--ink); }
+
+@media (max-width: 1240px) {
+  .coverage-strip { grid-template-columns: repeat(3, 1fr); }
+  .site-eff-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .coverage-strip { grid-template-columns: repeat(2, 1fr); }
+  .coverage-card:last-child { grid-column: 1 / -1; }
+  .site-efficiency-section { margin-bottom: 65px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

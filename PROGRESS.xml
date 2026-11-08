@@ -11,7 +11,7 @@
 -->
 <progress project="datacenter-efficiency-study"
           repo="https://github.com/tedngai/datacenter-efficiency-study"
-          updated="2026-11-02"
+          updated="2026-11-07"
           schema="1">
 
   <summary>
@@ -34,6 +34,60 @@
   </state>
 
   <entries>
+
+    <entry id="C-012" date="2026-11-07" type="change" area="frontend"
+           title="Site-efficiency view: all 442 campuses scored on disclosed evidence" status="done">
+      <detail>
+        Added a third dashboard section (03 / SITE EFFICIENCY) that asks the
+        operator chart's question of every campus, and states how few can answer
+        it. Coverage strip: 442 tracked, 307 with a power denominator, 127 with an
+        operator-disclosed PUE, 93 with a water intensity, 51 with an
+        accelerator-heat estimate, 135 with no power denominator.
+
+        Chart axes were changed from "cooling % x water" to "operator-disclosed
+        PUE x water intensity" during the build. PUE is populated for all 442
+        rows, but 315 of them carry the industry default 1.20 rather than a
+        disclosure, so a cooling-percentage axis was fabricated for 71% of the
+        dataset. pipeline/dashboard.py now emits a pue_disclosed flag and the
+        chart plots only the 127 rows where it is true (88 once a water figure is
+        also required).
+
+        Those 88 campuses collapse onto six distinct (PUE, water, rejection)
+        positions - Google 26, Meta 20, Microsoft 19, AWS 14, Nebius 5, Crusoe 4
+        - because a site's PUE is its operator's fleet figure and its water is the
+        operator's fleet WUE applied to site IT load. Bubbles are sized by the
+        number of campuses at a position, so the clustering is the finding rather
+        than an overlap artefact. Grouping keys on the rounded pixel position, not
+        the raw value: operator intensities differ in the fourth decimal (8.9345
+        vs 8.9394 ML/MW-yr) and value equality stacked two bubbles on one pixel.
+
+        The rack-cooling x heat-rejection matrix covers all 442 sites and does
+        stay per-site: 36 evaporative with no rack evidence, 39 direct-to-chip
+        with unknown rejection, 34 naming both layers. A sortable, searchable,
+        filterable ledger lists all 442 with IT MW, H100e/MW, PUE, water intensity,
+        rack, rejection and confidence; default sort is IT load descending, and
+        PUE values that are the industry default carry a *. Waterless sites are
+        kept at 0 in the ledger and excluded from the log-axis scatter. Water
+        figures resting on a stated WUE estimate rather than a disclosure (the
+        two xAI rows, 1.0 L/kWh) carry a ≈ in the ledger.
+
+        Plumbing: shared bundling extracted to pipeline/dashboard.py so both
+        build.py and build_gpu_cooling.py refresh index.html with current data;
+        build.py now injects typed JSON instead of in-memory string rows.
+      </detail>
+      <files>
+        <file>pipeline/dashboard.py</file>
+        <file>pipeline/build.py</file>
+        <file>pipeline/build_gpu_cooling.py</file>
+        <file>pipeline/frontend/index.template.html</file>
+        <file>pipeline/frontend/dashboard.js</file>
+        <file>pipeline/frontend/dashboard.css</file>
+        <file>index.html</file>
+        <file>README.md</file>
+        <file>DATA_DICTIONARY.md</file>
+        <file>PROGRESS.xml</file>
+      </files>
+    </entry>
 
     <entry id="C-011" date="2026-11-07" type="change" area="cooling"
            title="Per-site accelerator and cooling dataset with water caveats" status="done">
